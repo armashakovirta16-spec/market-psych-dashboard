@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Market Psychology & Asset Allocation Dashboard</title>
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+  // Applied before first paint to avoid a light-mode flash for users who chose dark.
+  (function () {
+    var saved = localStorage.getItem('theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+</head>
+<body>
+
+  <header class="page-header">
+    <div class="header-content">
+      <h1>Market Psychology & Asset Allocation</h1>
+      <p class="subtitle">Finance, macro, and behavioral signals — synthesized into one read</p>
+    </div>
+    <div class="header-right">
+      <div class="last-updated" id="lastUpdated">Loading...</div>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark mode">◐</button>
+    </div>
+  </header>
+
+  <section class="composite-banner" id="compositeBanner">
+    <div class="composite-label">Regime Read</div>
+    <div class="composite-regime-row">
+      <div class="composite-regime" id="compositeRegime">—</div>
+      <span class="sbadge neutral" id="compositeBadge">—</span>
+    </div>
+    <div class="composite-score-bar">
+      <div class="score-track">
+        <div class="score-marker" id="scoreMarker"></div>
+      </div>
+      <div class="score-labels">
+        <span>Risk-Off</span>
+        <span>Neutral</span>
+        <span>Risk-On</span>
+      </div>
+    </div>
+    <p class="composite-narrative" id="compositeNarrative">—</p>
+  </section>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="finance" onclick="showTab('finance', this)">Finance</div>
+    <div class="tab" data-tab="economics" onclick="showTab('economics', this)">Economics</div>
+    <div class="tab" data-tab="psychology" onclick="showTab('psychology', this)">Psychology</div>
+  </div>
+
+  <main class="tab-panels">
+
+    <section class="panel active" id="pillar-finance" data-panel="finance">
+      <div class="metric-row" id="financeKeyMetrics"></div>
+      <div class="chart-label">Sector returns, 1M</div>
+      <div class="chart-wrap"><canvas id="sectorChart"></canvas></div>
+      <div class="chart-label">Asset class returns, 1M</div>
+      <div class="chart-wrap"><canvas id="assetClassChart"></canvas></div>
+    </section>
+
+    <section class="panel" id="pillar-economics" data-panel="economics">
+      <div class="metric-row" id="economicsKeyMetrics"></div>
+    </section>
+
+    <section class="panel" id="pillar-psychology" data-panel="psychology">
+      <div class="metric-row" id="psychologyKeyMetrics"></div>
+      <div class="chart-label">AAII sentiment survey</div>
+      <div class="chart-wrap chart-wrap-donut"><canvas id="sentimentChart"></canvas></div>
+    </section>
+
+  </main>
+
+  <footer class="page-footer">
+    <p>Re-run <code>scripts/fetch_data.py</code> to refresh this snapshot. See README for setup.</p>
+  </footer>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

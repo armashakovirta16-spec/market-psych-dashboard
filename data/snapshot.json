@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "last_updated": "2026-07-19T19:22:42.546344+00:00",
+    "data_sources": {
+      "sp500_pe": "scraped",
+      "put_call_ratio": "scraped",
+      "ism_pmi": "scraped",
+      "aaii_sentiment": "manual (data/manual_overrides.json)"
+    }
+  },
+  "finance": {
+    "sector_returns_1m": {
+      "Tech (XLK)": -8.17,
+      "Financials (XLF)": 5.39,
+      "Energy (XLE)": 8.05,
+      "Healthcare (XLV)": 8.3,
+      "Utilities (XLU)": 1.56
+    },
+    "asset_class_returns_1m": {
+      "Equities (SPY)": -0.46,
+      "Bonds (AGG)": -0.37,
+      "Gold (GLD)": -4.83
+    },
+    "sp500_pe": 32.08,
+    "yield_curve_10y_2y": 0.41
+  },
+  "economics": {
+    "cpi_yoy": 3.46,
+    "unemployment_rate": 4.2,
+    "fed_funds_rate": 3.63,
+    "ism_pmi": 53.3
+  },
+  "psychology": {
+    "vix": 18.77,
+    "put_call_ratio": 0.97,
+    "aaii_sentiment": {
+      "bullish": 34.2,
+      "neutral": 31.5,
+      "bearish": 34.3,
+      "as_of": "2026-07-17"
+    }
+  },
+  "composite": {
+    "regime": "Cautiously Neutral",
+    "score": 0.06,
+    "score_range": [
+      -1,
+      1
+    ],
+    "narrative": "Auto-generated placeholder narrative \u2014 refine this once your composite logic is finalized."
+  }
+}

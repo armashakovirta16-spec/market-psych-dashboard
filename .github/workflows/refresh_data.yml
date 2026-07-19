@@ -1,0 +1,33 @@
+name: Refresh dashboard data
+
+on:
+  schedule:
+    # Runs at 21:00 UTC on weekdays (after US market close) — adjust as needed
+    - cron: '0 21 * * 1-5'
+  workflow_dispatch: {} # allows manual trigger from the Actions tab
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Fetch fresh data
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python scripts/fetch_data.py
+
+      - name: Commit updated snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/snapshot.json
+          git diff --staged --quiet || git commit -m "Auto-refresh data snapshot"
+          git push
