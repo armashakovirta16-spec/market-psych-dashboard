@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-19T19:22:42.546344+00:00",
+    "last_updated": "2026-07-20T10:38:00.530546+00:00",
     "data_sources": {
       "sp500_pe": "scraped",
       "put_call_ratio": "scraped",
@@ -31,7 +31,7 @@
     "ism_pmi": 53.3
   },
   "psychology": {
-    "vix": 18.77,
+    "vix": 18.37,
     "put_call_ratio": 0.97,
     "aaii_sentiment": {
       "bullish": 34.2,
