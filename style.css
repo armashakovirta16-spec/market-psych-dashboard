@@ -78,6 +78,14 @@ body {
   color: var(--text);
 }
 
+.panel-box {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+  padding: 16px 22px;
+}
+
 .subtitle {
   margin: 2px 0 0;
   color: var(--text-muted);
