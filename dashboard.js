@@ -28,6 +28,27 @@ function chartDefaults() {
   };
 }
 
+// For horizontal bars (indexAxis:'y'), Chart.js keeps the scale keys 'x'/'y'
+// but swaps their role: 'x' becomes the value axis, 'y' the category axis —
+// so grid visibility needs to be the mirror image of chartDefaults().
+function horizontalBarDefaults() {
+  const c = THEME_CHART_COLORS[getCurrentTheme()];
+  return {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: { grid: { color: c.grid }, ticks: { color: c.tick, font: { size: 11 } }, border: { display: false } },
+      y: { grid: { display: false }, ticks: { color: c.tick, font: { size: 11 } } },
+    },
+    plugins: { legend: { display: false } },
+  };
+}
+
+function signColors(values) {
+  return values.map((v) => ((v || 0) >= 0 ? CHART_COLORS.green : CHART_COLORS.red));
+}
+
 // Chart.js sizes a canvas at creation time, so charts inside a panel that
 // starts hidden (display:none) render at 0x0 until resized after becoming
 // visible — track instances per panel so showTab() can fix that up.
@@ -256,6 +277,71 @@ function renderTrend(entries) {
   }));
 }
 
+// Generic mini sparkline for a single history.json field, scoped to a tab
+// panel (so its chart gets resized correctly when that panel becomes
+// visible — see the PANEL_CHARTS comment above). Hides itself entirely
+// when there isn't enough history yet, rather than showing a redundant
+// "check back tomorrow" message (the main banner already covers that).
+function renderMiniTrend(panel, labelId, wrapId, canvasId, entries, field, labelText, borderColor, fillColor) {
+  const labelEl = document.getElementById(labelId);
+  const wrap = document.getElementById(wrapId);
+
+  if (!entries || entries.length < 2) {
+    labelEl.style.display = 'none';
+    wrap.style.display = 'none';
+    return;
+  }
+
+  labelEl.style.display = '';
+  wrap.style.display = '';
+  labelEl.textContent = `${labelText}, last ${entries.length} days`;
+
+  const opts = chartDefaults();
+  opts.scales.x.display = false;
+  opts.scales.y.display = false;
+  opts.plugins = { legend: { display: false } };
+  opts.elements = { point: { radius: 0 }, line: { tension: 0.3 } };
+
+  trackChart(panel, new Chart(document.getElementById(canvasId), {
+    type: 'line',
+    data: {
+      labels: entries.map((e) => e.date),
+      datasets: [{
+        data: entries.map((e) => e[field]),
+        borderColor,
+        backgroundColor: fillColor,
+        borderWidth: 2,
+        fill: true,
+      }],
+    },
+    options: opts,
+  }));
+}
+
+function renderRealRateChart(economics) {
+  const fedFunds = economics.fed_funds_rate;
+  const cpi = economics.cpi_yoy;
+  if (fedFunds === undefined || fedFunds === null || cpi === undefined || cpi === null) return;
+
+  const opts = horizontalBarDefaults();
+  opts.plugins.tooltip = { callbacks: { label: (ctx) => `${ctx.parsed.x}%` } };
+
+  trackChart('economics', new Chart(document.getElementById('realRateChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Fed Funds Rate', 'CPI YoY'],
+      datasets: [{
+        data: [fedFunds, cpi],
+        backgroundColor: [CHART_COLORS.finance, CHART_COLORS.amber],
+        borderRadius: 6,
+        borderSkipped: false,
+        maxBarThickness: 32,
+      }],
+    },
+    options: opts,
+  }));
+}
+
 function destroyAllCharts() {
   ALL_CHARTS.forEach((chart) => chart.destroy());
   ALL_CHARTS.length = 0;
@@ -274,8 +360,8 @@ async function refreshDashboard() {
   renderTrend(history.entries);
   renderFinance(snapshot.finance, pillarScores.finance);
   renderAllocationTilts(snapshot.allocation_tilts);
-  renderEconomics(snapshot.economics, pillarScores.economics);
-  renderPsychology(snapshot.psychology, pillarScores.psychology);
+  renderEconomics(snapshot.economics, pillarScores.economics, history.entries);
+  renderPsychology(snapshot.psychology, pillarScores.psychology, history.entries);
   renderStrategies(snapshot.strategies);
   // Re-render always rebuilds the active panel's chart at full size; other
   // panels' charts get fixed up on next tab switch same as on first load.
@@ -324,40 +410,42 @@ function renderFinance(finance, score) {
     metricHTML(finance.sp500_pe, 'S&P 500 P/E') +
     metricHTML(finance.yield_curve_10y_2y, '10y-2y Spread', '%');
 
+  const sectorValues = Object.values(finance.sector_returns_1m);
   trackChart('finance', new Chart(document.getElementById('sectorChart'), {
     type: 'bar',
     data: {
       labels: Object.keys(finance.sector_returns_1m),
       datasets: [{
         label: '1M Sector Return (%)',
-        data: Object.values(finance.sector_returns_1m),
-        backgroundColor: CHART_COLORS.finance,
+        data: sectorValues,
+        backgroundColor: signColors(sectorValues),
         borderRadius: 6,
         borderSkipped: false,
-        maxBarThickness: 32,
+        maxBarThickness: 28,
       }],
     },
-    options: { ...chartDefaults(), plugins: { legend: { display: false } } },
+    options: horizontalBarDefaults(),
   }));
 
+  const assetValues = Object.values(finance.asset_class_returns_1m);
   trackChart('finance', new Chart(document.getElementById('assetClassChart'), {
     type: 'bar',
     data: {
       labels: Object.keys(finance.asset_class_returns_1m),
       datasets: [{
         label: '1M Asset Class Return (%)',
-        data: Object.values(finance.asset_class_returns_1m),
-        backgroundColor: CHART_COLORS.finance,
+        data: assetValues,
+        backgroundColor: signColors(assetValues),
         borderRadius: 6,
         borderSkipped: false,
-        maxBarThickness: 32,
+        maxBarThickness: 28,
       }],
     },
-    options: { ...chartDefaults(), plugins: { legend: { display: false } } },
+    options: horizontalBarDefaults(),
   }));
 }
 
-function renderEconomics(economics, score) {
+function renderEconomics(economics, score, historyEntries) {
   document.getElementById('economicsSignal').innerHTML = pillarSignalHTML('Signal', score);
 
   const metrics = document.getElementById('economicsKeyMetrics');
@@ -366,15 +454,31 @@ function renderEconomics(economics, score) {
     metricHTML(economics.ism_pmi, 'ISM PMI') +
     metricHTML(economics.unemployment_rate, 'Unemployment', '%') +
     metricHTML(economics.fed_funds_rate, 'Fed Funds Rate', '%');
+
+  renderMiniTrend(
+    'economics', 'pmiTrendLabel', 'pmiTrendWrap', 'pmiTrendChart',
+    historyEntries, 'ism_pmi', 'ISM PMI', CHART_COLORS.economics, 'rgba(36, 138, 61, 0.12)',
+  );
+  renderRealRateChart(economics);
 }
 
-function renderPsychology(psychology, score) {
+function renderPsychology(psychology, score, historyEntries) {
   document.getElementById('psychologySignal').innerHTML = pillarSignalHTML('Fear/Greed', score);
 
   const metrics = document.getElementById('psychologyKeyMetrics');
   metrics.innerHTML =
     metricHTML(psychology.vix, 'VIX') +
     metricHTML(psychology.put_call_ratio, 'Put/Call Ratio');
+
+  const gaugeMarker = document.getElementById('psychGaugeMarker');
+  if (score !== undefined && score !== null) {
+    gaugeMarker.style.left = `${((score - -1) / 2) * 100}%`;
+  }
+
+  renderMiniTrend(
+    'psychology', 'vixTrendLabel', 'vixTrendWrap', 'vixTrendChart',
+    historyEntries, 'vix', 'VIX', CHART_COLORS.psychology, 'rgba(138, 75, 175, 0.12)',
+  );
 
   const aaii = psychology.aaii_sentiment || {};
   trackChart('psychology', new Chart(document.getElementById('sentimentChart'), {
