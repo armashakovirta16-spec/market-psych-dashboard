@@ -98,6 +98,41 @@ function pillarSignalHTML(label, score) {
   return `<span class="sbadge ${scoreBadgeClass(score)}">${label} ${score >= 0 ? '+' : ''}${score.toFixed(2)}</span>`;
 }
 
+function tiltBadgeClass(tilt) {
+  if (tilt === 'Overweight') return 'risk-on';
+  if (tilt === 'Underweight') return 'risk-off';
+  return 'neutral';
+}
+
+function tiltItemHTML(name, data) {
+  return `<div class="tilt-item">
+    <div class="tilt-item-header">
+      <span class="tilt-item-name">${name}</span>
+      <span class="sbadge ${tiltBadgeClass(data.tilt)}">${data.tilt}</span>
+    </div>
+    <p class="tilt-rationale">${data.rationale}</p>
+  </div>`;
+}
+
+function renderAllocationTilts(tilts) {
+  const disclaimerEl = document.getElementById('tiltDisclaimer');
+  const assetListEl = document.getElementById('assetTiltList');
+  const sectorListEl = document.getElementById('sectorTiltList');
+
+  if (!tilts) {
+    disclaimerEl.textContent = '';
+    assetListEl.innerHTML = '';
+    sectorListEl.innerHTML = '';
+    return;
+  }
+
+  disclaimerEl.textContent = tilts.disclaimer;
+  assetListEl.innerHTML = Object.entries(tilts.asset_classes || {})
+    .map(([name, data]) => tiltItemHTML(name, data)).join('');
+  sectorListEl.innerHTML = Object.entries(tilts.sectors || {})
+    .map(([name, data]) => tiltItemHTML(name, data)).join('');
+}
+
 // Each metric's "improving" direction, used to color the day-over-day
 // diff chips consistently with how the same metric feeds the composite
 // score (e.g. a rising VIX is colored as unfavorable, a rising PMI as
@@ -222,6 +257,7 @@ async function refreshDashboard() {
   renderDiffs(history.entries);
   renderTrend(history.entries);
   renderFinance(snapshot.finance, pillarScores.finance);
+  renderAllocationTilts(snapshot.allocation_tilts);
   renderEconomics(snapshot.economics, pillarScores.economics);
   renderPsychology(snapshot.psychology, pillarScores.psychology);
   // Re-render always rebuilds the active panel's chart at full size; other

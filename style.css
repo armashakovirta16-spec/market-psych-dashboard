@@ -372,6 +372,48 @@ body {
   height: 56px;
 }
 
+.tilt-disclaimer {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--text-dim);
+  margin: 0 0 12px;
+  max-width: 70ch;
+}
+
+.tilt-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.tilt-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.tilt-item:last-child {
+  border-bottom: none;
+}
+
+.tilt-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.tilt-item-name {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.tilt-rationale {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
 .page-footer {
   text-align: center;
   padding: 24px;
