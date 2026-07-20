@@ -57,7 +57,7 @@ function applyTheme(theme) {
 
   const c = THEME_CHART_COLORS[theme];
   ALL_CHARTS.forEach((chart) => {
-    if (chart.options.scales) {
+    if (chart.options.scales && chart.options.scales.x) {
       chart.options.scales.x.grid.color = c.grid;
       chart.options.scales.x.ticks.color = c.tick;
       chart.options.scales.y.grid.color = c.grid;
@@ -87,9 +87,44 @@ function regimeBadgeClass(regime) {
   return 'neutral';
 }
 
+function scoreBadgeClass(score) {
+  if (score > 0.15) return 'risk-on';
+  if (score < -0.15) return 'risk-off';
+  return 'neutral';
+}
+
+function pillarSignalHTML(label, score) {
+  if (score === undefined || score === null) return '';
+  return `<span class="sbadge ${scoreBadgeClass(score)}">${label} ${score >= 0 ? '+' : ''}${score.toFixed(2)}</span>`;
+}
+
 async function loadSnapshot() {
-  const res = await fetch('data/snapshot.json');
+  // cache: 'no-store' + a cache-busting param so a stale CDN/browser cache
+  // never masks a real update between polls.
+  const res = await fetch(`data/snapshot.json?t=${Date.now()}`, { cache: 'no-store' });
   return res.json();
+}
+
+function destroyAllCharts() {
+  ALL_CHARTS.forEach((chart) => chart.destroy());
+  ALL_CHARTS.length = 0;
+  PANEL_CHARTS.finance.length = 0;
+  PANEL_CHARTS.economics.length = 0;
+  PANEL_CHARTS.psychology.length = 0;
+}
+
+async function refreshDashboard() {
+  const snapshot = await loadSnapshot();
+  destroyAllCharts();
+  const pillarScores = (snapshot.composite && snapshot.composite.pillar_scores) || {};
+  renderComposite(snapshot.composite, snapshot.meta.last_updated);
+  renderFinance(snapshot.finance, pillarScores.finance);
+  renderEconomics(snapshot.economics, pillarScores.economics);
+  renderPsychology(snapshot.psychology, pillarScores.psychology);
+  // Re-render always rebuilds the active panel's chart at full size; other
+  // panels' charts get fixed up on next tab switch same as on first load.
+  const activeTab = document.querySelector('.tab.active');
+  if (activeTab) PANEL_CHARTS[activeTab.dataset.tab].forEach((chart) => chart.resize());
 }
 
 function metricHTML(value, label, suffix = '') {
@@ -102,7 +137,10 @@ function metricHTML(value, label, suffix = '') {
 
 function renderComposite(composite, lastUpdated) {
   document.getElementById('compositeRegime').textContent = composite.regime;
-  document.getElementById('compositeNarrative').textContent = composite.narrative;
+
+  const narrativeEl = document.getElementById('compositeNarrative');
+  const paragraphs = Array.isArray(composite.narrative) ? composite.narrative : [composite.narrative];
+  narrativeEl.innerHTML = paragraphs.map((p) => `<p>${p}</p>`).join('');
 
   const badge = document.getElementById('compositeBadge');
   badge.textContent = composite.regime;
@@ -112,11 +150,19 @@ function renderComposite(composite, lastUpdated) {
   const pct = ((composite.score - min) / (max - min)) * 100;
   document.getElementById('scoreMarker').style.left = `${pct}%`;
 
+  const pillarScores = composite.pillar_scores || {};
+  document.getElementById('pillarScoreRow').innerHTML =
+    pillarSignalHTML('Finance', pillarScores.finance) +
+    pillarSignalHTML('Economics', pillarScores.economics) +
+    pillarSignalHTML('Psychology', pillarScores.psychology);
+
   document.getElementById('lastUpdated').textContent =
     `Last updated: ${new Date(lastUpdated).toLocaleString()}`;
 }
 
-function renderFinance(finance) {
+function renderFinance(finance, score) {
+  document.getElementById('financeSignal').innerHTML = pillarSignalHTML('Signal', score);
+
   const metrics = document.getElementById('financeKeyMetrics');
   metrics.innerHTML =
     metricHTML(finance.sp500_pe, 'S&P 500 P/E') +
@@ -155,7 +201,9 @@ function renderFinance(finance) {
   }));
 }
 
-function renderEconomics(economics) {
+function renderEconomics(economics, score) {
+  document.getElementById('economicsSignal').innerHTML = pillarSignalHTML('Signal', score);
+
   const metrics = document.getElementById('economicsKeyMetrics');
   metrics.innerHTML =
     metricHTML(economics.cpi_yoy, 'CPI YoY', '%') +
@@ -164,7 +212,9 @@ function renderEconomics(economics) {
     metricHTML(economics.fed_funds_rate, 'Fed Funds Rate', '%');
 }
 
-function renderPsychology(psychology) {
+function renderPsychology(psychology, score) {
+  document.getElementById('psychologySignal').innerHTML = pillarSignalHTML('Fear/Greed', score);
+
   const metrics = document.getElementById('psychologyKeyMetrics');
   metrics.innerHTML =
     metricHTML(psychology.vix, 'VIX') +
@@ -205,9 +255,7 @@ function renderPsychology(psychology) {
   }));
 }
 
-loadSnapshot().then((snapshot) => {
-  renderComposite(snapshot.composite, snapshot.meta.last_updated);
-  renderFinance(snapshot.finance);
-  renderEconomics(snapshot.economics);
-  renderPsychology(snapshot.psychology);
-});
+const AUTO_REFRESH_MS = 5 * 60 * 1000;
+
+refreshDashboard();
+setInterval(refreshDashboard, AUTO_REFRESH_MS);

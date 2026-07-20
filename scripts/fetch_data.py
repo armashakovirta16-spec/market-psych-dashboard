@@ -175,21 +175,177 @@ def fetch_economics(fred: Fred):
     }
 
 
+HISTORICAL_AVG_PE = 16.5  # multpl.com's own long-run displayed mean for the S&P 500
+NATURAL_UNEMPLOYMENT_ANCHOR = 4.2  # rough full-employment reference point
+
+PILLAR_WEIGHTS = {"finance": 0.4, "economics": 0.3, "psychology": 0.3}
+
+# Thresholds for the behavioral-bias callouts in the narrative — each is a
+# compound or extreme condition, not just "any signal in one direction", so
+# a callout only fires when positioning genuinely looks like that bias.
+HERDING_AAII_SPREAD = 25          # |bullish - bearish| points
+LOSS_AVERSION_PUT_CALL = 1.10     # put/call ratio
+OVERCONFIDENCE_VIX_MAX = 15       # "complacent" volatility
+OVERCONFIDENCE_PE_OVER_AVG = 5    # points above HISTORICAL_AVG_PE
+
+
+def _clamp(x, lo=-1.0, hi=1.0):
+    return max(lo, min(hi, x))
+
+
+def _finance_pillar(finance):
+    """
+    Three equally-weighted, explainable signals:
+      - Yield curve (10y-2y): steep/positive reads as healthy growth
+        expectations; inverted is the textbook recession warning.
+      - Valuation: S&P 500 P/E vs. its long-run historical mean — expensive
+        relative to history nudges cautious (less margin of safety), cheap
+        relative to history nudges supportive.
+      - Breadth: share of the 5 tracked sector ETFs with positive 1-month
+        returns — broad-based moves are a simple momentum confirmation.
+    """
+    parts = {}
+
+    yc = finance.get("yield_curve_10y_2y")
+    if yc is not None:
+        parts["yield_curve"] = round(_clamp(yc / 1.5), 3)
+
+    pe = finance.get("sp500_pe")
+    if pe is not None:
+        parts["valuation"] = round(_clamp((HISTORICAL_AVG_PE - pe) / 10), 3)
+
+    sector_returns = [v for v in finance.get("sector_returns_1m", {}).values() if v is not None]
+    if sector_returns:
+        positive_share = sum(1 for r in sector_returns if r > 0) / len(sector_returns)
+        parts["breadth"] = round(_clamp(positive_share * 2 - 1), 3)
+
+    score = round(sum(parts.values()) / len(parts), 3) if parts else 0.0
+    return score, parts
+
+
+def _economics_pillar(economics):
+    """
+      - ISM PMI vs. the 50 expansion/contraction line.
+      - Real policy rate (Fed funds - CPI YoY): restrictive (positive) is a
+        headwind, accommodative (negative) is a tailwind.
+      - Unemployment vs. a rough full-employment anchor — half-weighted,
+        since the "right" direction here is genuinely ambiguous (very low
+        unemployment can mean late-cycle overheating as easily as healthy
+        growth); included for completeness, not leaned on hard.
+    """
+    parts = {}
+
+    pmi = economics.get("ism_pmi")
+    if pmi is not None:
+        parts["pmi"] = round(_clamp((pmi - 50) / 10), 3)
+
+    cpi, fed_funds = economics.get("cpi_yoy"), economics.get("fed_funds_rate")
+    if cpi is not None and fed_funds is not None:
+        parts["real_rate"] = round(_clamp((cpi - fed_funds) / 3), 3)
+
+    unemployment = economics.get("unemployment_rate")
+    if unemployment is not None:
+        parts["unemployment"] = round(_clamp((NATURAL_UNEMPLOYMENT_ANCHOR - unemployment) / 2) * 0.5, 3)
+
+    score = round(sum(parts.values()) / len(parts), 3) if parts else 0.0
+    return score, parts
+
+
+def _psychology_pillar(psychology):
+    """
+    Doubles as the dashboard's fear/greed-style index for the Psychology
+    pillar: low VIX, call-heavy put/call, and net-bullish AAII all read as
+    "greed"; the inverse of each reads as "fear".
+    """
+    parts = {}
+
+    vix = psychology.get("vix")
+    if vix is not None:
+        parts["vix"] = round(_clamp((22 - vix) / 12), 3)
+
+    pc = psychology.get("put_call_ratio")
+    if pc is not None:
+        parts["put_call"] = round(_clamp((1.0 - pc) / 0.35), 3)
+
+    aaii = psychology.get("aaii_sentiment") or {}
+    bullish, bearish = aaii.get("bullish"), aaii.get("bearish")
+    if bullish is not None and bearish is not None:
+        parts["aaii_spread"] = round(_clamp((bullish - bearish) / 40), 3)
+
+    score = round(sum(parts.values()) / len(parts), 3) if parts else 0.0
+    return score, parts
+
+
+def _describe(score, positive_word, negative_word):
+    if score > 0.15:
+        return positive_word
+    if score < -0.15:
+        return negative_word
+    return "roughly balanced"
+
+
+def _bias_callouts(finance, psychology):
+    """
+    Only ever asserts a bias if the data actually clears that bias's
+    threshold — a quiet market doesn't get a herding/overconfidence label
+    just because the code has one available.
+    """
+    callouts = []
+
+    aaii = psychology.get("aaii_sentiment") or {}
+    bullish, bearish = aaii.get("bullish"), aaii.get("bearish")
+    if bullish is not None and bearish is not None and abs(bullish - bearish) >= HERDING_AAII_SPREAD:
+        lean = "bullish" if bullish > bearish else "bearish"
+        callouts.append(
+            f"AAII sentiment is heavily {lean} ({bullish:.1f}% bullish vs. {bearish:.1f}% bearish, a "
+            f"{abs(bullish - bearish):.1f}-point spread) — a one-sided read that looks more like herding "
+            "into a single narrative than a balanced market."
+        )
+
+    put_call = psychology.get("put_call_ratio")
+    if put_call is not None and put_call >= LOSS_AVERSION_PUT_CALL:
+        callouts.append(
+            f"The put/call ratio at {put_call:.2f} shows investors paying up for downside protection — "
+            "a classic loss-aversion signature, where avoiding a loss is being weighted more heavily than "
+            "capturing further gains."
+        )
+
+    vix, pe = psychology.get("vix"), finance.get("sp500_pe")
+    if vix is not None and pe is not None and vix <= OVERCONFIDENCE_VIX_MAX and pe >= HISTORICAL_AVG_PE + OVERCONFIDENCE_PE_OVER_AVG:
+        callouts.append(
+            f"Volatility this low (VIX {vix:.1f}) alongside valuations well above their historical average "
+            f"(P/E {pe:.1f} vs. a ~{HISTORICAL_AVG_PE} long-run mean) suggests overconfidence — positioning "
+            "priced for calm markets to keep going, with little cushion if that assumption breaks."
+        )
+
+    if not callouts:
+        callouts.append(
+            "No single extreme-positioning signal (herding, loss-aversion-driven hedging, or overconfidence) "
+            "is flashing right now — sentiment, hedging demand, and volatility all look within a normal range."
+        )
+
+    return callouts
+
+
 def compute_composite(finance, economics, psychology) -> dict:
     """
-    Placeholder scoring logic — replace with your own weighting once you've
-    sanity-checked it with your professor. Keep it simple and explainable:
-    a transparent rule beats a black-box model for a v1.
+    Transparent, additive scoring: each pillar averages a handful of
+    explainable -1..+1 signals (documented above each helper), then the
+    three pillar scores are combined with fixed, documented weights
+    (PILLAR_WEIGHTS). Not predictive or rigorous by design — the goal is a
+    genuinely useful, inspectable first pass, not a black-box model.
     """
-    score = 0.0
-    # Example rule: high VIX or wide bear/bull sentiment spread -> more cautious
-    if psychology.get("vix"):
-        score -= (psychology["vix"] - 18) * 0.01  # above 18 nudges cautious
+    finance_score, finance_parts = _finance_pillar(finance)
+    economics_score, economics_parts = _economics_pillar(economics)
+    psychology_score, psychology_parts = _psychology_pillar(psychology)
 
-    if economics.get("ism_pmi"):
-        score += (economics["ism_pmi"] - 50) * 0.02  # below 50 = contraction, nudges cautious
-
-    score = max(-1.0, min(1.0, round(score, 2)))
+    score = round(
+        finance_score * PILLAR_WEIGHTS["finance"]
+        + economics_score * PILLAR_WEIGHTS["economics"]
+        + psychology_score * PILLAR_WEIGHTS["psychology"],
+        3,
+    )
+    score = _clamp(score)
 
     if score > 0.3:
         regime = "Risk-On"
@@ -198,11 +354,42 @@ def compute_composite(finance, economics, psychology) -> dict:
     else:
         regime = "Cautiously Neutral"
 
+    overview = (
+        f"Regime read: {regime} (composite score {score:+.2f} on a -1 to +1 scale). Finance conditions are "
+        f"{_describe(finance_score, 'supportive', 'cautious')} ({finance_score:+.2f}), economic data is "
+        f"{_describe(economics_score, 'supportive', 'cautious')} ({economics_score:+.2f}), and market "
+        f"psychology leans {_describe(psychology_score, 'greedy', 'fearful')} ({psychology_score:+.2f})."
+    )
+
+    detail = (
+        f"Finance: the yield curve is {'inverted' if finance.get('yield_curve_10y_2y', 0) < 0 else 'positively sloped'} "
+        f"({finance.get('yield_curve_10y_2y', 0):+.2f}pp), the S&P 500 trades at {finance.get('sp500_pe', 0):.1f}x "
+        f"earnings against a ~{HISTORICAL_AVG_PE}x historical average, and "
+        f"{sum(1 for r in finance.get('sector_returns_1m', {}).values() if (r or 0) > 0)} of "
+        f"{len(finance.get('sector_returns_1m', {}))} tracked sectors are positive over the past month. "
+        f"Economics: ISM PMI is at {economics.get('ism_pmi', 0):.1f} "
+        f"({'expansion' if (economics.get('ism_pmi') or 0) >= 50 else 'contraction'}), CPI is running "
+        f"{economics.get('cpi_yoy', 0):.1f}% YoY against a {economics.get('fed_funds_rate', 0):.2f}% Fed funds rate, "
+        f"and unemployment sits at {economics.get('unemployment_rate', 0):.1f}%."
+    )
+
+    bias_paragraph = " ".join(_bias_callouts(finance, psychology))
+
     return {
         "regime": regime,
         "score": score,
         "score_range": [-1, 1],
-        "narrative": "Auto-generated placeholder narrative — refine this once your composite logic is finalized.",
+        "pillar_scores": {
+            "finance": finance_score,
+            "economics": economics_score,
+            "psychology": psychology_score,
+        },
+        "pillar_components": {
+            "finance": finance_parts,
+            "economics": economics_parts,
+            "psychology": psychology_parts,
+        },
+        "narrative": [overview, detail, bias_paragraph],
     }
 
 
