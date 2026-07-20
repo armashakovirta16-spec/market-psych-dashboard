@@ -351,7 +351,18 @@ function destroyAllCharts() {
   PANEL_CHARTS.strategy.length = 0;
 }
 
+let isFirstLoad = true;
+const MIN_LOADING_DISPLAY_MS = 550; // long enough to read as deliberate, short enough not to annoy
+
+function hideLoadingOverlay() {
+  const overlay = document.getElementById('loadingOverlay');
+  if (!overlay) return;
+  overlay.classList.add('hidden');
+  overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
+}
+
 async function refreshDashboard() {
+  const loadStartedAt = Date.now();
   const [snapshot, history] = await Promise.all([loadSnapshot(), loadHistory()]);
   destroyAllCharts();
   const pillarScores = (snapshot.composite && snapshot.composite.pillar_scores) || {};
@@ -367,6 +378,14 @@ async function refreshDashboard() {
   // panels' charts get fixed up on next tab switch same as on first load.
   const activeTab = document.querySelector('.tab.active');
   if (activeTab) PANEL_CHARTS[activeTab.dataset.tab].forEach((chart) => chart.resize());
+
+  // Only the very first load shows the overlay — background auto-refreshes
+  // every 5 minutes shouldn't re-flash a loading screen over live data.
+  if (isFirstLoad) {
+    isFirstLoad = false;
+    const remaining = MIN_LOADING_DISPLAY_MS - (Date.now() - loadStartedAt);
+    setTimeout(hideLoadingOverlay, Math.max(0, remaining));
+  }
 }
 
 function metricHTML(value, label, suffix = '') {
