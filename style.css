@@ -25,6 +25,7 @@
   --color-finance: var(--blue);
   --color-economics: var(--green);
   --color-psychology: #8a4baf;
+  --color-strategy: var(--amber);
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, .04), 0 8px 24px rgba(0, 0, 0, .04);
   --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -287,6 +288,7 @@ body {
 .tab.active[data-tab="finance"] { color: var(--color-finance); }
 .tab.active[data-tab="economics"] { color: var(--color-economics); }
 .tab.active[data-tab="psychology"] { color: var(--color-psychology); }
+.tab.active[data-tab="strategy"] { color: var(--color-strategy); }
 
 .tab-panels {
   padding: 0 32px 48px;

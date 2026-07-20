@@ -56,6 +56,7 @@
     <div class="tab active" data-tab="finance" onclick="showTab('finance', this)">Finance</div>
     <div class="tab" data-tab="economics" onclick="showTab('economics', this)">Economics</div>
     <div class="tab" data-tab="psychology" onclick="showTab('psychology', this)">Psychology</div>
+    <div class="tab" data-tab="strategy" onclick="showTab('strategy', this)">Strategy</div>
   </div>
 
   <main class="tab-panels">
@@ -86,6 +87,11 @@
       <div class="metric-row" id="psychologyKeyMetrics"></div>
       <div class="chart-label">AAII sentiment survey</div>
       <div class="chart-wrap chart-wrap-donut"><canvas id="sentimentChart"></canvas></div>
+    </section>
+
+    <section class="panel" id="pillar-strategy" data-panel="strategy">
+      <p class="tilt-disclaimer">A fixed menu of common strategy postures, each evaluated against current Finance + Economics + Psychology conditions together. Not mutually exclusive — more than one can apply at once. Illustrative, not personalized investment advice.</p>
+      <div class="tilt-list" id="strategyList"></div>
     </section>
 
   </main>

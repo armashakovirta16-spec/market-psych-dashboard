@@ -31,7 +31,7 @@ function chartDefaults() {
 // Chart.js sizes a canvas at creation time, so charts inside a panel that
 // starts hidden (display:none) render at 0x0 until resized after becoming
 // visible — track instances per panel so showTab() can fix that up.
-const PANEL_CHARTS = { finance: [], economics: [], psychology: [] };
+const PANEL_CHARTS = { finance: [], economics: [], psychology: [], strategy: [] };
 const ALL_CHARTS = [];
 
 function trackChart(panel, chart) {
@@ -131,6 +131,21 @@ function renderAllocationTilts(tilts) {
     .map(([name, data]) => tiltItemHTML(name, data)).join('');
   sectorListEl.innerHTML = Object.entries(tilts.sectors || {})
     .map(([name, data]) => tiltItemHTML(name, data)).join('');
+}
+
+function strategyItemHTML(strategy) {
+  return `<div class="tilt-item">
+    <div class="tilt-item-header">
+      <span class="tilt-item-name">${strategy.name}</span>
+      <span class="sbadge ${strategy.indicated ? 'risk-on' : 'neutral'}">${strategy.indicated ? 'Indicated now' : 'Not indicated now'}</span>
+    </div>
+    <p class="tilt-rationale">${strategy.rationale}</p>
+  </div>`;
+}
+
+function renderStrategies(strategies) {
+  const listEl = document.getElementById('strategyList');
+  listEl.innerHTML = (strategies || []).map(strategyItemHTML).join('');
 }
 
 // Each metric's "improving" direction, used to color the day-over-day
@@ -247,6 +262,7 @@ function destroyAllCharts() {
   PANEL_CHARTS.finance.length = 0;
   PANEL_CHARTS.economics.length = 0;
   PANEL_CHARTS.psychology.length = 0;
+  PANEL_CHARTS.strategy.length = 0;
 }
 
 async function refreshDashboard() {
@@ -260,6 +276,7 @@ async function refreshDashboard() {
   renderAllocationTilts(snapshot.allocation_tilts);
   renderEconomics(snapshot.economics, pillarScores.economics);
   renderPsychology(snapshot.psychology, pillarScores.psychology);
+  renderStrategies(snapshot.strategies);
   // Re-render always rebuilds the active panel's chart at full size; other
   // panels' charts get fixed up on next tab switch same as on first load.
   const activeTab = document.querySelector('.tab.active');

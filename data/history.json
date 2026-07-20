@@ -15,13 +15,13 @@
     },
     {
       "date": "2026-07-20",
-      "composite_score": 0.052,
+      "composite_score": 0.054,
       "pillar_scores": {
         "finance": -0.042,
         "economics": 0.091,
-        "psychology": 0.138
+        "psychology": 0.144
       },
-      "vix": 18.03,
+      "vix": 17.84,
       "sp500_pe": 32.08,
       "ism_pmi": 53.3,
       "put_call_ratio": 0.97

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-20T11:45:34.036098+00:00",
+    "last_updated": "2026-07-20T12:00:56.739372+00:00",
     "data_sources": {
       "sp500_pe": "scraped",
       "put_call_ratio": "scraped",
@@ -31,7 +31,7 @@
     "ism_pmi": 53.3
   },
   "psychology": {
-    "vix": 18.03,
+    "vix": 17.84,
     "put_call_ratio": 0.97,
     "aaii_sentiment": {
       "bullish": 34.2,
@@ -42,7 +42,7 @@
   },
   "composite": {
     "regime": "Cautiously Neutral",
-    "score": 0.052,
+    "score": 0.054,
     "score_range": [
       -1,
       1
@@ -50,7 +50,7 @@
     "pillar_scores": {
       "finance": -0.042,
       "economics": 0.091,
-      "psychology": 0.138
+      "psychology": 0.144
     },
     "pillar_components": {
       "finance": {
@@ -64,7 +64,7 @@
         "unemployment": 0.0
       },
       "psychology": {
-        "vix": 0.331,
+        "vix": 0.347,
         "put_call": 0.086,
         "aaii_spread": -0.002
       }
@@ -113,5 +113,37 @@
         "rationale": "Regime is balanced (+0.05) and this sector has no standout momentum (+1.6%)."
       }
     }
-  }
+  },
+  "strategies": [
+    {
+      "name": "Broad equity risk-on / momentum continuation",
+      "indicated": false,
+      "rationale": "Composite (+0.05), breadth, or psychology (+0.14) isn't clearly confirming a Risk-On trend worth chasing right now."
+    },
+    {
+      "name": "Quality / defensive rotation",
+      "indicated": false,
+      "rationale": "Composite (+0.05) and psychology (+0.14) aren't both flashing caution at once \u2014 no strong case for a defensive rotation yet."
+    },
+    {
+      "name": "Barbell: quality equities + duration",
+      "indicated": false,
+      "rationale": "Either the regime isn't balanced enough or real yields aren't attractive enough to justify a barbell right now."
+    },
+    {
+      "name": "Inflation hedge / real-assets tilt",
+      "indicated": false,
+      "rationale": "Neither fear-leaning psychology nor hot CPI is showing up right now, so a real-assets hedge isn't specifically indicated."
+    },
+    {
+      "name": "Valuation-aware trim / raise cash on strength",
+      "indicated": true,
+      "rationale": "Valuations are significantly stretched (valuation component -1.00) even though the broader regime isn't bearish (+0.05) \u2014 a case for trimming winners into strength rather than adding new risk at these prices."
+    },
+    {
+      "name": "Stay neutral on net exposure",
+      "indicated": true,
+      "rationale": "The composite regime is genuinely balanced (+0.05) \u2014 no pillar is dominant enough to justify a strong directional tilt on overall market exposure."
+    }
+  ]
 }

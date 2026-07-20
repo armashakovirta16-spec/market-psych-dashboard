@@ -503,6 +503,113 @@ def compute_allocation_tilts(finance, economics, psychology, composite) -> dict:
     }
 
 
+NEUTRAL_BAND = 0.2  # |composite score| at or below this counts as "genuinely balanced"
+
+
+def compute_strategies(composite, economics, allocation_tilts) -> list:
+    """
+    A small fixed menu of named, well-known strategy postures, each
+    evaluated against the current composite/pillar scores with a simple
+    documented rule. Deliberately not mutually exclusive — a PM can hold
+    more than one tactical view at once (e.g. "stay neutral on net
+    exposure, but trim winners because valuations are stretched"). Reuses
+    the composite/pillar/tilt outputs already computed above rather than
+    introducing parallel logic — this is a synthesis layer, not a new
+    scoring model.
+    """
+    score = composite["score"]
+    psychology_score = composite["pillar_scores"]["psychology"]
+    components = composite.get("pillar_components", {})
+    valuation = (components.get("finance") or {}).get("valuation")
+    breadth = (components.get("finance") or {}).get("breadth")
+    real_rate = (components.get("economics") or {}).get("real_rate")
+    gold_tilt = (allocation_tilts.get("asset_classes", {}).get("Gold") or {}).get("tilt")
+
+    strategies = []
+
+    momentum_ok = score > 0.3 and (breadth or 0) > 0 and psychology_score < 0.5
+    strategies.append({
+        "name": "Broad equity risk-on / momentum continuation",
+        "indicated": bool(momentum_ok),
+        "rationale": (
+            f"Composite is Risk-On ({score:+.2f}) with positive sector breadth and psychology not "
+            f"already overheated ({psychology_score:+.2f}) — conditions support leaning into the trend."
+            if momentum_ok else
+            f"Composite ({score:+.2f}), breadth, or psychology ({psychology_score:+.2f}) isn't clearly "
+            "confirming a Risk-On trend worth chasing right now."
+        ),
+    })
+
+    defensive_ok = score < -0.2 or (valuation is not None and valuation <= -0.5 and psychology_score < 0)
+    strategies.append({
+        "name": "Quality / defensive rotation",
+        "indicated": bool(defensive_ok),
+        "rationale": (
+            f"Composite is cautious ({score:+.2f}) and/or valuations are stretched with fear-leaning "
+            f"psychology ({psychology_score:+.2f}) — a case for rotating toward quality and defensives."
+            if defensive_ok else
+            f"Composite ({score:+.2f}) and psychology ({psychology_score:+.2f}) aren't both flashing "
+            "caution at once — no strong case for a defensive rotation yet."
+        ),
+    })
+
+    barbell_ok = abs(score) <= NEUTRAL_BAND and real_rate is not None and real_rate <= -0.5
+    strategies.append({
+        "name": "Barbell: quality equities + duration",
+        "indicated": bool(barbell_ok),
+        "rationale": (
+            f"Regime is genuinely balanced ({score:+.2f}) and real policy rates look historically "
+            f"attractive (real-rate component {real_rate:+.2f}) — a case for pairing quality equity "
+            "exposure with a duration add rather than picking a hard direction."
+            if barbell_ok else
+            "Either the regime isn't balanced enough or real yields aren't attractive enough to "
+            "justify a barbell right now."
+        ),
+    })
+
+    inflation_hedge_ok = gold_tilt == "Overweight"
+    strategies.append({
+        "name": "Inflation hedge / real-assets tilt",
+        "indicated": bool(inflation_hedge_ok),
+        "rationale": (
+            "Gold is already flagged Overweight above (fear-leaning psychology and/or hot CPI) — "
+            "the same signal supports a broader real-assets hedge."
+            if inflation_hedge_ok else
+            "Neither fear-leaning psychology nor hot CPI is showing up right now, so a real-assets "
+            "hedge isn't specifically indicated."
+        ),
+    })
+
+    trim_ok = valuation is not None and valuation <= -0.7 and score > -NEUTRAL_BAND
+    strategies.append({
+        "name": "Valuation-aware trim / raise cash on strength",
+        "indicated": bool(trim_ok),
+        "rationale": (
+            f"Valuations are significantly stretched (valuation component {valuation:+.2f}) even "
+            f"though the broader regime isn't bearish ({score:+.2f}) — a case for trimming winners "
+            "into strength rather than adding new risk at these prices."
+            if trim_ok else
+            "Valuations aren't stretched enough, or the regime is already bearish, for this specific "
+            "trim-on-strength case to apply."
+        ),
+    })
+
+    neutral_ok = abs(score) <= NEUTRAL_BAND
+    strategies.append({
+        "name": "Stay neutral on net exposure",
+        "indicated": bool(neutral_ok),
+        "rationale": (
+            f"The composite regime is genuinely balanced ({score:+.2f}) — no pillar is dominant enough "
+            "to justify a strong directional tilt on overall market exposure."
+            if neutral_ok else
+            f"The composite regime ({score:+.2f}) is directional enough that staying purely neutral "
+            "isn't the best fit right now."
+        ),
+    })
+
+    return strategies
+
+
 def load_history() -> dict:
     try:
         with open(HISTORY_PATH) as f:
@@ -566,6 +673,7 @@ def main():
 
     composite = compute_composite(finance, economics, psychology)
     allocation_tilts = compute_allocation_tilts(finance, economics, psychology, composite)
+    strategies = compute_strategies(composite, economics, allocation_tilts)
 
     snapshot = {
         "meta": {
@@ -582,6 +690,7 @@ def main():
         "psychology": psychology,
         "composite": composite,
         "allocation_tilts": allocation_tilts,
+        "strategies": strategies,
     }
 
     with open(OUTPUT_PATH, "w") as f:
