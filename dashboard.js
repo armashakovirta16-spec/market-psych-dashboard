@@ -98,6 +98,62 @@ function pillarSignalHTML(label, score) {
   return `<span class="sbadge ${scoreBadgeClass(score)}">${label} ${score >= 0 ? '+' : ''}${score.toFixed(2)}</span>`;
 }
 
+// Each metric's "improving" direction, used to color the day-over-day
+// diff chips consistently with how the same metric feeds the composite
+// score (e.g. a rising VIX is colored as unfavorable, a rising PMI as
+// favorable) — not asserting good/bad in general, just reusing the same
+// direction already baked into compute_composite() on the backend.
+const DIFF_METRICS = [
+  { key: 'composite_score', label: 'Composite', decimals: 2, threshold: 0.05, higherIsBetter: true },
+  { key: 'vix', label: 'VIX', decimals: 2, threshold: 1.5, higherIsBetter: false },
+  { key: 'put_call_ratio', label: 'Put/Call', decimals: 2, threshold: 0.1, higherIsBetter: false },
+  { key: 'sp500_pe', label: 'S&P 500 P/E', decimals: 1, threshold: 0.5, higherIsBetter: false },
+  { key: 'ism_pmi', label: 'ISM PMI', decimals: 1, threshold: 0.5, higherIsBetter: true },
+];
+
+function computeDiffs(entries) {
+  if (!entries || entries.length < 2) return [];
+  const prev = entries[entries.length - 2];
+  const curr = entries[entries.length - 1];
+
+  const diffs = [];
+  for (const m of DIFF_METRICS) {
+    const prevVal = prev[m.key];
+    const currVal = curr[m.key];
+    if (prevVal === undefined || prevVal === null || currVal === undefined || currVal === null) continue;
+
+    const delta = currVal - prevVal;
+    if (Math.abs(delta) < m.threshold) continue;
+
+    const improved = m.higherIsBetter ? delta > 0 : delta < 0;
+    diffs.push({
+      label: m.label,
+      text: `${m.label} ${prevVal.toFixed(m.decimals)} → ${currVal.toFixed(m.decimals)}`,
+      className: improved ? 'risk-on' : 'risk-off',
+    });
+  }
+  return diffs;
+}
+
+function renderDiffs(entries) {
+  const label = document.getElementById('diffLabel');
+  const row = document.getElementById('diffRow');
+  const diffs = computeDiffs(entries);
+
+  if (!entries || entries.length < 2) {
+    label.style.display = 'none';
+    row.innerHTML = '';
+    return;
+  }
+
+  label.style.display = '';
+  if (diffs.length === 0) {
+    row.innerHTML = '<span class="sbadge neutral">No material changes since yesterday</span>';
+  } else {
+    row.innerHTML = diffs.map((d) => `<span class="sbadge ${d.className}">${d.text}</span>`).join('');
+  }
+}
+
 async function loadSnapshot() {
   // cache: 'no-store' + a cache-busting param so a stale CDN/browser cache
   // never masks a real update between polls.
@@ -163,6 +219,7 @@ async function refreshDashboard() {
   destroyAllCharts();
   const pillarScores = (snapshot.composite && snapshot.composite.pillar_scores) || {};
   renderComposite(snapshot.composite, snapshot.meta.last_updated);
+  renderDiffs(history.entries);
   renderTrend(history.entries);
   renderFinance(snapshot.finance, pillarScores.finance);
   renderEconomics(snapshot.economics, pillarScores.economics);
