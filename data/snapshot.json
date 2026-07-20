@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-20T10:49:50.557271+00:00",
+    "last_updated": "2026-07-20T11:27:41.264273+00:00",
     "data_sources": {
       "sp500_pe": "scraped",
       "put_call_ratio": "scraped",
@@ -31,7 +31,7 @@
     "ism_pmi": 53.3
   },
   "psychology": {
-    "vix": 18.37,
+    "vix": 18.19,
     "put_call_ratio": 0.97,
     "aaii_sentiment": {
       "bullish": 34.2,
@@ -42,7 +42,7 @@
   },
   "composite": {
     "regime": "Cautiously Neutral",
-    "score": 0.049,
+    "score": 0.051,
     "score_range": [
       -1,
       1
@@ -50,7 +50,7 @@
     "pillar_scores": {
       "finance": -0.042,
       "economics": 0.091,
-      "psychology": 0.129
+      "psychology": 0.134
     },
     "pillar_components": {
       "finance": {
@@ -64,7 +64,7 @@
         "unemployment": 0.0
       },
       "psychology": {
-        "vix": 0.302,
+        "vix": 0.317,
         "put_call": 0.086,
         "aaii_spread": -0.002
       }

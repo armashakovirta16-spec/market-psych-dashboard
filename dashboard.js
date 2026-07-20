@@ -105,6 +105,51 @@ async function loadSnapshot() {
   return res.json();
 }
 
+async function loadHistory() {
+  try {
+    const res = await fetch(`data/history.json?t=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) return { entries: [] };
+    return res.json();
+  } catch {
+    return { entries: [] };
+  }
+}
+
+function renderTrend(entries) {
+  const wrap = document.getElementById('trendChartWrap');
+  const label = document.getElementById('trendLabel');
+
+  if (!entries || entries.length < 2) {
+    wrap.style.display = 'none';
+    label.textContent = 'Trend builds up daily as the pipeline runs — check back tomorrow for a real read.';
+    return;
+  }
+
+  wrap.style.display = '';
+  label.textContent = `Composite score, last ${entries.length} days`;
+
+  const trendOptions = chartDefaults();
+  trendOptions.scales.x.display = false;
+  trendOptions.scales.y.display = false;
+  trendOptions.plugins = { legend: { display: false } };
+  trendOptions.elements = { point: { radius: 0 }, line: { tension: 0.3 } };
+
+  ALL_CHARTS.push(new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+      labels: entries.map((e) => e.date),
+      datasets: [{
+        data: entries.map((e) => e.composite_score),
+        borderColor: CHART_COLORS.finance,
+        backgroundColor: 'rgba(0, 113, 227, 0.12)',
+        borderWidth: 2,
+        fill: true,
+      }],
+    },
+    options: trendOptions,
+  }));
+}
+
 function destroyAllCharts() {
   ALL_CHARTS.forEach((chart) => chart.destroy());
   ALL_CHARTS.length = 0;
@@ -114,10 +159,11 @@ function destroyAllCharts() {
 }
 
 async function refreshDashboard() {
-  const snapshot = await loadSnapshot();
+  const [snapshot, history] = await Promise.all([loadSnapshot(), loadHistory()]);
   destroyAllCharts();
   const pillarScores = (snapshot.composite && snapshot.composite.pillar_scores) || {};
   renderComposite(snapshot.composite, snapshot.meta.last_updated);
+  renderTrend(history.entries);
   renderFinance(snapshot.finance, pillarScores.finance);
   renderEconomics(snapshot.economics, pillarScores.economics);
   renderPsychology(snapshot.psychology, pillarScores.psychology);

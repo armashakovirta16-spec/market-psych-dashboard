@@ -28,7 +28,9 @@ import yfinance as yf
 from fredapi import Fred
 
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "snapshot.json")
+HISTORY_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "history.json")
 MANUAL_OVERRIDES_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "manual_overrides.json")
+HISTORY_MAX_ENTRIES = 90  # keep ~3 months; a daily-cadence dashboard doesn't need more
 
 # A browser UA avoids the bot-blocking a bare "python-requests" UA hits on some sites.
 REQUEST_HEADERS = {
@@ -393,6 +395,40 @@ def compute_composite(finance, economics, psychology) -> dict:
     }
 
 
+def load_history() -> dict:
+    try:
+        with open(HISTORY_PATH) as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {"entries": []}
+
+
+def append_history_entry(history: dict, snapshot: dict) -> dict:
+    """
+    Records one point per calendar day (UTC) so the frontend can show a
+    trend, not just a snapshot. Re-running on the same day updates that
+    day's entry in place rather than adding a duplicate — a manual re-run
+    or a retried Action shouldn't inflate the trend with same-day noise.
+    """
+    today = datetime.now(timezone.utc).date().isoformat()
+    entry = {
+        "date": today,
+        "composite_score": snapshot["composite"]["score"],
+        "pillar_scores": snapshot["composite"]["pillar_scores"],
+        "vix": snapshot["psychology"].get("vix"),
+        "sp500_pe": snapshot["finance"].get("sp500_pe"),
+        "ism_pmi": snapshot["economics"].get("ism_pmi"),
+        "put_call_ratio": snapshot["psychology"].get("put_call_ratio"),
+    }
+
+    entries = [e for e in history.get("entries", []) if e.get("date") != today]
+    entries.append(entry)
+    entries.sort(key=lambda e: e["date"])
+    entries = entries[-HISTORY_MAX_ENTRIES:]
+
+    return {"entries": entries}
+
+
 def main():
     fred_key = os.environ.get("FRED_API_KEY")
     if not fred_key:
@@ -440,8 +476,12 @@ def main():
 
     with open(OUTPUT_PATH, "w") as f:
         json.dump(snapshot, f, indent=2)
-
     print(f"Wrote snapshot to {OUTPUT_PATH}")
+
+    history = append_history_entry(load_history(), snapshot)
+    with open(HISTORY_PATH, "w") as f:
+        json.dump(history, f, indent=2)
+    print(f"Wrote {len(history['entries'])}-entry history to {HISTORY_PATH}")
 
 
 if __name__ == "__main__":

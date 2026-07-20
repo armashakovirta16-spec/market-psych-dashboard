@@ -368,6 +368,10 @@ body {
   margin: 8px auto 0;
 }
 
+.sparkline-wrap {
+  height: 56px;
+}
+
 .page-footer {
   text-align: center;
   padding: 24px;
