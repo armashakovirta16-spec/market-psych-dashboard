@@ -194,6 +194,49 @@ body {
   transition: background .15s ease;
 }
 
+.refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--blue);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: opacity .15s ease, transform .1s ease;
+}
+
+.refresh-btn:hover {
+  opacity: .85;
+}
+
+.refresh-btn:active {
+  transform: scale(0.96);
+}
+
+.refresh-btn:disabled {
+  opacity: .55;
+  cursor: default;
+}
+
+.refresh-icon {
+  display: inline-block;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.refresh-btn.spinning .refresh-icon {
+  animation: refreshSpin .7s linear infinite;
+}
+
+@keyframes refreshSpin {
+  to { transform: rotate(360deg); }
+}
+
 .theme-toggle:hover {
   background: var(--surface2);
 }

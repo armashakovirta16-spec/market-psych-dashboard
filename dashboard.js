@@ -410,6 +410,36 @@ async function refreshDashboard() {
   }
 }
 
+// Manual "Refresh" button: forces an immediate re-fetch of whatever's
+// currently published (same mechanism as the 5-minute auto-refresh, just
+// on demand) — this re-checks for the latest published data, it does not
+// trigger a brand-new scrape/fetch run on GitHub's side.
+async function handleRefreshClick() {
+  const btn = document.getElementById('refreshBtn');
+  const label = btn.querySelector('.refresh-label');
+  if (btn.disabled) return;
+
+  const previousUpdatedAt = document.getElementById('lastUpdated').textContent;
+  btn.disabled = true;
+  btn.classList.add('spinning');
+  label.textContent = 'Refreshing…';
+
+  try {
+    await refreshDashboard();
+    const newUpdatedAt = document.getElementById('lastUpdated').textContent;
+    label.textContent = newUpdatedAt === previousUpdatedAt ? 'Up to date' : 'Updated';
+  } catch (err) {
+    console.error('Manual refresh failed:', err);
+    label.textContent = 'Failed — retry';
+  } finally {
+    btn.classList.remove('spinning');
+    setTimeout(() => {
+      label.textContent = 'Refresh';
+      btn.disabled = false;
+    }, 1800);
+  }
+}
+
 function metricHTML(value, label, suffix = '') {
   const display = (value === null || value === undefined) ? '—' : `${value}${suffix}`;
   return `<div class="metric">
