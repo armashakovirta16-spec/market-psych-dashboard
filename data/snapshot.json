@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-21T09:17:55.739502+00:00",
+    "last_updated": "2026-07-21T09:28:45.123487+00:00",
     "data_sources": {
       "sp500_pe": "scraped",
       "put_call_ratio": "scraped",
@@ -31,7 +31,7 @@
     "ism_pmi": 53.3
   },
   "psychology": {
-    "vix": 17.48,
+    "vix": 17.47,
     "put_call_ratio": 1.0,
     "aaii_sentiment": {
       "bullish": 34.2,
@@ -46,17 +46,18 @@
   },
   "composite": {
     "regime": "Cautiously Neutral",
-    "score": 0.044,
+    "score": -0.0,
     "score_range": [
       -1,
       1
     ],
     "baseline_score": 0.01,
-    "psychology_gap": 0.034,
+    "psychology_gap": -0.01,
+    "psychology_weight": 0.17,
     "pillar_scores": {
       "finance": -0.051,
       "economics": 0.091,
-      "psychology": 0.125
+      "psychology": -0.049
     },
     "pillar_components": {
       "finance": {
@@ -70,15 +71,15 @@
         "unemployment": 0.0
       },
       "psychology": {
-        "vix": 0.377,
-        "put_call": 0.0,
-        "aaii_spread": -0.002
+        "vix": 0.108,
+        "put_call": -0.111,
+        "aaii_spread": -0.144
       }
     },
     "narrative": [
-      "Regime read: Cautiously Neutral (composite score +0.04 on a -1 to +1 scale). Finance conditions are roughly balanced (-0.05), economic data is roughly balanced (+0.09), and market psychology leans roughly balanced (+0.12), with the economy in an Expansion phase.",
+      "Regime read: Cautiously Neutral (composite score -0.00 on a -1 to +1 scale). Finance conditions are roughly balanced (-0.05), economic data is roughly balanced (+0.09), and market psychology leans roughly balanced (-0.05), with the economy in an Expansion phase.",
       "Finance: the yield curve is positively sloped (+0.37pp), the S&P 500 trades at 28.6x earnings against a ~16.5x historical average, and 4 of 5 tracked sectors are positive over the past month. Economics: ISM PMI is at 53.3 (expansion), CPI is running 3.5% YoY against a 3.63% Fed funds rate, and unemployment sits at 4.2%. ISM PMI at 53.3 shows expansion, with neither the yield curve nor unemployment flashing late-cycle strain.",
-      "Psychology isn't pulling the read away from fundamentals right now \u2014 the fundamentals-only baseline (+0.01) and the full psychology-adjusted composite (+0.04) are essentially the same.",
+      "Psychology isn't pulling the read away from fundamentals right now \u2014 the fundamentals-only baseline (+0.01) and the full psychology-adjusted composite (-0.00) are essentially the same. Psychology is calm enough that it's only weighted 17% of the final read (vs. a floor of 15% and a ceiling of 55% when conditions get extreme).",
       "No single extreme-positioning signal (herding, loss-aversion-driven hedging, overconfidence, or a Minsky-style extended-calm streak) is flashing right now \u2014 sentiment, hedging demand, and volatility all look within a normal range."
     ]
   },
@@ -87,15 +88,15 @@
     "asset_classes": {
       "Equities": {
         "tilt": "Neutral",
-        "rationale": "Composite regime is balanced (+0.04). Valuations are also stretched (valuation component -1.00), a headwind if the regime turns."
+        "rationale": "Composite regime is balanced (-0.00). Valuations are also stretched (valuation component -1.00), a headwind if the regime turns."
       },
       "Bonds": {
         "tilt": "Neutral",
-        "rationale": "Composite regime is balanced (+0.04)."
+        "rationale": "Composite regime is balanced (-0.00)."
       },
       "Gold": {
         "tilt": "Neutral",
-        "rationale": "No strong fear or inflation signal right now (psychology +0.12, CPI 3.5% YoY)."
+        "rationale": "No strong fear or inflation signal right now (psychology -0.05, CPI 3.5% YoY)."
       }
     },
     "sectors": {
@@ -117,7 +118,7 @@
       },
       "Utilities (XLU)": {
         "tilt": "Neutral",
-        "rationale": "Regime is balanced (+0.04) and this sector has no standout momentum (+0.5%)."
+        "rationale": "Regime is balanced (-0.00) and this sector has no standout momentum (+0.5%)."
       }
     }
   },
@@ -125,12 +126,12 @@
     {
       "name": "Broad equity risk-on / momentum continuation",
       "indicated": false,
-      "rationale": "Composite (+0.04), breadth, or psychology (+0.12) isn't clearly confirming a Risk-On trend worth chasing right now."
+      "rationale": "Composite (-0.00), breadth, or psychology (-0.05) isn't clearly confirming a Risk-On trend worth chasing right now."
     },
     {
       "name": "Quality / defensive rotation",
-      "indicated": false,
-      "rationale": "Composite (+0.04) and psychology (+0.12) aren't both flashing caution at once \u2014 no strong case for a defensive rotation yet."
+      "indicated": true,
+      "rationale": "Composite is cautious (-0.00) and/or valuations are stretched with fear-leaning psychology (-0.05) \u2014 a case for rotating toward quality and defensives."
     },
     {
       "name": "Barbell: quality equities + duration",
@@ -145,12 +146,12 @@
     {
       "name": "Valuation-aware trim / raise cash on strength",
       "indicated": true,
-      "rationale": "Valuations are significantly stretched (valuation component -1.00) even though the broader regime isn't bearish (+0.04) \u2014 a case for trimming winners into strength rather than adding new risk at these prices."
+      "rationale": "Valuations are significantly stretched (valuation component -1.00) even though the broader regime isn't bearish (-0.00) \u2014 a case for trimming winners into strength rather than adding new risk at these prices."
     },
     {
       "name": "Stay neutral on net exposure",
       "indicated": true,
-      "rationale": "The composite regime is genuinely balanced (+0.04) \u2014 no pillar is dominant enough to justify a strong directional tilt on overall market exposure."
+      "rationale": "The composite regime is genuinely balanced (-0.00) \u2014 no pillar is dominant enough to justify a strong directional tilt on overall market exposure."
     }
   ]
 }

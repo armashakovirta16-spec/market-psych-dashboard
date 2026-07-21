@@ -180,7 +180,35 @@ def fetch_economics(fred: Fred):
 HISTORICAL_AVG_PE = 16.5  # multpl.com's own long-run displayed mean for the S&P 500
 NATURAL_UNEMPLOYMENT_ANCHOR = 4.2  # rough full-employment reference point
 
-PILLAR_WEIGHTS = {"finance": 0.4, "economics": 0.3, "psychology": 0.3}
+PILLAR_WEIGHTS = {"finance": 0.4, "economics": 0.3, "psychology": 0.3}  # used only for the fundamentals split (finance vs. economics) — see ADAPTIVE_PSYCHOLOGY_WEIGHT below for how psychology's overall influence is now determined
+
+# Adaptive Markets Hypothesis: psychology should govern *how much to trust*
+# the fundamentals baseline, not just be a third independent vote at a fixed
+# weight. Implemented as a weight that scales with how extreme psychology
+# currently is — near-calm markets track fundamentals almost entirely (per
+# the framework: "when conditions are calm, prices track fundamentals
+# reasonably well"); extreme psychology pulls the composite further from
+# the fundamentals baseline (per: "when fear, herding, or overconfidence
+# dominate, prices decouple from fundamentals").
+MIN_PSYCHOLOGY_WEIGHT = 0.15  # calm-market floor — fundamentals still get the final say
+MAX_PSYCHOLOGY_WEIGHT = 0.55  # extreme-market ceiling — psychology can outweigh fundamentals
+
+# Baker & Wurgler's Investor Sentiment Index is the named template for the
+# psychology composite ("adapt rather than invent from scratch") — their
+# exact six proxies (closed-end fund discount, IPO volume/first-day
+# returns, equity share of new issues, dividend premium, NYSE turnover)
+# aren't available here, so this adapts their *method* (standardize each
+# proxy against its long-run mean/std, then average) to the three proxies
+# this dashboard does have. These long-run figures are reasonable
+# approximate references, not a rigorous backtest — consistent with the
+# project's "not predictive or rigorous, just genuinely useful" scope.
+VIX_LONG_RUN_MEAN = 19.5
+VIX_LONG_RUN_STD = 7.5
+PUT_CALL_LONG_RUN_MEAN = 0.95
+PUT_CALL_LONG_RUN_STD = 0.18
+AAII_SPREAD_LONG_RUN_MEAN = 6.0   # bulls have historically outnumbered bears on average
+AAII_SPREAD_LONG_RUN_STD = 17.0
+ZSCORE_CAP = 2.5  # standard deviations mapped to the +/-1 unit scale
 
 # Thresholds for the behavioral-bias callouts in the narrative — each is a
 # compound or extreme condition, not just "any signal in one direction", so
@@ -206,6 +234,27 @@ MINSKY_MIN_STREAK_DAYS = 5
 
 def _clamp(x, lo=-1.0, hi=1.0):
     return max(lo, min(hi, x))
+
+
+def _zscore_to_unit(z: float) -> float:
+    """Clip a z-score to +/-ZSCORE_CAP standard deviations, then rescale to -1..+1."""
+    return _clamp(z / ZSCORE_CAP)
+
+
+def _psychology_vix_reference(cycle_stage: str) -> float:
+    """
+    The VIX component's "calm" reference point shifts down in Late-Cycle —
+    the literal implementation of the framework's principle that
+    psychology should be read "relative to [cycle] stage, not in the
+    abstract": the same VIX reading counts as less calm when the economy
+    is already showing late-cycle strain (Minsky's complacency-before-
+    fragility idea). Scoped to VIX/complacency specifically, since that's
+    the concrete mechanism the framework names — put/call and AAII aren't
+    stage-conditioned.
+    """
+    if cycle_stage == "Late-Cycle":
+        return VIX_LONG_RUN_MEAN - 2.5
+    return VIX_LONG_RUN_MEAN
 
 
 def classify_cycle_stage(economics, finance) -> dict:
@@ -315,26 +364,39 @@ def _economics_pillar(economics):
     return score, parts
 
 
-def _psychology_pillar(psychology):
+def _psychology_pillar(psychology, cycle_stage=None):
     """
     Doubles as the dashboard's fear/greed-style index for the Psychology
     pillar: low VIX, call-heavy put/call, and net-bullish AAII all read as
     "greed"; the inverse of each reads as "fear".
+
+    Each proxy is standardized against a long-run mean/std (z-score, capped
+    at +/-ZSCORE_CAP and rescaled to -1..+1) rather than an ad hoc linear
+    reference point — adapting Baker & Wurgler's Investor Sentiment Index
+    *method* (standardize each proxy, then average) to the three proxies
+    available here, since their own six aren't. The VIX reference point
+    also shifts with cycle stage (see _psychology_vix_reference()) — the
+    only proxy the framework specifically ties to stage.
     """
     parts = {}
 
     vix = psychology.get("vix")
     if vix is not None:
-        parts["vix"] = round(_clamp((22 - vix) / 12), 3)
+        vix_reference = _psychology_vix_reference(cycle_stage)
+        z = (vix_reference - vix) / VIX_LONG_RUN_STD
+        parts["vix"] = round(_zscore_to_unit(z), 3)
 
     pc = psychology.get("put_call_ratio")
     if pc is not None:
-        parts["put_call"] = round(_clamp((1.0 - pc) / 0.35), 3)
+        z = (PUT_CALL_LONG_RUN_MEAN - pc) / PUT_CALL_LONG_RUN_STD
+        parts["put_call"] = round(_zscore_to_unit(z), 3)
 
     aaii = psychology.get("aaii_sentiment") or {}
     bullish, bearish = aaii.get("bullish"), aaii.get("bearish")
     if bullish is not None and bearish is not None:
-        parts["aaii_spread"] = round(_clamp((bullish - bearish) / 40), 3)
+        spread = bullish - bearish
+        z = (spread - AAII_SPREAD_LONG_RUN_MEAN) / AAII_SPREAD_LONG_RUN_STD
+        parts["aaii_spread"] = round(_zscore_to_unit(z), 3)
 
     score = round(sum(parts.values()) / len(parts), 3) if parts else 0.0
     return score, parts
@@ -444,37 +506,45 @@ def _bias_callouts(finance, psychology, cycle_stage, history_entries):
 
 def compute_composite(finance, economics, psychology, cycle_stage, history_entries=None) -> dict:
     """
-    Transparent, additive scoring: each pillar averages a handful of
-    explainable -1..+1 signals (documented above each helper), then the
-    three pillar scores are combined with fixed, documented weights
-    (PILLAR_WEIGHTS). Not predictive or rigorous by design — the goal is a
-    genuinely useful, inspectable first pass, not a black-box model.
-
-    Also computes a fundamentals-only baseline (finance + economics,
-    re-weighted to sum to 1, no psychology) and the gap between that and
-    the full composite. Per the theoretical framework this dashboard is
-    built on (Adaptive Markets Hypothesis — psychology governs how much to
-    trust the finance/econ baseline, not just a third independent vote),
-    that gap is framed as the headline insight, not any single pillar
-    score on its own.
+    Transparent scoring: each pillar averages a handful of explainable
+    -1..+1 signals (documented above each helper). Finance and economics
+    combine into a fundamentals-only baseline at fixed weights
+    (PILLAR_WEIGHTS). Psychology does NOT then get added at a third fixed
+    weight — per the Adaptive Markets Hypothesis this dashboard is built
+    on, psychology's job is to govern *how much to trust* that baseline,
+    not cast an independent vote. So its weight in the final composite is
+    adaptive: near MIN_PSYCHOLOGY_WEIGHT when psychology is calm (baseline
+    dominates, matching "when conditions are calm, prices track
+    fundamentals reasonably well"), rising toward MAX_PSYCHOLOGY_WEIGHT the
+    more extreme psychology gets (matching "when fear, herding, or
+    overconfidence dominate, prices decouple from fundamentals"). The gap
+    between the baseline and the final composite is framed as the headline
+    insight, not any single pillar score on its own — and that gap now
+    widens automatically exactly when psychology is extreme enough to
+    warrant it, instead of being a fixed proportion regardless of how calm
+    or extreme conditions are. Not predictive or rigorous by design — the
+    goal is a genuinely useful, inspectable first pass, not a black-box
+    model.
     """
     finance_score, finance_parts = _finance_pillar(finance)
     economics_score, economics_parts = _economics_pillar(economics)
-    psychology_score, psychology_parts = _psychology_pillar(psychology)
+    psychology_score, psychology_parts = _psychology_pillar(psychology, cycle_stage.get("stage"))
 
-    score = round(
-        finance_score * PILLAR_WEIGHTS["finance"]
-        + economics_score * PILLAR_WEIGHTS["economics"]
-        + psychology_score * PILLAR_WEIGHTS["psychology"],
+    fundamentals_weight_sum = PILLAR_WEIGHTS["finance"] + PILLAR_WEIGHTS["economics"]
+    baseline_score = round(
+        (finance_score * PILLAR_WEIGHTS["finance"] + economics_score * PILLAR_WEIGHTS["economics"]) / fundamentals_weight_sum,
         3,
     )
+
+    psychology_extremity = min(abs(psychology_score), 1.0)
+    psychology_weight = round(
+        MIN_PSYCHOLOGY_WEIGHT + (MAX_PSYCHOLOGY_WEIGHT - MIN_PSYCHOLOGY_WEIGHT) * psychology_extremity, 3
+    )
+    fundamentals_weight_final = 1 - psychology_weight
+
+    score = round(baseline_score * fundamentals_weight_final + psychology_score * psychology_weight, 3)
     score = _clamp(score)
 
-    fundamentals_weight = PILLAR_WEIGHTS["finance"] + PILLAR_WEIGHTS["economics"]
-    baseline_score = round(
-        (finance_score * PILLAR_WEIGHTS["finance"] + economics_score * PILLAR_WEIGHTS["economics"]) / fundamentals_weight,
-        3,
-    )
     psychology_gap = round(score - baseline_score, 3)
 
     if score > 0.3:
@@ -507,19 +577,23 @@ def compute_composite(finance, economics, psychology, cycle_stage, history_entri
         f"and unemployment sits at {economics.get('unemployment_rate', 0):.1f}%. {cycle_stage.get('rationale', '')}"
     )
 
+    weight_pct = round(psychology_weight * 100)
     if abs(psychology_gap) < 0.05:
         gap_paragraph = (
             f"Psychology isn't pulling the read away from fundamentals right now — the fundamentals-only "
             f"baseline ({baseline_score:+.2f}) and the full psychology-adjusted composite ({score:+.2f}) are "
-            "essentially the same."
+            f"essentially the same. Psychology is calm enough that it's only weighted {weight_pct}% of the "
+            "final read (vs. a floor of 15% and a ceiling of 55% when conditions get extreme)."
         )
     else:
         direction = "more optimistic" if psychology_gap > 0 else "more cautious"
         gap_paragraph = (
             f"Fundamentals (finance + economics) alone would put the read at {baseline_score:+.2f}; current "
             f"psychology shifts that to {score:+.2f} — a {abs(psychology_gap):.2f}-point gap that makes "
-            f"positioning {direction} than fundamentals alone would justify. Per the Adaptive Markets "
-            "Hypothesis this dashboard is built on, that gap — not any single pillar — is the actual signal."
+            f"positioning {direction} than fundamentals alone would justify. Psychology is weighted {weight_pct}% "
+            "of the final read right now (up from a 15% calm-market floor) because of how extreme it currently "
+            "is. Per the Adaptive Markets Hypothesis this dashboard is built on, that gap — not any single "
+            "pillar — is the actual signal."
         )
 
     bias_paragraph = " ".join(_bias_callouts(finance, psychology, cycle_stage.get("stage"), history_entries))
@@ -530,6 +604,7 @@ def compute_composite(finance, economics, psychology, cycle_stage, history_entri
         "score_range": [-1, 1],
         "baseline_score": baseline_score,
         "psychology_gap": psychology_gap,
+        "psychology_weight": psychology_weight,
         "pillar_scores": {
             "finance": finance_score,
             "economics": economics_score,
