@@ -125,6 +125,27 @@ function tiltBadgeClass(tilt) {
   return 'neutral';
 }
 
+function cycleStageBadgeClass(stage) {
+  if (stage === 'Expansion') return 'risk-on';
+  if (stage === 'Contraction') return 'risk-off';
+  return 'neutral'; // Late-Cycle or Unknown
+}
+
+function renderCycleStage(cycleStage) {
+  const listEl = document.getElementById('cycleStageList');
+  if (!cycleStage) {
+    listEl.innerHTML = '';
+    return;
+  }
+  listEl.innerHTML = `<div class="tilt-item">
+    <div class="tilt-item-header">
+      <span class="tilt-item-name">Cycle Stage</span>
+      <span class="sbadge ${cycleStageBadgeClass(cycleStage.stage)}">${cycleStage.stage}</span>
+    </div>
+    <p class="tilt-rationale">${cycleStage.rationale}</p>
+  </div>`;
+}
+
 function tiltItemHTML(name, data) {
   return `<div class="tilt-item">
     <div class="tilt-item-header">
@@ -371,7 +392,7 @@ async function refreshDashboard() {
   renderTrend(history.entries);
   renderFinance(snapshot.finance, pillarScores.finance);
   renderAllocationTilts(snapshot.allocation_tilts);
-  renderEconomics(snapshot.economics, pillarScores.economics, history.entries);
+  renderEconomics(snapshot.economics, pillarScores.economics, history.entries, snapshot.cycle_stage);
   renderPsychology(snapshot.psychology, pillarScores.psychology, history.entries);
   renderStrategies(snapshot.strategies);
   // Re-render always rebuilds the active panel's chart at full size; other
@@ -416,6 +437,14 @@ function renderComposite(composite, lastUpdated) {
     pillarSignalHTML('Finance', pillarScores.finance) +
     pillarSignalHTML('Economics', pillarScores.economics) +
     pillarSignalHTML('Psychology', pillarScores.psychology);
+
+  // Fundamentals-only baseline vs. the full psychology-adjusted composite —
+  // per the theoretical framework, that gap is the headline insight, not
+  // any single pillar score, so it gets its own row rather than being
+  // buried only in the narrative prose.
+  document.getElementById('gapRow').innerHTML =
+    pillarSignalHTML('Fundamentals baseline', composite.baseline_score) +
+    pillarSignalHTML('Psychology gap', composite.psychology_gap);
 
   document.getElementById('lastUpdated').textContent =
     `Last updated: ${new Date(lastUpdated).toLocaleString()}`;
@@ -464,7 +493,7 @@ function renderFinance(finance, score) {
   }));
 }
 
-function renderEconomics(economics, score, historyEntries) {
+function renderEconomics(economics, score, historyEntries, cycleStage) {
   document.getElementById('economicsSignal').innerHTML = pillarSignalHTML('Signal', score);
 
   const metrics = document.getElementById('economicsKeyMetrics');
@@ -473,6 +502,8 @@ function renderEconomics(economics, score, historyEntries) {
     metricHTML(economics.ism_pmi, 'ISM PMI') +
     metricHTML(economics.unemployment_rate, 'Unemployment', '%') +
     metricHTML(economics.fed_funds_rate, 'Fed Funds Rate', '%');
+
+  renderCycleStage(cycleStage);
 
   renderMiniTrend(
     'economics', 'pmiTrendLabel', 'pmiTrendWrap', 'pmiTrendChart',

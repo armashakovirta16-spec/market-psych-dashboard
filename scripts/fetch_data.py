@@ -185,14 +185,76 @@ PILLAR_WEIGHTS = {"finance": 0.4, "economics": 0.3, "psychology": 0.3}
 # Thresholds for the behavioral-bias callouts in the narrative — each is a
 # compound or extreme condition, not just "any signal in one direction", so
 # a callout only fires when positioning genuinely looks like that bias.
-HERDING_AAII_SPREAD = 25          # |bullish - bearish| points
-LOSS_AVERSION_PUT_CALL = 1.10     # put/call ratio
-OVERCONFIDENCE_VIX_MAX = 15       # "complacent" volatility
+# Citations are the specific mechanisms named in the professor's theoretical
+# framework doc — every metric here should trace back to one of them.
+HERDING_AAII_SPREAD = 25          # |bullish - bearish| points — herding / social proof
+LOSS_AVERSION_PUT_CALL = 1.10     # put/call ratio — Prospect Theory (Kahneman & Tversky)
+OVERCONFIDENCE_VIX_MAX = 15       # "complacent" volatility — overconfidence / illusion of control
 OVERCONFIDENCE_PE_OVER_AVG = 5    # points above HISTORICAL_AVG_PE
+
+# Business-cycle stage (the Economics pillar's "context layer", per the
+# framework) — psychology signals are read differently depending on this.
+LATE_CYCLE_UNEMPLOYMENT_MAX = 3.8  # unemployment this low = classic late-cycle labor-market tightness
+
+# Minsky's Financial Instability Hypothesis: stability breeds complacency,
+# which breeds fragility. This is a persistence signal, not a snapshot one —
+# it checks data/history.json for how many consecutive days VIX has stayed
+# "calm", not just today's reading.
+MINSKY_VIX_CEILING = 15
+MINSKY_MIN_STREAK_DAYS = 5
 
 
 def _clamp(x, lo=-1.0, hi=1.0):
     return max(lo, min(hi, x))
+
+
+def classify_cycle_stage(economics, finance) -> dict:
+    """
+    Business-cycle framing, per the theoretical framework's "Economics
+    pillar — the context layer": is the economy in Expansion, Late-Cycle,
+    or Contraction? This matters because psychology signals mean different
+    things depending on stage — a calm VIX reading is unremarkable in
+    Expansion but a Minsky-style warning sign Late-Cycle (see
+    _overconfidence_vix_ceiling() below, which reads psychology "relative
+    to that stage — not in the abstract").
+
+    Simple, named rules from data already fetched:
+      - PMI < 50: Contraction — manufacturing activity is already shrinking.
+      - PMI >= 50 but the yield curve is inverted or unemployment is very
+        low: Late-Cycle — still growing, but showing classic late-cycle
+        strain (an inverted curve pricing in a future slowdown, or a labor
+        market tight enough to risk overheating).
+      - otherwise: Expansion.
+    """
+    pmi = economics.get("ism_pmi")
+    yield_curve = finance.get("yield_curve_10y_2y")
+    unemployment = economics.get("unemployment_rate")
+
+    if pmi is None:
+        return {"stage": "Unknown", "rationale": "ISM PMI isn't available, so the cycle stage can't be classified."}
+
+    if pmi < 50:
+        return {
+            "stage": "Contraction",
+            "rationale": f"ISM PMI at {pmi:.1f} is below the 50 expansion/contraction line — manufacturing activity is already shrinking.",
+        }
+
+    strain_flags = []
+    if yield_curve is not None and yield_curve < 0:
+        strain_flags.append(f"the yield curve is inverted ({yield_curve:+.2f}pp), pricing in a future slowdown")
+    if unemployment is not None and unemployment <= LATE_CYCLE_UNEMPLOYMENT_MAX:
+        strain_flags.append(f"unemployment is very low ({unemployment:.1f}%), a classic late-cycle tightness signal")
+
+    if strain_flags:
+        return {
+            "stage": "Late-Cycle",
+            "rationale": f"ISM PMI at {pmi:.1f} still shows expansion, but {' and '.join(strain_flags)} — hallmarks of a late-cycle economy.",
+        }
+
+    return {
+        "stage": "Expansion",
+        "rationale": f"ISM PMI at {pmi:.1f} shows expansion, with neither the yield curve nor unemployment flashing late-cycle strain.",
+    }
 
 
 def _finance_pillar(finance):
@@ -286,11 +348,46 @@ def _describe(score, positive_word, negative_word):
     return "roughly balanced"
 
 
-def _bias_callouts(finance, psychology):
+def _overconfidence_vix_ceiling(cycle_stage: str) -> float:
+    """
+    Same idea as OVERCONFIDENCE_VIX_MAX, but tightened Late-Cycle — this is
+    the concrete implementation of the framework's point that psychology
+    should be read "relative to that stage, not in the abstract": the same
+    "calm" VIX reading is more concerning when the economy is already
+    showing late-cycle strain, so it takes a lower bar to flag it there.
+    """
+    if cycle_stage == "Late-Cycle":
+        return OVERCONFIDENCE_VIX_MAX + 3
+    return OVERCONFIDENCE_VIX_MAX
+
+
+def _minsky_streak_days(history_entries, current_vix) -> int:
+    """
+    Minsky's Financial Instability Hypothesis is a persistence claim
+    ("stability breeds complacency, which breeds fragility"), not a
+    snapshot one — so this counts consecutive calm days rather than just
+    checking today's VIX. Today counts as day 1, then walks backward
+    through data/history.json's prior entries (loaded before today's is
+    appended, so there's no double-count).
+    """
+    if current_vix is None or current_vix > MINSKY_VIX_CEILING:
+        return 0
+    streak = 1
+    for entry in reversed(history_entries or []):
+        vix = entry.get("vix")
+        if vix is None or vix > MINSKY_VIX_CEILING:
+            break
+        streak += 1
+    return streak
+
+
+def _bias_callouts(finance, psychology, cycle_stage, history_entries):
     """
     Only ever asserts a bias if the data actually clears that bias's
     threshold — a quiet market doesn't get a herding/overconfidence label
-    just because the code has one available.
+    just because the code has one available. Each callout cites the
+    specific mechanism it implements from the theoretical framework, so
+    it's traceable rather than an unexplained label.
     """
     callouts = []
 
@@ -300,42 +397,66 @@ def _bias_callouts(finance, psychology):
         lean = "bullish" if bullish > bearish else "bearish"
         callouts.append(
             f"AAII sentiment is heavily {lean} ({bullish:.1f}% bullish vs. {bearish:.1f}% bearish, a "
-            f"{abs(bullish - bearish):.1f}-point spread) — a one-sided read that looks more like herding "
-            "into a single narrative than a balanced market."
+            f"{abs(bullish - bearish):.1f}-point spread) — a one-sided read that looks more like herding / "
+            "social proof into a single narrative than a balanced market."
         )
 
     put_call = psychology.get("put_call_ratio")
     if put_call is not None and put_call >= LOSS_AVERSION_PUT_CALL:
         callouts.append(
             f"The put/call ratio at {put_call:.2f} shows investors paying up for downside protection — "
-            "a classic loss-aversion signature, where avoiding a loss is being weighted more heavily than "
-            "capturing further gains."
+            "a classic Prospect Theory loss-aversion signature, where avoiding a loss is being weighted "
+            "more heavily than capturing further gains."
         )
 
     vix, pe = psychology.get("vix"), finance.get("sp500_pe")
-    if vix is not None and pe is not None and vix <= OVERCONFIDENCE_VIX_MAX and pe >= HISTORICAL_AVG_PE + OVERCONFIDENCE_PE_OVER_AVG:
+    vix_ceiling = _overconfidence_vix_ceiling(cycle_stage)
+    if vix is not None and pe is not None and vix <= vix_ceiling and pe >= HISTORICAL_AVG_PE + OVERCONFIDENCE_PE_OVER_AVG:
+        stage_note = (
+            " This reads as more concerning given the economy is already showing late-cycle strain — per "
+            "Minsky, calm this late in the cycle is exactly when complacency turns risky."
+            if cycle_stage == "Late-Cycle" else ""
+        )
         callouts.append(
             f"Volatility this low (VIX {vix:.1f}) alongside valuations well above their historical average "
-            f"(P/E {pe:.1f} vs. a ~{HISTORICAL_AVG_PE} long-run mean) suggests overconfidence — positioning "
-            "priced for calm markets to keep going, with little cushion if that assumption breaks."
+            f"(P/E {pe:.1f} vs. a ~{HISTORICAL_AVG_PE} long-run mean) suggests overconfidence / illusion of "
+            f"control — positioning priced for calm markets to keep going, with little cushion if that "
+            f"assumption breaks.{stage_note}"
+        )
+
+    streak = _minsky_streak_days(history_entries, vix)
+    if streak >= MINSKY_MIN_STREAK_DAYS:
+        callouts.append(
+            f"VIX has stayed at or below {MINSKY_VIX_CEILING} for at least {streak} straight recorded days — "
+            "per Minsky's Financial Instability Hypothesis, extended calm is exactly the condition that lets "
+            "complacency build into fragility, not a reason to relax."
         )
 
     if not callouts:
         callouts.append(
-            "No single extreme-positioning signal (herding, loss-aversion-driven hedging, or overconfidence) "
-            "is flashing right now — sentiment, hedging demand, and volatility all look within a normal range."
+            "No single extreme-positioning signal (herding, loss-aversion-driven hedging, overconfidence, or "
+            "a Minsky-style extended-calm streak) is flashing right now — sentiment, hedging demand, and "
+            "volatility all look within a normal range."
         )
 
     return callouts
 
 
-def compute_composite(finance, economics, psychology) -> dict:
+def compute_composite(finance, economics, psychology, cycle_stage, history_entries=None) -> dict:
     """
     Transparent, additive scoring: each pillar averages a handful of
     explainable -1..+1 signals (documented above each helper), then the
     three pillar scores are combined with fixed, documented weights
     (PILLAR_WEIGHTS). Not predictive or rigorous by design — the goal is a
     genuinely useful, inspectable first pass, not a black-box model.
+
+    Also computes a fundamentals-only baseline (finance + economics,
+    re-weighted to sum to 1, no psychology) and the gap between that and
+    the full composite. Per the theoretical framework this dashboard is
+    built on (Adaptive Markets Hypothesis — psychology governs how much to
+    trust the finance/econ baseline, not just a third independent vote),
+    that gap is framed as the headline insight, not any single pillar
+    score on its own.
     """
     finance_score, finance_parts = _finance_pillar(finance)
     economics_score, economics_parts = _economics_pillar(economics)
@@ -349,6 +470,13 @@ def compute_composite(finance, economics, psychology) -> dict:
     )
     score = _clamp(score)
 
+    fundamentals_weight = PILLAR_WEIGHTS["finance"] + PILLAR_WEIGHTS["economics"]
+    baseline_score = round(
+        (finance_score * PILLAR_WEIGHTS["finance"] + economics_score * PILLAR_WEIGHTS["economics"]) / fundamentals_weight,
+        3,
+    )
+    psychology_gap = round(score - baseline_score, 3)
+
     if score > 0.3:
         regime = "Risk-On"
     elif score < -0.3:
@@ -356,11 +484,15 @@ def compute_composite(finance, economics, psychology) -> dict:
     else:
         regime = "Cautiously Neutral"
 
+    stage_name = cycle_stage.get("stage", "Unknown")
+    stage_article = "an" if stage_name[:1] in "AEIOU" else "a"
+
     overview = (
         f"Regime read: {regime} (composite score {score:+.2f} on a -1 to +1 scale). Finance conditions are "
         f"{_describe(finance_score, 'supportive', 'cautious')} ({finance_score:+.2f}), economic data is "
         f"{_describe(economics_score, 'supportive', 'cautious')} ({economics_score:+.2f}), and market "
-        f"psychology leans {_describe(psychology_score, 'greedy', 'fearful')} ({psychology_score:+.2f})."
+        f"psychology leans {_describe(psychology_score, 'greedy', 'fearful')} ({psychology_score:+.2f}), with "
+        f"the economy in {stage_article} {stage_name} phase."
     )
 
     detail = (
@@ -372,15 +504,32 @@ def compute_composite(finance, economics, psychology) -> dict:
         f"Economics: ISM PMI is at {economics.get('ism_pmi', 0):.1f} "
         f"({'expansion' if (economics.get('ism_pmi') or 0) >= 50 else 'contraction'}), CPI is running "
         f"{economics.get('cpi_yoy', 0):.1f}% YoY against a {economics.get('fed_funds_rate', 0):.2f}% Fed funds rate, "
-        f"and unemployment sits at {economics.get('unemployment_rate', 0):.1f}%."
+        f"and unemployment sits at {economics.get('unemployment_rate', 0):.1f}%. {cycle_stage.get('rationale', '')}"
     )
 
-    bias_paragraph = " ".join(_bias_callouts(finance, psychology))
+    if abs(psychology_gap) < 0.05:
+        gap_paragraph = (
+            f"Psychology isn't pulling the read away from fundamentals right now — the fundamentals-only "
+            f"baseline ({baseline_score:+.2f}) and the full psychology-adjusted composite ({score:+.2f}) are "
+            "essentially the same."
+        )
+    else:
+        direction = "more optimistic" if psychology_gap > 0 else "more cautious"
+        gap_paragraph = (
+            f"Fundamentals (finance + economics) alone would put the read at {baseline_score:+.2f}; current "
+            f"psychology shifts that to {score:+.2f} — a {abs(psychology_gap):.2f}-point gap that makes "
+            f"positioning {direction} than fundamentals alone would justify. Per the Adaptive Markets "
+            "Hypothesis this dashboard is built on, that gap — not any single pillar — is the actual signal."
+        )
+
+    bias_paragraph = " ".join(_bias_callouts(finance, psychology, cycle_stage.get("stage"), history_entries))
 
     return {
         "regime": regime,
         "score": score,
         "score_range": [-1, 1],
+        "baseline_score": baseline_score,
+        "psychology_gap": psychology_gap,
         "pillar_scores": {
             "finance": finance_score,
             "economics": economics_score,
@@ -391,7 +540,7 @@ def compute_composite(finance, economics, psychology) -> dict:
             "economics": economics_parts,
             "psychology": psychology_parts,
         },
-        "narrative": [overview, detail, bias_paragraph],
+        "narrative": [overview, detail, gap_paragraph, bias_paragraph],
     }
 
 
@@ -671,7 +820,13 @@ def main():
         "aaii_sentiment", {"bullish": None, "neutral": None, "bearish": None}
     )
 
-    composite = compute_composite(finance, economics, psychology)
+    # Load history BEFORE appending today's entry, so compute_composite's
+    # Minsky streak check sees only prior days (today's VIX is passed in
+    # separately and counted as day 1 of the streak).
+    history = load_history()
+
+    cycle_stage = classify_cycle_stage(economics, finance)
+    composite = compute_composite(finance, economics, psychology, cycle_stage, history.get("entries"))
     allocation_tilts = compute_allocation_tilts(finance, economics, psychology, composite)
     strategies = compute_strategies(composite, economics, allocation_tilts)
 
@@ -688,6 +843,7 @@ def main():
         "finance": finance,
         "economics": economics,
         "psychology": psychology,
+        "cycle_stage": cycle_stage,
         "composite": composite,
         "allocation_tilts": allocation_tilts,
         "strategies": strategies,
@@ -697,7 +853,7 @@ def main():
         json.dump(snapshot, f, indent=2)
     print(f"Wrote snapshot to {OUTPUT_PATH}")
 
-    history = append_history_entry(load_history(), snapshot)
+    history = append_history_entry(history, snapshot)
     with open(HISTORY_PATH, "w") as f:
         json.dump(history, f, indent=2)
     print(f"Wrote {len(history['entries'])}-entry history to {HISTORY_PATH}")

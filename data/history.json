@@ -25,6 +25,19 @@
       "sp500_pe": 32.08,
       "ism_pmi": 53.3,
       "put_call_ratio": 0.97
+    },
+    {
+      "date": "2026-07-21",
+      "composite_score": 0.044,
+      "pillar_scores": {
+        "finance": -0.051,
+        "economics": 0.091,
+        "psychology": 0.124
+      },
+      "vix": 17.51,
+      "sp500_pe": 28.64,
+      "ism_pmi": 53.3,
+      "put_call_ratio": 1.0
     }
   ]
 }
