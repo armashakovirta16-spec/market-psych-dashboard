@@ -11,7 +11,8 @@
       "vix": 18.77,
       "sp500_pe": 32.08,
       "ism_pmi": 53.3,
-      "put_call_ratio": 0.97
+      "put_call_ratio": 0.97,
+      "consumer_sentiment": 44.8
     },
     {
       "date": "2026-07-20",
@@ -24,20 +25,22 @@
       "vix": 17.84,
       "sp500_pe": 32.08,
       "ism_pmi": 53.3,
-      "put_call_ratio": 0.97
+      "put_call_ratio": 0.97,
+      "consumer_sentiment": 44.8
     },
     {
       "date": "2026-07-21",
-      "composite_score": -0.0,
+      "composite_score": -0.069,
       "pillar_scores": {
         "finance": -0.051,
         "economics": 0.091,
-        "psychology": -0.05
+        "psychology": -0.287
       },
       "vix": 17.54,
       "sp500_pe": 28.64,
       "ism_pmi": 53.3,
-      "put_call_ratio": 1.0
+      "put_call_ratio": 1.0,
+      "consumer_sentiment": 44.8
     }
   ]
 }

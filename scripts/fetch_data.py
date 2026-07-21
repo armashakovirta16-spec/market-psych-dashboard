@@ -5,6 +5,8 @@ and writes it to data/snapshot.json for the frontend to consume.
 Data sources:
   - Finance / Psychology (VIX, sector & asset ETFs): yfinance (no API key needed)
   - Economics (CPI, unemployment, rates): FRED API (needs a free API key)
+  - Consumer sentiment (Psychology): FRED API (U. Michigan Consumer Sentiment,
+    series UMCSENT) — monthly, no scraping needed.
   - S&P 500 P/E, ISM PMI, Cboe put/call ratio: scraped (no free API exists for
     any of these); each falls back to data/manual_overrides.json if the scrape
     fails, so a broken page never leaves the field silently null.
@@ -60,6 +62,7 @@ FRED_SERIES = {
     "fed_funds_rate": "FEDFUNDS",
     "yield_10y": "DGS10",
     "yield_2y": "DGS2",
+    "consumer_sentiment": "UMCSENT",  # U. Michigan Consumer Sentiment — monthly
 }
 
 
@@ -160,6 +163,16 @@ def fetch_ism_pmi() -> float:
     return float(match.group(1))
 
 
+def fetch_consumer_sentiment(fred: Fred) -> float:
+    """Latest U. Michigan Consumer Sentiment reading from FRED (UMCSENT).
+
+    Free and reliable via the FRED API already used for CPI/rates — no
+    scraping needed, unlike put/call or ISM PMI above.
+    """
+    series = fred.get_series(FRED_SERIES["consumer_sentiment"]).dropna()
+    return round(float(series.iloc[-1]), 1)
+
+
 def fetch_economics(fred: Fred):
     unemployment = fred.get_series(FRED_SERIES["unemployment_rate"]).iloc[-1]
     fed_funds = fred.get_series(FRED_SERIES["fed_funds_rate"]).iloc[-1]
@@ -208,6 +221,8 @@ PUT_CALL_LONG_RUN_MEAN = 0.95
 PUT_CALL_LONG_RUN_STD = 0.18
 AAII_SPREAD_LONG_RUN_MEAN = 6.0   # bulls have historically outnumbered bears on average
 AAII_SPREAD_LONG_RUN_STD = 17.0
+CONSUMER_SENTIMENT_LONG_RUN_MEAN = 81.5  # UMCSENT's mean since 2000 (FRED data)
+CONSUMER_SENTIMENT_LONG_RUN_STD = 14.0   # UMCSENT's std since 2000 (FRED data)
 ZSCORE_CAP = 2.5  # standard deviations mapped to the +/-1 unit scale
 
 # Thresholds for the behavioral-bias callouts in the narrative — each is a
@@ -367,13 +382,14 @@ def _economics_pillar(economics):
 def _psychology_pillar(psychology, cycle_stage=None):
     """
     Doubles as the dashboard's fear/greed-style index for the Psychology
-    pillar: low VIX, call-heavy put/call, and net-bullish AAII all read as
-    "greed"; the inverse of each reads as "fear".
+    pillar: low VIX, call-heavy put/call, net-bullish AAII, and high
+    consumer sentiment all read as "greed"; the inverse of each reads as
+    "fear".
 
     Each proxy is standardized against a long-run mean/std (z-score, capped
     at +/-ZSCORE_CAP and rescaled to -1..+1) rather than an ad hoc linear
     reference point — adapting Baker & Wurgler's Investor Sentiment Index
-    *method* (standardize each proxy, then average) to the three proxies
+    *method* (standardize each proxy, then average) to the four proxies
     available here, since their own six aren't. The VIX reference point
     also shifts with cycle stage (see _psychology_vix_reference()) — the
     only proxy the framework specifically ties to stage.
@@ -397,6 +413,11 @@ def _psychology_pillar(psychology, cycle_stage=None):
         spread = bullish - bearish
         z = (spread - AAII_SPREAD_LONG_RUN_MEAN) / AAII_SPREAD_LONG_RUN_STD
         parts["aaii_spread"] = round(_zscore_to_unit(z), 3)
+
+    consumer_sentiment = psychology.get("consumer_sentiment")
+    if consumer_sentiment is not None:
+        z = (consumer_sentiment - CONSUMER_SENTIMENT_LONG_RUN_MEAN) / CONSUMER_SENTIMENT_LONG_RUN_STD
+        parts["consumer_sentiment"] = round(_zscore_to_unit(z), 3)
 
     score = round(sum(parts.values()) / len(parts), 3) if parts else 0.0
     return score, parts
@@ -860,6 +881,7 @@ def append_history_entry(history: dict, snapshot: dict) -> dict:
         "sp500_pe": snapshot["finance"].get("sp500_pe"),
         "ism_pmi": snapshot["economics"].get("ism_pmi"),
         "put_call_ratio": snapshot["psychology"].get("put_call_ratio"),
+        "consumer_sentiment": snapshot["psychology"].get("consumer_sentiment"),
     }
 
     entries = [e for e in history.get("entries", []) if e.get("date") != today]
@@ -896,6 +918,7 @@ def main():
     psychology["aaii_sentiment"] = overrides.get(
         "aaii_sentiment", {"bullish": None, "neutral": None, "bearish": None}
     )
+    psychology["consumer_sentiment"] = fetch_consumer_sentiment(fred)
 
     # Load history BEFORE appending today's entry, so compute_composite's
     # Minsky streak check sees only prior days (today's VIX is passed in
@@ -915,6 +938,7 @@ def main():
                 "put_call_ratio": pc_source,
                 "ism_pmi": pmi_source,
                 "aaii_sentiment": "manual (data/manual_overrides.json)",
+                "consumer_sentiment": "FRED (UMCSENT)",
             },
         },
         "finance": finance,

@@ -202,6 +202,7 @@ const DIFF_METRICS = [
   { key: 'put_call_ratio', label: 'Put/Call', decimals: 2, threshold: 0.1, higherIsBetter: false },
   { key: 'sp500_pe', label: 'S&P 500 P/E', decimals: 1, threshold: 0.5, higherIsBetter: false },
   { key: 'ism_pmi', label: 'ISM PMI', decimals: 1, threshold: 0.5, higherIsBetter: true },
+  { key: 'consumer_sentiment', label: 'Consumer Sentiment', decimals: 1, threshold: 1.0, higherIsBetter: true },
 ];
 
 function computeDiffs(entries) {
@@ -467,7 +468,7 @@ function renderComposite(composite, lastUpdated) {
   document.getElementById('pillarScoreRow').innerHTML =
     pillarSignalHTML('Finance', pillarScores.finance, 'Yield curve, valuation vs. history, and sector breadth, averaged (-1 to +1)') +
     pillarSignalHTML('Economics', pillarScores.economics, 'ISM PMI, real policy rate, and unemployment vs. full employment, averaged (-1 to +1)') +
-    pillarSignalHTML('Psychology', pillarScores.psychology, 'VIX, put/call ratio, and AAII spread, standardized and averaged (-1 to +1)');
+    pillarSignalHTML('Psychology', pillarScores.psychology, 'VIX, put/call ratio, AAII spread, and consumer sentiment, standardized and averaged (-1 to +1)');
 
   // Fundamentals-only baseline vs. the full psychology-adjusted composite —
   // per the theoretical framework, that gap is the headline insight, not
@@ -549,7 +550,8 @@ function renderPsychology(psychology, score, historyEntries) {
   const metrics = document.getElementById('psychologyKeyMetrics');
   metrics.innerHTML =
     metricHTML(psychology.vix, 'VIX') +
-    metricHTML(psychology.put_call_ratio, 'Put/Call Ratio');
+    metricHTML(psychology.put_call_ratio, 'Put/Call Ratio') +
+    metricHTML(psychology.consumer_sentiment, 'Consumer Sentiment (U. Mich.)');
 
   const gaugeMarker = document.getElementById('psychGaugeMarker');
   if (score !== undefined && score !== null) {
@@ -559,6 +561,11 @@ function renderPsychology(psychology, score, historyEntries) {
   renderMiniTrend(
     'psychology', 'vixTrendLabel', 'vixTrendWrap', 'vixTrendChart',
     historyEntries, 'vix', 'VIX', CHART_COLORS.psychology, 'rgba(138, 75, 175, 0.12)',
+  );
+
+  renderMiniTrend(
+    'psychology', 'consumerSentimentTrendLabel', 'consumerSentimentTrendWrap', 'consumerSentimentTrendChart',
+    historyEntries, 'consumer_sentiment', 'Consumer Sentiment', CHART_COLORS.psychology, 'rgba(138, 75, 175, 0.12)',
   );
 
   const aaii = psychology.aaii_sentiment || {};
