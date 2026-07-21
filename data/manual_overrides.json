@@ -1,12 +1,12 @@
 {
   "_comment": "AAII sentiment has no scrapeable free source (aaii.com blocks bots) — update 'aaii_sentiment' by hand weekly from https://www.aaii.com/sentimentsurvey (released Thursdays). The other three fields are fallback values only, used when the live scrape in fetch_data.py fails for that run — refresh them occasionally so the fallback doesn't go stale, but they are not the primary source.",
   "aaii_sentiment": {
-    "bullish": 34.2,
-    "neutral": 31.5,
-    "bearish": 34.3,
-    "as_of": "2026-07-17"
+    "bullish": 44.9,
+    "neutral": 22.2,
+    "bearish": 32.9,
+    "as_of": "2026-07-15"
   },
-  "sp500_pe": 24.8,
-  "put_call_ratio": 0.92,
-  "ism_pmi": 48.7
+  "sp500_pe": 28.64,
+  "put_call_ratio": 1.0,
+  "ism_pmi": 53.3
 }
