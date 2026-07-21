@@ -7,12 +7,14 @@ Data sources:
   - Economics (CPI, unemployment, rates): FRED API (needs a free API key)
   - Consumer sentiment (Psychology): FRED API (U. Michigan Consumer Sentiment,
     series UMCSENT) — monthly, no scraping needed.
-  - S&P 500 P/E, ISM PMI, Cboe put/call ratio: scraped (no free API exists for
-    any of these); each falls back to data/manual_overrides.json if the scrape
-    fails, so a broken page never leaves the field silently null.
-  - AAII sentiment: aaii.com blocks scrapers outright, so this one is manual
-    only — update data/manual_overrides.json weekly from
-    https://www.aaii.com/sentimentsurvey (released Thursdays).
+  - S&P 500 P/E, ISM PMI, Cboe put/call ratio, AAII sentiment: scraped (no
+    free API exists for any of these); each falls back to
+    data/manual_overrides.json if the scrape fails, so a broken page never
+    leaves the field silently null. AAII in particular has previously blocked
+    scrapers outright (Cloudflare) — if that starts happening again, update
+    data/manual_overrides.json's aaii_sentiment weekly from
+    https://www.aaii.com/sentimentsurvey (released Thursdays) so the fallback
+    doesn't go stale.
 
 Setup:
   pip install -r requirements.txt --break-system-packages
@@ -161,6 +163,40 @@ def fetch_ism_pmi() -> float:
     if not match:
         raise ValueError("ISM PMI value not found on Trading Economics page — page structure may have changed")
     return float(match.group(1))
+
+
+def fetch_aaii_sentiment() -> dict:
+    """Scrape AAII's Investor Sentiment Survey for the latest weekly bullish/neutral/bearish split.
+
+    aaii.com previously blocked scrapers outright (Cloudflare, HTTP 403 on
+    every attempt). A 2026-07-21 recheck with this same request pattern
+    succeeded and returned real data, suggesting the block may be scoped to
+    specific IP ranges (e.g. GitHub Actions' datacenter IPs) rather than
+    every automated request — worth re-verifying if this starts failing
+    again. Uses fetch_with_fallback() like the other scrapes above, so a
+    renewed block just falls back to data/manual_overrides.json instead of
+    breaking the run.
+    """
+    resp = requests.get("https://www.aaii.com/sentimentsurvey", headers=REQUEST_HEADERS, timeout=10)
+    resp.raise_for_status()
+    match = re.search(
+        r'Week Ending\s*</div>.*?<div class="date">\s*([\d/]+)\s*</div>\s*'
+        r'<div class="bars">\s*<div class="bar bullish" style="width:([\d.]+)%">.*?'
+        r'<div class="bar neutral" style="width:([\d.]+)%">.*?'
+        r'<div class="bar bearish" style="width:([\d.]+)%">',
+        resp.text,
+        re.S,
+    )
+    if not match:
+        raise ValueError("AAII sentiment not found on page — page structure may have changed")
+    date_str, bullish, neutral, bearish = match.groups()
+    month, day, year = date_str.split("/")
+    return {
+        "bullish": float(bullish),
+        "neutral": float(neutral),
+        "bearish": float(bearish),
+        "as_of": f"{year}-{int(month):02d}-{int(day):02d}",
+    }
 
 
 def fetch_consumer_sentiment(fred: Fred) -> float:
@@ -908,16 +944,18 @@ def main():
     spx_pe, pe_source = fetch_with_fallback(fetch_sp500_pe, overrides.get("sp500_pe"), "sp500_pe")
     put_call, pc_source = fetch_with_fallback(fetch_put_call_ratio, overrides.get("put_call_ratio"), "put_call_ratio")
     ism_pmi, pmi_source = fetch_with_fallback(fetch_ism_pmi, overrides.get("ism_pmi"), "ism_pmi")
+    aaii_sentiment, aaii_source = fetch_with_fallback(
+        fetch_aaii_sentiment,
+        overrides.get("aaii_sentiment", {"bullish": None, "neutral": None, "bearish": None}),
+        "aaii_sentiment",
+    )
 
     economics["ism_pmi"] = ism_pmi
     finance["sp500_pe"] = spx_pe
     finance["yield_curve_10y_2y"] = economics.pop("yield_curve_10y_2y")
 
     psychology["put_call_ratio"] = put_call
-    # AAII blocks scrapers outright, so this is manual-only — see data/manual_overrides.json.
-    psychology["aaii_sentiment"] = overrides.get(
-        "aaii_sentiment", {"bullish": None, "neutral": None, "bearish": None}
-    )
+    psychology["aaii_sentiment"] = aaii_sentiment
     psychology["consumer_sentiment"] = fetch_consumer_sentiment(fred)
 
     # Load history BEFORE appending today's entry, so compute_composite's
@@ -937,7 +975,7 @@ def main():
                 "sp500_pe": pe_source,
                 "put_call_ratio": pc_source,
                 "ism_pmi": pmi_source,
-                "aaii_sentiment": "manual (data/manual_overrides.json)",
+                "aaii_sentiment": aaii_source,
                 "consumer_sentiment": "FRED (UMCSENT)",
             },
         },

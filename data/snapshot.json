@@ -5,7 +5,7 @@
       "sp500_pe": "scraped",
       "put_call_ratio": "scraped",
       "ism_pmi": "scraped",
-      "aaii_sentiment": "manual (data/manual_overrides.json)",
+      "aaii_sentiment": "scraped",
       "consumer_sentiment": "FRED (UMCSENT)"
     }
   },

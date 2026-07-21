@@ -1,5 +1,5 @@
 {
-  "_comment": "AAII sentiment has no scrapeable free source (aaii.com blocks bots) — update 'aaii_sentiment' by hand weekly from https://www.aaii.com/sentimentsurvey (released Thursdays). The other three fields are fallback values only, used when the live scrape in fetch_data.py fails for that run — refresh them occasionally so the fallback doesn't go stale, but they are not the primary source.",
+  "_comment": "All four fields here are fallback values only, used when the corresponding live scrape in fetch_data.py fails for that run — refresh them occasionally so the fallback doesn't go stale, but they are not the primary source. aaii_sentiment specifically: aaii.com has previously blocked scrapers outright (Cloudflare); if that recurs, update this by hand weekly from https://www.aaii.com/sentimentsurvey (released Thursdays).",
   "aaii_sentiment": {
     "bullish": 44.9,
     "neutral": 22.2,
