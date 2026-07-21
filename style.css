@@ -148,14 +148,34 @@ body {
   gap: 10px;
 }
 
-.last-updated {
+.last-updated-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   background: var(--surface);
   border: 1px solid var(--border2);
   border-radius: 999px;
   padding: 6px 14px;
+  white-space: nowrap;
+}
+
+.last-updated {
   font-size: 12px;
   color: var(--text-muted);
-  white-space: nowrap;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  animation: livePulse 2s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52, 199, 89, .4); }
+  50% { opacity: .6; box-shadow: 0 0 0 4px rgba(52, 199, 89, 0); }
 }
 
 .theme-toggle {
@@ -217,6 +237,7 @@ body {
   border-radius: 999px;
   font-size: 12px;
   font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
 
 .sbadge.risk-on { background: rgba(52, 199, 89, .12); color: var(--green); }
@@ -228,19 +249,33 @@ body {
   height: 6px;
   border-radius: 999px;
   background: linear-gradient(to right, var(--red), var(--amber), var(--green));
-  opacity: 0.85;
+  opacity: 0.9;
+}
+
+.score-track::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -3px;
+  width: 2px;
+  height: 12px;
+  background: var(--surface);
+  opacity: 0.7;
+  transform: translateX(-50%);
+  pointer-events: none;
 }
 
 .score-marker {
   position: absolute;
-  top: -4px;
-  width: 14px;
-  height: 14px;
+  top: -5px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--surface);
-  border: 2px solid var(--text);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+  border: 3px solid var(--text);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .25), 0 0 0 3px var(--surface);
   transform: translateX(-50%);
+  transition: left .6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .score-labels {
@@ -434,8 +469,15 @@ body {
 }
 
 .tilt-item {
-  padding: 12px 0;
+  padding: 12px;
+  margin: 0 -12px;
   border-bottom: 1px solid var(--border);
+  border-radius: 8px;
+  transition: background .15s ease;
+}
+
+.tilt-item:hover {
+  background: var(--surface2);
 }
 
 .tilt-item:last-child {

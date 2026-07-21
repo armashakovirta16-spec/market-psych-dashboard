@@ -570,11 +570,13 @@ def compute_composite(finance, economics, psychology, cycle_stage, history_entri
         f"({finance.get('yield_curve_10y_2y', 0):+.2f}pp), the S&P 500 trades at {finance.get('sp500_pe', 0):.1f}x "
         f"earnings against a ~{HISTORICAL_AVG_PE}x historical average, and "
         f"{sum(1 for r in finance.get('sector_returns_1m', {}).values() if (r or 0) > 0)} of "
-        f"{len(finance.get('sector_returns_1m', {}))} tracked sectors are positive over the past month. "
+        f"{len(finance.get('sector_returns_1m', {}))} tracked sectors are positive over the past month — the "
+        f"classical efficient-market / factor-based baseline this dashboard's behavioral overlay adjusts. "
         f"Economics: ISM PMI is at {economics.get('ism_pmi', 0):.1f} "
         f"({'expansion' if (economics.get('ism_pmi') or 0) >= 50 else 'contraction'}), CPI is running "
         f"{economics.get('cpi_yoy', 0):.1f}% YoY against a {economics.get('fed_funds_rate', 0):.2f}% Fed funds rate, "
-        f"and unemployment sits at {economics.get('unemployment_rate', 0):.1f}%. {cycle_stage.get('rationale', '')}"
+        f"and unemployment sits at {economics.get('unemployment_rate', 0):.1f}%. {cycle_stage.get('rationale', '')} "
+        f"(standard business-cycle framing — sentiment reads differently depending on where the cycle stands.)"
     )
 
     weight_pct = round(psychology_weight * 100)

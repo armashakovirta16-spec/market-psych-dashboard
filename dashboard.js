@@ -114,9 +114,10 @@ function scoreBadgeClass(score) {
   return 'neutral';
 }
 
-function pillarSignalHTML(label, score) {
+function pillarSignalHTML(label, score, title) {
   if (score === undefined || score === null) return '';
-  return `<span class="sbadge ${scoreBadgeClass(score)}">${label} ${score >= 0 ? '+' : ''}${score.toFixed(2)}</span>`;
+  const titleAttr = title ? ` title="${title}"` : '';
+  return `<span class="sbadge ${scoreBadgeClass(score)}"${titleAttr}>${label} ${score >= 0 ? '+' : ''}${score.toFixed(2)}</span>`;
 }
 
 function tiltBadgeClass(tilt) {
@@ -434,24 +435,24 @@ function renderComposite(composite, lastUpdated) {
 
   const pillarScores = composite.pillar_scores || {};
   document.getElementById('pillarScoreRow').innerHTML =
-    pillarSignalHTML('Finance', pillarScores.finance) +
-    pillarSignalHTML('Economics', pillarScores.economics) +
-    pillarSignalHTML('Psychology', pillarScores.psychology);
+    pillarSignalHTML('Finance', pillarScores.finance, 'Yield curve, valuation vs. history, and sector breadth, averaged (-1 to +1)') +
+    pillarSignalHTML('Economics', pillarScores.economics, 'ISM PMI, real policy rate, and unemployment vs. full employment, averaged (-1 to +1)') +
+    pillarSignalHTML('Psychology', pillarScores.psychology, 'VIX, put/call ratio, and AAII spread, standardized and averaged (-1 to +1)');
 
   // Fundamentals-only baseline vs. the full psychology-adjusted composite —
   // per the theoretical framework, that gap is the headline insight, not
   // any single pillar score, so it gets its own row rather than being
   // buried only in the narrative prose.
   document.getElementById('gapRow').innerHTML =
-    pillarSignalHTML('Fundamentals baseline', composite.baseline_score) +
-    pillarSignalHTML('Psychology gap', composite.psychology_gap);
+    pillarSignalHTML('Fundamentals baseline', composite.baseline_score, 'What Finance + Economics alone would suggest, with no psychology overlay') +
+    pillarSignalHTML('Psychology gap', composite.psychology_gap, 'How far current psychology is pulling the read from that fundamentals baseline');
 
   document.getElementById('lastUpdated').textContent =
     `Last updated: ${new Date(lastUpdated).toLocaleString()}`;
 }
 
 function renderFinance(finance, score) {
-  document.getElementById('financeSignal').innerHTML = pillarSignalHTML('Signal', score);
+  document.getElementById('financeSignal').innerHTML = pillarSignalHTML('Signal', score, 'This pillar\'s -1 to +1 score, feeding into the composite regime read');
 
   const metrics = document.getElementById('financeKeyMetrics');
   metrics.innerHTML =
@@ -494,7 +495,7 @@ function renderFinance(finance, score) {
 }
 
 function renderEconomics(economics, score, historyEntries, cycleStage) {
-  document.getElementById('economicsSignal').innerHTML = pillarSignalHTML('Signal', score);
+  document.getElementById('economicsSignal').innerHTML = pillarSignalHTML('Signal', score, 'This pillar\'s -1 to +1 score, feeding into the composite regime read');
 
   const metrics = document.getElementById('economicsKeyMetrics');
   metrics.innerHTML =
@@ -513,7 +514,7 @@ function renderEconomics(economics, score, historyEntries, cycleStage) {
 }
 
 function renderPsychology(psychology, score, historyEntries) {
-  document.getElementById('psychologySignal').innerHTML = pillarSignalHTML('Fear/Greed', score);
+  document.getElementById('psychologySignal').innerHTML = pillarSignalHTML('Fear/Greed', score, 'This pillar\'s -1 (fear) to +1 (greed) score, feeding into the composite regime read');
 
   const metrics = document.getElementById('psychologyKeyMetrics');
   metrics.innerHTML =

@@ -29,7 +29,10 @@
       <p class="subtitle">Finance, Macro, and Behavioral signals — all in one easy read</p>
     </div>
     <div class="header-right">
-      <div class="last-updated" id="lastUpdated">Loading...</div>
+      <div class="last-updated-wrap">
+        <span class="live-dot"></span>
+        <span class="last-updated" id="lastUpdated">Loading...</span>
+      </div>
       <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark mode">◐</button>
     </div>
   </header>
@@ -129,7 +132,7 @@
   </main>
 
   <footer class="page-footer">
-    <p>Re-run <code>scripts/fetch_data.py</code> to refresh this snapshot. See README for setup.</p>
+    <p>Data refreshes automatically each trading day. Synthesized from finance, economic, and behavioral signals — not personalized investment advice.</p>
   </footer>
 
   <script src="dashboard.js"></script>
