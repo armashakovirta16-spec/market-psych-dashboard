@@ -83,6 +83,20 @@
       "ism_pmi": 53.3,
       "put_call_ratio": 1.01,
       "consumer_sentiment": 44.8
+    },
+    {
+      "date": "2026-07-25",
+      "composite_score": -0.213,
+      "pillar_scores": {
+        "finance": -0.324,
+        "economics": 0.091,
+        "psychology": -0.37
+      },
+      "vix": 18.58,
+      "sp500_pe": 28.52,
+      "ism_pmi": 53.3,
+      "put_call_ratio": 0.99,
+      "consumer_sentiment": 44.8
     }
   ]
 }
