@@ -23,6 +23,7 @@ Setup:
 """
 
 import json
+import math
 import os
 import re
 from datetime import datetime, timezone
@@ -69,11 +70,19 @@ FRED_SERIES = {
 
 
 def pct_change_1m(ticker: str) -> float:
-    """Approximate 1-month percent return for a ticker via yfinance."""
+    """Approximate 1-month percent return for a ticker via yfinance.
+
+    yfinance occasionally returns a Close of NaN for a given day (a data
+    hiccup, not a market close) — round(NaN, 2) is still NaN, and Python's
+    json.dump writes that as a bare `NaN` token, which is invalid JSON and
+    breaks JSON.parse() on the frontend. Treat it the same as missing data.
+    """
     hist = yf.Ticker(ticker).history(period="1mo")
     if hist.empty or len(hist) < 2:
         return None
     start, end = hist["Close"].iloc[0], hist["Close"].iloc[-1]
+    if math.isnan(start) or math.isnan(end) or start == 0:
+        return None
     return round((end - start) / start * 100, 2)
 
 
@@ -988,13 +997,16 @@ def main():
         "strategies": strategies,
     }
 
+    # allow_nan=False: a NaN slipping through some other computation should
+    # fail the run loudly, not silently write invalid JSON (bare `NaN` isn't
+    # valid JSON and breaks JSON.parse() on the frontend) that ships anyway.
     with open(OUTPUT_PATH, "w") as f:
-        json.dump(snapshot, f, indent=2)
+        json.dump(snapshot, f, indent=2, allow_nan=False)
     print(f"Wrote snapshot to {OUTPUT_PATH}")
 
     history = append_history_entry(history, snapshot)
     with open(HISTORY_PATH, "w") as f:
-        json.dump(history, f, indent=2)
+        json.dump(history, f, indent=2, allow_nan=False)
     print(f"Wrote {len(history['entries'])}-entry history to {HISTORY_PATH}")
 
 
