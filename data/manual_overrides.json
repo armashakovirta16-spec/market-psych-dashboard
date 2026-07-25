@@ -1,12 +1,12 @@
 {
   "_comment": "All four fields here are fallback values only, used when the corresponding live scrape in fetch_data.py fails for that run — refresh them occasionally so the fallback doesn't go stale, but they are not the primary source. aaii_sentiment specifically: aaii.com has previously blocked scrapers outright (Cloudflare); if that recurs, update this by hand weekly from https://www.aaii.com/sentimentsurvey (released Thursdays).",
   "aaii_sentiment": {
-    "bullish": 44.9,
-    "neutral": 22.2,
-    "bearish": 32.9,
-    "as_of": "2026-07-15"
+    "bullish": 29.6,
+    "neutral": 28.1,
+    "bearish": 42.3,
+    "as_of": "2026-07-22"
   },
-  "sp500_pe": 28.64,
-  "put_call_ratio": 1.0,
+  "sp500_pe": 28.52,
+  "put_call_ratio": 0.99,
   "ism_pmi": 53.3
 }

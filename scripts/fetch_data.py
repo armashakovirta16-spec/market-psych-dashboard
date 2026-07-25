@@ -23,7 +23,6 @@ Setup:
 """
 
 import json
-import math
 import os
 import re
 from datetime import datetime, timezone
@@ -72,16 +71,20 @@ FRED_SERIES = {
 def pct_change_1m(ticker: str) -> float:
     """Approximate 1-month percent return for a ticker via yfinance.
 
-    yfinance occasionally returns a Close of NaN for a given day (a data
-    hiccup, not a market close) — round(NaN, 2) is still NaN, and Python's
-    json.dump writes that as a bare `NaN` token, which is invalid JSON and
-    breaks JSON.parse() on the frontend. Treat it the same as missing data.
+    yfinance's most recent daily bar is sometimes still NaN (today's session
+    hasn't fully settled yet when the run happens to catch it mid-update) —
+    round(NaN, 2) is still NaN, and Python's json.dump writes that as a bare
+    `NaN` token, which is invalid JSON and breaks JSON.parse() on the
+    frontend. Drop unsettled NaN rows first so an incomplete latest bar
+    falls back to the last settled close instead of nulling out the whole
+    return.
     """
     hist = yf.Ticker(ticker).history(period="1mo")
-    if hist.empty or len(hist) < 2:
+    closes = hist["Close"].dropna()
+    if len(closes) < 2:
         return None
-    start, end = hist["Close"].iloc[0], hist["Close"].iloc[-1]
-    if math.isnan(start) or math.isnan(end) or start == 0:
+    start, end = closes.iloc[0], closes.iloc[-1]
+    if start == 0:
         return None
     return round((end - start) / start * 100, 2)
 
@@ -90,8 +93,8 @@ def fetch_finance_and_psychology():
     sector_returns = {name: pct_change_1m(t) for name, t in SECTOR_ETFS.items()}
     asset_returns = {name: pct_change_1m(t) for name, t in ASSET_CLASS_ETFS.items()}
 
-    vix_hist = yf.Ticker("^VIX").history(period="5d")
-    vix = round(vix_hist["Close"].iloc[-1], 2) if not vix_hist.empty else None
+    vix_closes = yf.Ticker("^VIX").history(period="5d")["Close"].dropna()
+    vix = round(vix_closes.iloc[-1], 2) if not vix_closes.empty else None
 
     return {
         "sector_returns_1m": sector_returns,
