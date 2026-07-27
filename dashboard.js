@@ -203,6 +203,9 @@ const DIFF_METRICS = [
   { key: 'sp500_pe', label: 'S&P 500 P/E', decimals: 1, threshold: 0.5, higherIsBetter: false },
   { key: 'ism_pmi', label: 'ISM PMI', decimals: 1, threshold: 0.5, higherIsBetter: true },
   { key: 'consumer_sentiment', label: 'Consumer Sentiment', decimals: 1, threshold: 1.0, higherIsBetter: true },
+  { key: 'hy_oas', label: 'HY Credit Spread', decimals: 2, threshold: 0.1, higherIsBetter: false },
+  { key: 'news_sentiment', label: 'News Sentiment', decimals: 2, threshold: 0.03, higherIsBetter: true },
+  { key: 'naaim_exposure', label: 'NAAIM Exposure', decimals: 1, threshold: 5.0, higherIsBetter: true },
 ];
 
 function computeDiffs(entries) {
@@ -222,6 +225,7 @@ function computeDiffs(entries) {
     const improved = m.higherIsBetter ? delta > 0 : delta < 0;
     diffs.push({
       label: m.label,
+      prevVal, currVal, delta,
       text: `${m.label} ${prevVal.toFixed(m.decimals)} → ${currVal.toFixed(m.decimals)}`,
       className: improved ? 'risk-on' : 'risk-off',
     });
@@ -229,18 +233,38 @@ function computeDiffs(entries) {
   return diffs;
 }
 
+// Auto-generated "what changed since yesterday" sentence (Will's memo item
+// 5) — descriptive (rose/fell), not evaluative, since "improved/worsened"
+// framing is already carried separately by the chip colors below.
+function diffNarrativeText(diffs) {
+  if (diffs.length === 0) {
+    return 'No metric moved enough since yesterday to flag — conditions look essentially unchanged.';
+  }
+  const clauses = diffs.map((d) => {
+    const direction = d.delta > 0 ? 'rose' : 'fell';
+    return `${d.label} ${direction} from ${d.prevVal.toFixed(2)} to ${d.currVal.toFixed(2)}`;
+  });
+  const joined = clauses.length === 1
+    ? clauses[0]
+    : `${clauses.slice(0, -1).join(', ')}, and ${clauses[clauses.length - 1]}`;
+  return `Since yesterday: ${joined}.`;
+}
+
 function renderDiffs(entries) {
   const label = document.getElementById('diffLabel');
   const row = document.getElementById('diffRow');
+  const narrativeEl = document.getElementById('diffNarrative');
   const diffs = computeDiffs(entries);
 
   if (!entries || entries.length < 2) {
     label.style.display = 'none';
     row.innerHTML = '';
+    narrativeEl.textContent = '';
     return;
   }
 
   label.style.display = '';
+  narrativeEl.textContent = diffNarrativeText(diffs);
   if (diffs.length === 0) {
     row.innerHTML = '<span class="sbadge neutral">No material changes since yesterday</span>';
   } else {
@@ -303,13 +327,17 @@ function renderTrend(entries) {
 // Generic mini sparkline for a single history.json field, scoped to a tab
 // panel (so its chart gets resized correctly when that panel becomes
 // visible — see the PANEL_CHARTS comment above). Hides itself entirely
-// when there isn't enough history yet, rather than showing a redundant
-// "check back tomorrow" message (the main banner already covers that).
+// when there isn't enough history *for this specific field* yet, rather
+// than showing a redundant "check back tomorrow" message (the main banner
+// already covers that) — a newly-added field only has today's entry
+// populated, so gating on entries.length alone would draw a near-empty
+// line (a single trailing point with undefined everywhere else).
 function renderMiniTrend(panel, labelId, wrapId, canvasId, entries, field, labelText, borderColor, fillColor) {
   const labelEl = document.getElementById(labelId);
   const wrap = document.getElementById(wrapId);
+  const points = (entries || []).filter((e) => e[field] !== undefined && e[field] !== null);
 
-  if (!entries || entries.length < 2) {
+  if (points.length < 2) {
     labelEl.style.display = 'none';
     wrap.style.display = 'none';
     return;
@@ -317,7 +345,7 @@ function renderMiniTrend(panel, labelId, wrapId, canvasId, entries, field, label
 
   labelEl.style.display = '';
   wrap.style.display = '';
-  labelEl.textContent = `${labelText}, last ${entries.length} days`;
+  labelEl.textContent = `${labelText}, last ${points.length} days`;
 
   const opts = chartDefaults();
   opts.scales.x.display = false;
@@ -328,9 +356,9 @@ function renderMiniTrend(panel, labelId, wrapId, canvasId, entries, field, label
   trackChart(panel, new Chart(document.getElementById(canvasId), {
     type: 'line',
     data: {
-      labels: entries.map((e) => e.date),
+      labels: points.map((e) => e.date),
       datasets: [{
-        data: entries.map((e) => e[field]),
+        data: points.map((e) => e[field]),
         borderColor,
         backgroundColor: fillColor,
         borderWidth: 2,
@@ -392,7 +420,7 @@ async function refreshDashboard() {
   renderComposite(snapshot.composite, snapshot.meta.last_updated);
   renderDiffs(history.entries);
   renderTrend(history.entries);
-  renderFinance(snapshot.finance, pillarScores.finance);
+  renderFinance(snapshot.finance, pillarScores.finance, history.entries);
   renderAllocationTilts(snapshot.allocation_tilts);
   renderEconomics(snapshot.economics, pillarScores.economics, history.entries, snapshot.cycle_stage);
   renderPsychology(snapshot.psychology, pillarScores.psychology, history.entries);
@@ -441,9 +469,14 @@ async function handleRefreshClick() {
   }
 }
 
-function metricHTML(value, label, suffix = '') {
+// `explain` is the "explain this signal" tooltip layer (Will's memo item
+// 5, gated on item 2's teaching-audience decision) — a native title
+// attribute rather than a custom widget, so it stays keyboard/AT-neutral
+// and needs no new dependency.
+function metricHTML(value, label, suffix = '', explain = '') {
   const display = (value === null || value === undefined) ? '—' : `${value}${suffix}`;
-  return `<div class="metric">
+  const titleAttr = explain ? ` title="${explain}"` : '';
+  return `<div class="metric"${titleAttr}>
     <div class="metric-value">${display}</div>
     <div class="metric-label">${label}</div>
   </div>`;
@@ -464,11 +497,34 @@ function renderComposite(composite, lastUpdated) {
   const pct = ((composite.score - min) / (max - min)) * 100;
   document.getElementById('scoreMarker').style.left = `${pct}%`;
 
+  // Hero number, per Will's memo item 5: lead with the gap and current
+  // posture, large, first on screen — everything else is progressive
+  // disclosure below.
+  const gap = composite.psychology_gap;
+  const heroEl = document.getElementById('heroGapValue');
+  if (gap !== undefined && gap !== null) {
+    heroEl.textContent = `${gap >= 0 ? '+' : ''}${gap.toFixed(2)}`;
+    heroEl.className = `hero-gap-value ${scoreBadgeClass(gap)}`;
+  }
+
+  // Weight gauge: where in the adaptive 15-55% band psychology currently
+  // sits — the signature mechanism this dashboard is built on, made visible
+  // rather than left implicit in the narrative prose.
+  const weight = composite.psychology_weight;
+  const [wMin, wMax] = composite.psychology_weight_range || [0.15, 0.55];
+  if (weight !== undefined && weight !== null) {
+    const wPct = ((weight - wMin) / (wMax - wMin)) * 100;
+    document.getElementById('weightGaugeMarker').style.left = `${Math.max(0, Math.min(100, wPct))}%`;
+    document.getElementById('weightGaugeCurrentLabel').textContent = `${Math.round(weight * 100)}% now`;
+  }
+  document.getElementById('weightGaugeMinLabel').textContent = `${Math.round(wMin * 100)}% (calm floor)`;
+  document.getElementById('weightGaugeMaxLabel').textContent = `${Math.round(wMax * 100)}% (extreme ceiling)`;
+
   const pillarScores = composite.pillar_scores || {};
   document.getElementById('pillarScoreRow').innerHTML =
     pillarSignalHTML('Finance', pillarScores.finance, 'Yield curve, valuation vs. history, and sector breadth, averaged (-1 to +1)') +
     pillarSignalHTML('Economics', pillarScores.economics, 'ISM PMI, real policy rate, and unemployment vs. full employment, averaged (-1 to +1)') +
-    pillarSignalHTML('Psychology', pillarScores.psychology, 'VIX, put/call ratio, AAII spread, and consumer sentiment, standardized and averaged (-1 to +1)');
+    pillarSignalHTML('Psychology', pillarScores.psychology, 'VIX, put/call ratio, AAII spread, consumer sentiment, HY credit spread, news sentiment, and NAAIM exposure, standardized and averaged (-1 to +1)');
 
   // Fundamentals-only baseline vs. the full psychology-adjusted composite —
   // per the theoretical framework, that gap is the headline insight, not
@@ -482,13 +538,18 @@ function renderComposite(composite, lastUpdated) {
     `Last updated: ${new Date(lastUpdated).toLocaleString()}`;
 }
 
-function renderFinance(finance, score) {
+function renderFinance(finance, score, historyEntries) {
   document.getElementById('financeSignal').innerHTML = pillarSignalHTML('Signal', score, 'This pillar\'s -1 to +1 score, feeding into the composite regime read');
 
   const metrics = document.getElementById('financeKeyMetrics');
   metrics.innerHTML =
-    metricHTML(finance.sp500_pe, 'S&P 500 P/E') +
-    metricHTML(finance.yield_curve_10y_2y, '10y-2y Spread', '%');
+    metricHTML(finance.sp500_pe, 'S&P 500 P/E', '', 'Price-to-earnings ratio for the S&P 500 — how expensive stocks are relative to their trailing earnings. Higher means more expensive versus history.') +
+    metricHTML(finance.yield_curve_10y_2y, '10y-2y Spread', '%', '10-year minus 2-year Treasury yield. A negative (inverted) spread has historically preceded recessions.');
+
+  renderMiniTrend(
+    'finance', 'peTrendLabel', 'peTrendWrap', 'peTrendChart',
+    historyEntries, 'sp500_pe', 'S&P 500 P/E', CHART_COLORS.finance, 'rgba(0, 113, 227, 0.12)',
+  );
 
   const sectorValues = Object.values(finance.sector_returns_1m);
   trackChart('finance', new Chart(document.getElementById('sectorChart'), {
@@ -530,16 +591,28 @@ function renderEconomics(economics, score, historyEntries, cycleStage) {
 
   const metrics = document.getElementById('economicsKeyMetrics');
   metrics.innerHTML =
-    metricHTML(economics.cpi_yoy, 'CPI YoY', '%') +
-    metricHTML(economics.ism_pmi, 'ISM PMI') +
-    metricHTML(economics.unemployment_rate, 'Unemployment', '%') +
-    metricHTML(economics.fed_funds_rate, 'Fed Funds Rate', '%');
+    metricHTML(economics.cpi_yoy, 'CPI YoY', '%', 'Consumer Price Index, year-over-year — the headline U.S. inflation rate.') +
+    metricHTML(economics.ism_pmi, 'ISM PMI', '', 'ISM Manufacturing Purchasing Managers’ Index. Above 50 signals expansion, below 50 signals contraction.') +
+    metricHTML(economics.unemployment_rate, 'Unemployment', '%', 'Share of the labor force without a job and actively looking for one.') +
+    metricHTML(economics.fed_funds_rate, 'Fed Funds Rate', '%', 'The Federal Reserve’s target interest rate — the cost of overnight borrowing between banks.');
 
   renderCycleStage(cycleStage);
 
   renderMiniTrend(
     'economics', 'pmiTrendLabel', 'pmiTrendWrap', 'pmiTrendChart',
     historyEntries, 'ism_pmi', 'ISM PMI', CHART_COLORS.economics, 'rgba(36, 138, 61, 0.12)',
+  );
+  renderMiniTrend(
+    'economics', 'cpiTrendLabel', 'cpiTrendWrap', 'cpiTrendChart',
+    historyEntries, 'cpi_yoy', 'CPI YoY', CHART_COLORS.economics, 'rgba(36, 138, 61, 0.12)',
+  );
+  renderMiniTrend(
+    'economics', 'unemploymentTrendLabel', 'unemploymentTrendWrap', 'unemploymentTrendChart',
+    historyEntries, 'unemployment_rate', 'Unemployment', CHART_COLORS.economics, 'rgba(36, 138, 61, 0.12)',
+  );
+  renderMiniTrend(
+    'economics', 'fedFundsTrendLabel', 'fedFundsTrendWrap', 'fedFundsTrendChart',
+    historyEntries, 'fed_funds_rate', 'Fed Funds Rate', CHART_COLORS.economics, 'rgba(36, 138, 61, 0.12)',
   );
   renderRealRateChart(economics);
 }
@@ -549,9 +622,12 @@ function renderPsychology(psychology, score, historyEntries) {
 
   const metrics = document.getElementById('psychologyKeyMetrics');
   metrics.innerHTML =
-    metricHTML(psychology.vix, 'VIX') +
-    metricHTML(psychology.put_call_ratio, 'Put/Call Ratio') +
-    metricHTML(psychology.consumer_sentiment, 'Consumer Sentiment (U. Mich.)');
+    metricHTML(psychology.vix, 'VIX', '', 'The "fear gauge" — implied volatility priced into S&P 500 options. Low means calm/complacent, high means fearful.') +
+    metricHTML(psychology.put_call_ratio, 'Put/Call Ratio', '', 'Ratio of put to call option volume across Cboe exchanges. Above roughly 1 means more downside hedging demand than usual.') +
+    metricHTML(psychology.consumer_sentiment, 'Consumer Sentiment (U. Mich.)', '', 'University of Michigan\'s monthly survey of how optimistic consumers feel about the economy and their own finances.') +
+    metricHTML(psychology.hy_oas, 'HY Credit Spread (OAS)', '%', 'Extra yield investors demand to hold high-yield ("junk") bonds over Treasuries. Widening spreads price in more credit/default risk.') +
+    metricHTML(psychology.news_sentiment, 'SF Fed News Sentiment', '', 'A daily index of how positive or negative U.S. economic news coverage reads, built with NLP over major newspapers.') +
+    metricHTML(psychology.naaim_exposure, 'NAAIM Manager Exposure', '', 'Active investment managers\' self-reported average equity exposure, -200% to +200%. Real reported positioning, not just stated opinion like AAII.');
 
   const gaugeMarker = document.getElementById('psychGaugeMarker');
   if (score !== undefined && score !== null) {
@@ -564,8 +640,33 @@ function renderPsychology(psychology, score, historyEntries) {
   );
 
   renderMiniTrend(
+    'psychology', 'putCallTrendLabel', 'putCallTrendWrap', 'putCallTrendChart',
+    historyEntries, 'put_call_ratio', 'Put/Call Ratio', CHART_COLORS.psychology, 'rgba(138, 75, 175, 0.12)',
+  );
+
+  renderMiniTrend(
+    'psychology', 'aaiiSpreadTrendLabel', 'aaiiSpreadTrendWrap', 'aaiiSpreadTrendChart',
+    historyEntries, 'aaii_spread', 'AAII Bull-Bear Spread', CHART_COLORS.psychology, 'rgba(138, 75, 175, 0.12)',
+  );
+
+  renderMiniTrend(
     'psychology', 'consumerSentimentTrendLabel', 'consumerSentimentTrendWrap', 'consumerSentimentTrendChart',
     historyEntries, 'consumer_sentiment', 'Consumer Sentiment', CHART_COLORS.psychology, 'rgba(138, 75, 175, 0.12)',
+  );
+
+  renderMiniTrend(
+    'psychology', 'hyOasTrendLabel', 'hyOasTrendWrap', 'hyOasTrendChart',
+    historyEntries, 'hy_oas', 'HY Credit Spread (OAS)', CHART_COLORS.psychology, 'rgba(138, 75, 175, 0.12)',
+  );
+
+  renderMiniTrend(
+    'psychology', 'newsSentimentTrendLabel', 'newsSentimentTrendWrap', 'newsSentimentTrendChart',
+    historyEntries, 'news_sentiment', 'SF Fed News Sentiment', CHART_COLORS.psychology, 'rgba(138, 75, 175, 0.12)',
+  );
+
+  renderMiniTrend(
+    'psychology', 'naaimTrendLabel', 'naaimTrendWrap', 'naaimTrendChart',
+    historyEntries, 'naaim_exposure', 'NAAIM Manager Exposure', CHART_COLORS.psychology, 'rgba(138, 75, 175, 0.12)',
   );
 
   const aaii = psychology.aaii_sentiment || {};
@@ -604,6 +705,15 @@ function renderPsychology(psychology, score, historyEntries) {
 }
 
 const AUTO_REFRESH_MS = 5 * 60 * 1000;
+
+// The composite trend chart lives inside a collapsed-by-default <details>
+// (progressive disclosure, per Will's memo item 5) — Chart.js sizes a
+// canvas at creation time, so a chart created while its container is
+// display:none renders at 0x0 until something resizes it, same issue
+// PANEL_CHARTS/showTab() already solves for tab switches.
+document.getElementById('compositeDetails').addEventListener('toggle', (e) => {
+  if (e.target.open) ALL_CHARTS.forEach((chart) => chart.resize());
+});
 
 refreshDashboard();
 setInterval(refreshDashboard, AUTO_REFRESH_MS);

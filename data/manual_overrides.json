@@ -1,5 +1,5 @@
 {
-  "_comment": "All four fields here are fallback values only, used when the corresponding live scrape in fetch_data.py fails for that run — refresh them occasionally so the fallback doesn't go stale, but they are not the primary source. aaii_sentiment specifically: aaii.com has previously blocked scrapers outright (Cloudflare); if that recurs, update this by hand weekly from https://www.aaii.com/sentimentsurvey (released Thursdays).",
+  "_comment": "All fields here are fallback values only, used when the corresponding live scrape in fetch_data.py fails for that run — refresh them occasionally so the fallback doesn't go stale, but they are not the primary source. aaii_sentiment specifically: aaii.com has previously blocked scrapers outright (Cloudflare); if that recurs, update this by hand weekly from https://www.aaii.com/sentimentsurvey (released Thursdays). naaim_exposure: update weekly from https://naaim.org/programs/naaim-exposure-index/ if the scrape breaks (the .xlsx link's filename/path changes weekly).",
   "aaii_sentiment": {
     "bullish": 29.6,
     "neutral": 28.1,
@@ -8,5 +8,7 @@
   },
   "sp500_pe": 28.52,
   "put_call_ratio": 0.99,
-  "ism_pmi": 53.3
+  "ism_pmi": 53.3,
+  "naaim_exposure": 84.02,
+  "news_sentiment": 0.02
 }

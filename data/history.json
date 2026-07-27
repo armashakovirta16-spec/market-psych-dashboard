@@ -12,7 +12,10 @@
       "sp500_pe": 32.08,
       "ism_pmi": 53.3,
       "put_call_ratio": 0.97,
-      "consumer_sentiment": 44.8
+      "consumer_sentiment": 44.8,
+      "cpi_yoy": 3.46,
+      "unemployment_rate": 4.2,
+      "fed_funds_rate": 3.63
     },
     {
       "date": "2026-07-20",
@@ -26,7 +29,10 @@
       "sp500_pe": 32.08,
       "ism_pmi": 53.3,
       "put_call_ratio": 0.97,
-      "consumer_sentiment": 44.8
+      "consumer_sentiment": 44.8,
+      "cpi_yoy": 3.46,
+      "unemployment_rate": 4.2,
+      "fed_funds_rate": 3.63
     },
     {
       "date": "2026-07-21",
@@ -40,7 +46,10 @@
       "sp500_pe": 28.64,
       "ism_pmi": 53.3,
       "put_call_ratio": 1.0,
-      "consumer_sentiment": 44.8
+      "consumer_sentiment": 44.8,
+      "cpi_yoy": 3.46,
+      "unemployment_rate": 4.2,
+      "fed_funds_rate": 3.63
     },
     {
       "date": "2026-07-22",
@@ -54,7 +63,10 @@
       "sp500_pe": 28.89,
       "ism_pmi": 53.3,
       "put_call_ratio": 1.0,
-      "consumer_sentiment": 44.8
+      "consumer_sentiment": 44.8,
+      "cpi_yoy": 3.46,
+      "unemployment_rate": 4.2,
+      "fed_funds_rate": 3.63
     },
     {
       "date": "2026-07-23",
@@ -68,7 +80,10 @@
       "sp500_pe": 28.85,
       "ism_pmi": 53.3,
       "put_call_ratio": 0.92,
-      "consumer_sentiment": 44.8
+      "consumer_sentiment": 44.8,
+      "cpi_yoy": 3.46,
+      "unemployment_rate": 4.2,
+      "fed_funds_rate": 3.63
     },
     {
       "date": "2026-07-24",
@@ -82,7 +97,10 @@
       "sp500_pe": 28.49,
       "ism_pmi": 53.3,
       "put_call_ratio": 1.01,
-      "consumer_sentiment": 44.8
+      "consumer_sentiment": 44.8,
+      "cpi_yoy": 3.46,
+      "unemployment_rate": 4.2,
+      "fed_funds_rate": 3.63
     },
     {
       "date": "2026-07-25",
@@ -96,7 +114,32 @@
       "sp500_pe": 28.52,
       "ism_pmi": 53.3,
       "put_call_ratio": 0.99,
-      "consumer_sentiment": 44.8
+      "consumer_sentiment": 44.8,
+      "cpi_yoy": 3.46,
+      "unemployment_rate": 4.2,
+      "fed_funds_rate": 3.63
+    },
+    {
+      "date": "2026-07-27",
+      "composite_score": -0.02,
+      "psychology_weight": 0.199,
+      "pillar_scores": {
+        "finance": -0.058,
+        "economics": 0.091,
+        "psychology": -0.123
+      },
+      "vix": 18.7,
+      "sp500_pe": 28.52,
+      "ism_pmi": 53.3,
+      "put_call_ratio": 0.99,
+      "consumer_sentiment": 44.8,
+      "hy_oas": 2.79,
+      "news_sentiment": 0.02,
+      "naaim_exposure": 84.02,
+      "aaii_spread": -12.699999999999996,
+      "cpi_yoy": 3.46,
+      "unemployment_rate": 4.2,
+      "fed_funds_rate": 3.63
     }
   ]
 }

@@ -362,6 +362,78 @@ body {
   font-size: 13px;
 }
 
+.hero-row {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.hero-gap-value {
+  font-family: 'Space Grotesk', var(--font-body);
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.hero-gap-value.risk-on { color: var(--green); }
+.hero-gap-value.risk-off { color: var(--red); }
+.hero-gap-value.neutral { color: var(--amber); }
+
+.hero-gap-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  max-width: 22ch;
+}
+
+.hero-posture {
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+
+.hero-posture .composite-regime-row {
+  margin: 0 0 12px;
+}
+
+.gauge-track {
+  background: linear-gradient(to right, var(--border2), var(--color-psychology));
+}
+
+.diff-narrative {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 14px 0 0;
+  max-width: 80ch;
+}
+
+.composite-details {
+  margin-top: 20px;
+  border-top: 1px solid var(--border2);
+  padding-top: 6px;
+}
+
+.composite-details summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 8px 0;
+  transition: color .15s ease;
+}
+
+.composite-details summary:hover {
+  color: var(--text);
+}
+
+.composite-details[open] summary {
+  margin-bottom: 4px;
+}
+
 .pillar-signal {
   display: inline-flex;
   margin-bottom: 16px;

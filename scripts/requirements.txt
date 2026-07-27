@@ -2,3 +2,4 @@ yfinance
 fredapi
 pandas
 requests
+openpyxl

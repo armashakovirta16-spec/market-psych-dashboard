@@ -42,27 +42,54 @@
 
   <section class="composite-banner" id="compositeBanner">
     <div class="composite-label">Regime Read</div>
-    <div class="composite-regime-row">
-      <div class="composite-regime" id="compositeRegime">—</div>
-      <span class="sbadge neutral" id="compositeBadge">—</span>
+
+    <div class="hero-row">
+      <div class="hero-gap">
+        <div class="hero-gap-value" id="heroGapValue" title="How far current psychology is pulling the read from the Finance + Economics fundamentals baseline — the headline signal this dashboard is built around, not any single pillar score.">—</div>
+        <div class="hero-gap-label">Psychology gap vs. fundamentals baseline</div>
+      </div>
+      <div class="hero-posture">
+        <div class="composite-regime-row">
+          <div class="composite-regime" id="compositeRegime">—</div>
+          <span class="sbadge neutral" id="compositeBadge">—</span>
+        </div>
+        <div class="composite-score-bar">
+          <div class="score-track">
+            <div class="score-marker" id="scoreMarker"></div>
+          </div>
+          <div class="score-labels">
+            <span>Risk-Off</span>
+            <span>Neutral</span>
+            <span>Risk-On</span>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <div class="chart-label" id="weightGaugeLabel" title="Per the Adaptive Markets Hypothesis, psychology doesn't vote at a fixed weight — it governs how much the composite trusts fundamentals. Calm markets sit near the 15% floor; extreme psychology can rise to the 55% ceiling.">Psychology's weight in the final read</div>
     <div class="composite-score-bar">
-      <div class="score-track">
-        <div class="score-marker" id="scoreMarker"></div>
+      <div class="score-track gauge-track">
+        <div class="score-marker" id="weightGaugeMarker"></div>
       </div>
       <div class="score-labels">
-        <span>Risk-Off</span>
-        <span>Neutral</span>
-        <span>Risk-On</span>
+        <span id="weightGaugeMinLabel">15% (calm floor)</span>
+        <span id="weightGaugeCurrentLabel">—</span>
+        <span id="weightGaugeMaxLabel">55% (extreme ceiling)</span>
       </div>
     </div>
-    <div class="pillar-score-row" id="pillarScoreRow"></div>
-    <div class="pillar-score-row" id="gapRow"></div>
+
     <div class="chart-label" id="diffLabel" style="display:none;">Since yesterday</div>
-    <div class="pillar-score-row" id="diffRow"></div>
-    <div class="composite-narrative" id="compositeNarrative">—</div>
-    <div class="chart-label" id="trendLabel">Composite score trend</div>
-    <div class="chart-wrap sparkline-wrap" id="trendChartWrap"><canvas id="trendChart"></canvas></div>
+    <p class="diff-narrative" id="diffNarrative"></p>
+
+    <details class="composite-details" id="compositeDetails">
+      <summary>Full breakdown — pillar scores, narrative, and trend</summary>
+      <div class="pillar-score-row" id="pillarScoreRow"></div>
+      <div class="pillar-score-row" id="gapRow"></div>
+      <div class="pillar-score-row" id="diffRow"></div>
+      <div class="composite-narrative" id="compositeNarrative">—</div>
+      <div class="chart-label" id="trendLabel">Composite score trend</div>
+      <div class="chart-wrap sparkline-wrap" id="trendChartWrap"><canvas id="trendChart"></canvas></div>
+    </details>
   </section>
 
   <div class="tabs">
@@ -77,6 +104,9 @@
     <section class="panel active" id="pillar-finance" data-panel="finance">
       <div class="pillar-signal" id="financeSignal"></div>
       <div class="metric-row" id="financeKeyMetrics"></div>
+      <div class="chart-label" id="peTrendLabel">S&amp;P 500 P/E trend</div>
+      <div class="chart-wrap sparkline-wrap" id="peTrendWrap"><canvas id="peTrendChart"></canvas></div>
+
       <div class="chart-label">Sector returns, 1M</div>
       <div class="chart-wrap"><canvas id="sectorChart"></canvas></div>
       <div class="chart-label">Asset class returns, 1M</div>
@@ -99,6 +129,15 @@
 
       <div class="chart-label" id="pmiTrendLabel">ISM PMI trend</div>
       <div class="chart-wrap sparkline-wrap" id="pmiTrendWrap"><canvas id="pmiTrendChart"></canvas></div>
+
+      <div class="chart-label" id="cpiTrendLabel">CPI YoY trend</div>
+      <div class="chart-wrap sparkline-wrap" id="cpiTrendWrap"><canvas id="cpiTrendChart"></canvas></div>
+
+      <div class="chart-label" id="unemploymentTrendLabel">Unemployment trend</div>
+      <div class="chart-wrap sparkline-wrap" id="unemploymentTrendWrap"><canvas id="unemploymentTrendChart"></canvas></div>
+
+      <div class="chart-label" id="fedFundsTrendLabel">Fed funds rate trend</div>
+      <div class="chart-wrap sparkline-wrap" id="fedFundsTrendWrap"><canvas id="fedFundsTrendChart"></canvas></div>
 
       <div class="chart-label">Fed Funds Rate vs. CPI YoY</div>
       <div class="chart-wrap"><canvas id="realRateChart"></canvas></div>
@@ -123,8 +162,23 @@
       <div class="chart-label" id="vixTrendLabel">VIX trend</div>
       <div class="chart-wrap sparkline-wrap" id="vixTrendWrap"><canvas id="vixTrendChart"></canvas></div>
 
+      <div class="chart-label" id="putCallTrendLabel">Put/Call ratio trend</div>
+      <div class="chart-wrap sparkline-wrap" id="putCallTrendWrap"><canvas id="putCallTrendChart"></canvas></div>
+
+      <div class="chart-label" id="aaiiSpreadTrendLabel">AAII bull-bear spread trend</div>
+      <div class="chart-wrap sparkline-wrap" id="aaiiSpreadTrendWrap"><canvas id="aaiiSpreadTrendChart"></canvas></div>
+
       <div class="chart-label" id="consumerSentimentTrendLabel">Consumer sentiment trend</div>
       <div class="chart-wrap sparkline-wrap" id="consumerSentimentTrendWrap"><canvas id="consumerSentimentTrendChart"></canvas></div>
+
+      <div class="chart-label" id="hyOasTrendLabel">HY credit spread trend</div>
+      <div class="chart-wrap sparkline-wrap" id="hyOasTrendWrap"><canvas id="hyOasTrendChart"></canvas></div>
+
+      <div class="chart-label" id="newsSentimentTrendLabel">SF Fed news sentiment trend</div>
+      <div class="chart-wrap sparkline-wrap" id="newsSentimentTrendWrap"><canvas id="newsSentimentTrendChart"></canvas></div>
+
+      <div class="chart-label" id="naaimTrendLabel">NAAIM manager exposure trend</div>
+      <div class="chart-wrap sparkline-wrap" id="naaimTrendWrap"><canvas id="naaimTrendChart"></canvas></div>
 
       <div class="chart-label">AAII sentiment survey</div>
       <div class="chart-wrap chart-wrap-donut"><canvas id="sentimentChart"></canvas></div>

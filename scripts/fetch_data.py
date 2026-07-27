@@ -7,6 +7,20 @@ Data sources:
   - Economics (CPI, unemployment, rates): FRED API (needs a free API key)
   - Consumer sentiment (Psychology): FRED API (U. Michigan Consumer Sentiment,
     series UMCSENT) — monthly, no scraping needed.
+  - HY OAS credit spread (Psychology): FRED API (ICE BofA US High Yield Index
+    OAS, series BAMLH0A0HYM2) — daily, no scraping needed. Note: FRED's free
+    CSV/API history for this specific series only goes back to ~2023 (ICE
+    licensing restricts older vintages from free redistribution), so the
+    long-run reference below is a literature-based approximation, not
+    computed from this project's own data pull — see HY_OAS_LONG_RUN_MEAN.
+  - News sentiment (Psychology): SF Fed Daily News Sentiment Index, a plain
+    CSV with no auth needed (frbsf.org) — full history back to 1980, so the
+    long-run reference here *is* computed directly from real data.
+  - NAAIM manager exposure (Psychology): scraped — naaim.org's exposure-index
+    page links to a new .xlsx each week (filename embeds the release date),
+    so this scrapes the current link, downloads it, and reads the latest
+    "NAAIM Number" column. Falls back to data/manual_overrides.json like the
+    other scrapes below if the page structure or link pattern changes.
   - S&P 500 P/E, ISM PMI, Cboe put/call ratio, AAII sentiment: scraped (no
     free API exists for any of these); each falls back to
     data/manual_overrides.json if the scrape fails, so a broken page never
@@ -22,11 +36,14 @@ Setup:
   Set it as an environment variable: export FRED_API_KEY=your_key_here
 """
 
+import csv
+import io
 import json
 import os
 import re
 from datetime import datetime, timezone
 
+import openpyxl
 import requests
 import yfinance as yf
 from fredapi import Fred
@@ -65,7 +82,11 @@ FRED_SERIES = {
     "yield_10y": "DGS10",
     "yield_2y": "DGS2",
     "consumer_sentiment": "UMCSENT",  # U. Michigan Consumer Sentiment — monthly
+    "hy_oas": "BAMLH0A0HYM2",          # ICE BofA US High Yield Index OAS — daily
 }
+
+NAAIM_PAGE_URL = "https://naaim.org/programs/naaim-exposure-index/"
+NEWS_SENTIMENT_CSV_URL = "https://www.frbsf.org/wp-content/uploads/news-sentiment-chart-1.csv"
 
 
 def pct_change_1m(ticker: str) -> float:
@@ -221,6 +242,59 @@ def fetch_consumer_sentiment(fred: Fred) -> float:
     return round(float(series.iloc[-1]), 1)
 
 
+def fetch_hy_oas(fred: Fred) -> float:
+    """Latest ICE BofA US High Yield Index OAS reading from FRED (BAMLH0A0HYM2).
+
+    The bond market's priced fear — diversifies a Psychology pillar that was
+    otherwise VIX-heavy (equity-vol-only). Free via FRED like CPI/rates, but
+    note the free history for this specific series only goes back to ~2023
+    (see HY_OAS_LONG_RUN_MEAN for why the reference isn't computed from it).
+    """
+    series = fred.get_series(FRED_SERIES["hy_oas"]).dropna()
+    return round(float(series.iloc[-1]), 2)
+
+
+def fetch_news_sentiment() -> float:
+    """Latest SF Fed Daily News Sentiment Index reading.
+
+    A plain CSV export, no auth or scraping needed — frbsf.org/wp-content/
+    uploads/news-sentiment-chart-1.csv. History runs back to 1980, so
+    NEWS_SENTIMENT_LONG_RUN_MEAN/STD below are computed from the real thing,
+    not approximated.
+    """
+    resp = requests.get(NEWS_SENTIMENT_CSV_URL, headers=REQUEST_HEADERS, timeout=10)
+    resp.raise_for_status()
+    rows = list(csv.reader(io.StringIO(resp.text)))
+    last_value_row = next(r for r in reversed(rows[1:]) if r and r[1] not in ("", "."))
+    return round(float(last_value_row[1]), 3)
+
+
+def fetch_naaim_exposure() -> float:
+    """Latest NAAIM Number (mean manager equity exposure, -200 to +200) from naaim.org.
+
+    Actual reported positioning, not costless stated opinion — fixes the
+    weakness AAII has as a psychology proxy. naaim.org links a new .xlsx each
+    week with the release date baked into the filename (e.g.
+    USE_Data-since-Inception_2026-07-22.xlsx), so this scrapes the exposure-
+    index page for that link first, then downloads and parses it.
+    """
+    page = requests.get(NAAIM_PAGE_URL, headers=REQUEST_HEADERS, timeout=10)
+    page.raise_for_status()
+    match = re.search(r'href="(https://naaim\.org/wp-content/uploads/\d{4}/\d{2}/[^"]+\.xlsx)"', page.text)
+    if not match:
+        raise ValueError("NAAIM data file link not found on exposure-index page — page structure may have changed")
+
+    xlsx_resp = requests.get(match.group(1), headers=REQUEST_HEADERS, timeout=15)
+    xlsx_resp.raise_for_status()
+    wb = openpyxl.load_workbook(io.BytesIO(xlsx_resp.content), read_only=True, data_only=True)
+    ws = wb[wb.sheetnames[0]]
+    rows = ws.iter_rows(values_only=True)
+    header = next(rows)
+    naaim_idx = header.index("NAAIM Number")
+    latest_row = next(rows)
+    return round(float(latest_row[naaim_idx]), 2)
+
+
 def fetch_economics(fred: Fred):
     unemployment = fred.get_series(FRED_SERIES["unemployment_rate"]).iloc[-1]
     fed_funds = fred.get_series(FRED_SERIES["fed_funds_rate"]).iloc[-1]
@@ -271,6 +345,18 @@ AAII_SPREAD_LONG_RUN_MEAN = 6.0   # bulls have historically outnumbered bears on
 AAII_SPREAD_LONG_RUN_STD = 17.0
 CONSUMER_SENTIMENT_LONG_RUN_MEAN = 81.5  # UMCSENT's mean since 2000 (FRED data)
 CONSUMER_SENTIMENT_LONG_RUN_STD = 14.0   # UMCSENT's std since 2000 (FRED data)
+# HY OAS: free FRED history for BAMLH0A0HYM2 only goes back to ~2023 (ICE
+# licensing), which is too short and too benign a window to derive a
+# long-run reference from (see fetch_hy_oas docstring) — these are
+# literature-based approximations for the full series since 1996-97
+# (typical "normal" range ~3-6%, spiking to ~20% in 2008 and ~11% in 2020),
+# not computed from this project's own data pull like the others here.
+HY_OAS_LONG_RUN_MEAN = 5.0
+HY_OAS_LONG_RUN_STD = 2.75
+NEWS_SENTIMENT_LONG_RUN_MEAN = 0.009  # SF Fed index's own mean, full 1980-present history
+NEWS_SENTIMENT_LONG_RUN_STD = 0.18
+NAAIM_LONG_RUN_MEAN = 67.4  # NAAIM Number's mean since inception (~2006, full history)
+NAAIM_LONG_RUN_STD = 23.6
 ZSCORE_CAP = 2.5  # standard deviations mapped to the +/-1 unit scale
 
 # Thresholds for the behavioral-bias callouts in the narrative — each is a
@@ -430,14 +516,15 @@ def _economics_pillar(economics):
 def _psychology_pillar(psychology, cycle_stage=None):
     """
     Doubles as the dashboard's fear/greed-style index for the Psychology
-    pillar: low VIX, call-heavy put/call, net-bullish AAII, and high
-    consumer sentiment all read as "greed"; the inverse of each reads as
+    pillar: low VIX, call-heavy put/call, net-bullish AAII, high consumer
+    sentiment, tight credit spreads, upbeat news sentiment, and high NAAIM
+    manager exposure all read as "greed"; the inverse of each reads as
     "fear".
 
     Each proxy is standardized against a long-run mean/std (z-score, capped
     at +/-ZSCORE_CAP and rescaled to -1..+1) rather than an ad hoc linear
     reference point — adapting Baker & Wurgler's Investor Sentiment Index
-    *method* (standardize each proxy, then average) to the four proxies
+    *method* (standardize each proxy, then average) to the seven proxies
     available here, since their own six aren't. The VIX reference point
     also shifts with cycle stage (see _psychology_vix_reference()) — the
     only proxy the framework specifically ties to stage.
@@ -466,6 +553,21 @@ def _psychology_pillar(psychology, cycle_stage=None):
     if consumer_sentiment is not None:
         z = (consumer_sentiment - CONSUMER_SENTIMENT_LONG_RUN_MEAN) / CONSUMER_SENTIMENT_LONG_RUN_STD
         parts["consumer_sentiment"] = round(_zscore_to_unit(z), 3)
+
+    hy_oas = psychology.get("hy_oas")
+    if hy_oas is not None:
+        z = (HY_OAS_LONG_RUN_MEAN - hy_oas) / HY_OAS_LONG_RUN_STD
+        parts["hy_oas"] = round(_zscore_to_unit(z), 3)
+
+    news_sentiment = psychology.get("news_sentiment")
+    if news_sentiment is not None:
+        z = (news_sentiment - NEWS_SENTIMENT_LONG_RUN_MEAN) / NEWS_SENTIMENT_LONG_RUN_STD
+        parts["news_sentiment"] = round(_zscore_to_unit(z), 3)
+
+    naaim_exposure = psychology.get("naaim_exposure")
+    if naaim_exposure is not None:
+        z = (naaim_exposure - NAAIM_LONG_RUN_MEAN) / NAAIM_LONG_RUN_STD
+        parts["naaim_exposure"] = round(_zscore_to_unit(z), 3)
 
     score = round(sum(parts.values()) / len(parts), 3) if parts else 0.0
     return score, parts
@@ -676,6 +778,7 @@ def compute_composite(finance, economics, psychology, cycle_stage, history_entri
         "baseline_score": baseline_score,
         "psychology_gap": psychology_gap,
         "psychology_weight": psychology_weight,
+        "psychology_weight_range": [MIN_PSYCHOLOGY_WEIGHT, MAX_PSYCHOLOGY_WEIGHT],
         "pillar_scores": {
             "finance": finance_score,
             "economics": economics_score,
@@ -921,15 +1024,25 @@ def append_history_entry(history: dict, snapshot: dict) -> dict:
     or a retried Action shouldn't inflate the trend with same-day noise.
     """
     today = datetime.now(timezone.utc).date().isoformat()
+    aaii = snapshot["psychology"].get("aaii_sentiment") or {}
+    aaii_bullish, aaii_bearish = aaii.get("bullish"), aaii.get("bearish")
     entry = {
         "date": today,
         "composite_score": snapshot["composite"]["score"],
+        "psychology_weight": snapshot["composite"].get("psychology_weight"),
         "pillar_scores": snapshot["composite"]["pillar_scores"],
         "vix": snapshot["psychology"].get("vix"),
         "sp500_pe": snapshot["finance"].get("sp500_pe"),
         "ism_pmi": snapshot["economics"].get("ism_pmi"),
         "put_call_ratio": snapshot["psychology"].get("put_call_ratio"),
         "consumer_sentiment": snapshot["psychology"].get("consumer_sentiment"),
+        "hy_oas": snapshot["psychology"].get("hy_oas"),
+        "news_sentiment": snapshot["psychology"].get("news_sentiment"),
+        "naaim_exposure": snapshot["psychology"].get("naaim_exposure"),
+        "aaii_spread": (aaii_bullish - aaii_bearish) if aaii_bullish is not None and aaii_bearish is not None else None,
+        "cpi_yoy": snapshot["economics"].get("cpi_yoy"),
+        "unemployment_rate": snapshot["economics"].get("unemployment_rate"),
+        "fed_funds_rate": snapshot["economics"].get("fed_funds_rate"),
     }
 
     entries = [e for e in history.get("entries", []) if e.get("date") != today]
@@ -961,6 +1074,12 @@ def main():
         overrides.get("aaii_sentiment", {"bullish": None, "neutral": None, "bearish": None}),
         "aaii_sentiment",
     )
+    naaim_exposure, naaim_source = fetch_with_fallback(
+        fetch_naaim_exposure, overrides.get("naaim_exposure"), "naaim_exposure"
+    )
+    news_sentiment, news_sentiment_source = fetch_with_fallback(
+        fetch_news_sentiment, overrides.get("news_sentiment"), "news_sentiment"
+    )
 
     economics["ism_pmi"] = ism_pmi
     finance["sp500_pe"] = spx_pe
@@ -969,6 +1088,9 @@ def main():
     psychology["put_call_ratio"] = put_call
     psychology["aaii_sentiment"] = aaii_sentiment
     psychology["consumer_sentiment"] = fetch_consumer_sentiment(fred)
+    psychology["hy_oas"] = fetch_hy_oas(fred)
+    psychology["news_sentiment"] = news_sentiment
+    psychology["naaim_exposure"] = naaim_exposure
 
     # Load history BEFORE appending today's entry, so compute_composite's
     # Minsky streak check sees only prior days (today's VIX is passed in
@@ -989,6 +1111,9 @@ def main():
                 "ism_pmi": pmi_source,
                 "aaii_sentiment": aaii_source,
                 "consumer_sentiment": "FRED (UMCSENT)",
+                "hy_oas": "FRED (BAMLH0A0HYM2)",
+                "news_sentiment": news_sentiment_source,
+                "naaim_exposure": naaim_source,
             },
         },
         "finance": finance,
