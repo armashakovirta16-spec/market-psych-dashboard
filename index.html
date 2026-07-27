@@ -97,6 +97,7 @@
     <div class="tab" data-tab="economics" onclick="showTab('economics', this)">Economics</div>
     <div class="tab" data-tab="psychology" onclick="showTab('psychology', this)">Psychology</div>
     <div class="tab" data-tab="strategy" onclick="showTab('strategy', this)">Strategy</div>
+    <div class="tab" data-tab="backtesting" onclick="showTab('backtesting', this)">Backtesting</div>
   </div>
 
   <main class="tab-panels">
@@ -187,6 +188,35 @@
     <section class="panel" id="pillar-strategy" data-panel="strategy">
       <p class="tilt-disclaimer">A fixed menu of common strategy postures, each evaluated against current Finance + Economics + Psychology conditions together. Not mutually exclusive — more than one can apply at once. Illustrative, not personalized investment advice.</p>
       <div class="tilt-list" id="strategyList"></div>
+    </section>
+
+    <section class="panel" id="pillar-backtesting" data-panel="backtesting">
+      <div class="pillar-signal" id="backtestVerdict"></div>
+      <p class="tilt-disclaimer">Does an extreme gap between market psychology and fundamentals actually predict forward S&amp;P 500 returns — and does the adaptive 15-55% psychology weight beat a static 35%? Reconstructed daily from 1999 using expanding-window (no-look-ahead) references, not the live dashboard's fixed approximations. Research artifact, not investment advice — see limitations below before drawing conclusions.</p>
+
+      <div class="metric-row" id="backtestKeyMetrics"></div>
+
+      <div class="chart-label">SPY growth ($100 start), shaded by the regime this composite would have called</div>
+      <div class="chart-wrap" id="regimeChartWrap"><canvas id="regimeChart"></canvas></div>
+      <div class="regime-legend">
+        <span><i class="regime-swatch risk-on"></i>Risk-On</span>
+        <span><i class="regime-swatch neutral"></i>Neutral</span>
+        <span><i class="regime-swatch risk-off"></i>Risk-Off</span>
+      </div>
+
+      <div class="chart-label">Forward return by fundamentals-psychology gap decile</div>
+      <p class="tilt-disclaimer">Decile 0 = most fear-pulled reading; decile 9 = most greed-pulled. If the gap were predictive, forward returns should trend cleanly across deciles — they don't, at any horizon (see the regression table below).</p>
+      <div class="chart-wrap" id="decileChartWrap"><canvas id="decileChart"></canvas></div>
+
+      <div class="chart-label">Newey-West regression: signal vs. forward return, by horizon</div>
+      <div class="backtest-table-wrap"><table class="backtest-table" id="regressionTable"></table></div>
+
+      <div class="chart-label">Adaptive (15-55%) vs. fixed (35%) psychology weight</div>
+      <p class="tilt-disclaimer" id="disagreementNote"></p>
+
+      <div class="chart-label">Known limitations</div>
+      <ul class="backtest-caveats" id="caveatsList"></ul>
+      <p class="tilt-disclaimer">Full methodology and writeup: <code>Session_Update_2026-07-27.docx</code> in the project repository.</p>
     </section>
 
   </main>

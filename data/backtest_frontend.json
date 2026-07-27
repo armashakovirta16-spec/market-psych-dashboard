@@ -1,0 +1,2959 @@
+{
+  "meta": {
+    "start_date": "1999-01-04",
+    "end_date": "2026-07-27",
+    "n_trading_days": 6931,
+    "note": "Reconstructed historical series \u2014 see script docstring and the final report for data-availability caveats."
+  },
+  "monthly_series": [
+    {
+      "date": "1999-01",
+      "adaptive_composite": null,
+      "fixed_composite": null,
+      "gap": null,
+      "spy_growth": 100.0,
+      "regime": null
+    },
+    {
+      "date": "1999-02",
+      "adaptive_composite": null,
+      "fixed_composite": null,
+      "gap": null,
+      "spy_growth": 96.79,
+      "regime": null
+    },
+    {
+      "date": "1999-03",
+      "adaptive_composite": 0.121,
+      "fixed_composite": 0.096,
+      "gap": -0.02,
+      "spy_growth": 100.81,
+      "regime": "Neutral"
+    },
+    {
+      "date": "1999-04",
+      "adaptive_composite": 0.124,
+      "fixed_composite": 0.075,
+      "gap": -0.077,
+      "spy_growth": 104.64,
+      "regime": "Neutral"
+    },
+    {
+      "date": "1999-05",
+      "adaptive_composite": -0.137,
+      "fixed_composite": -0.106,
+      "gap": 0.024,
+      "spy_growth": 102.24,
+      "regime": "Neutral"
+    },
+    {
+      "date": "1999-06",
+      "adaptive_composite": 0.217,
+      "fixed_composite": 0.208,
+      "gap": -0.014,
+      "spy_growth": 107.9,
+      "regime": "Neutral"
+    },
+    {
+      "date": "1999-07",
+      "adaptive_composite": -0.034,
+      "fixed_composite": -0.052,
+      "gap": -0.025,
+      "spy_growth": 104.56,
+      "regime": "Neutral"
+    },
+    {
+      "date": "1999-08",
+      "adaptive_composite": -0.001,
+      "fixed_composite": -0.024,
+      "gap": -0.03,
+      "spy_growth": 104.02,
+      "regime": "Neutral"
+    },
+    {
+      "date": "1999-09",
+      "adaptive_composite": -0.057,
+      "fixed_composite": -0.073,
+      "gap": -0.024,
+      "spy_growth": 101.69,
+      "regime": "Neutral"
+    },
+    {
+      "date": "1999-10",
+      "adaptive_composite": 0.145,
+      "fixed_composite": 0.093,
+      "gap": -0.075,
+      "spy_growth": 108.21,
+      "regime": "Neutral"
+    },
+    {
+      "date": "1999-11",
+      "adaptive_composite": 0.177,
+      "fixed_composite": 0.184,
+      "gap": 0.143,
+      "spy_growth": 110.01,
+      "regime": "Neutral"
+    },
+    {
+      "date": "1999-12",
+      "adaptive_composite": 0.167,
+      "fixed_composite": 0.179,
+      "gap": 0.119,
+      "spy_growth": 116.29,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2000-01",
+      "adaptive_composite": 0.139,
+      "fixed_composite": 0.143,
+      "gap": 0.176,
+      "spy_growth": 110.5,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2000-02",
+      "adaptive_composite": -0.001,
+      "fixed_composite": 0.029,
+      "gap": 0.051,
+      "spy_growth": 108.82,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2000-03",
+      "adaptive_composite": 0.141,
+      "fixed_composite": 0.092,
+      "gap": -0.063,
+      "spy_growth": 119.37,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2000-04",
+      "adaptive_composite": -0.002,
+      "fixed_composite": 0.004,
+      "gap": 0.005,
+      "spy_growth": 115.17,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2000-05",
+      "adaptive_composite": 0.011,
+      "fixed_composite": 0.026,
+      "gap": 0.017,
+      "spy_growth": 113.36,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2000-06",
+      "adaptive_composite": -0.146,
+      "fixed_composite": -0.122,
+      "gap": 0.022,
+      "spy_growth": 115.59,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2000-07",
+      "adaptive_composite": -0.082,
+      "fixed_composite": -0.039,
+      "gap": 0.13,
+      "spy_growth": 113.78,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2000-08",
+      "adaptive_composite": 0.132,
+      "fixed_composite": 0.143,
+      "gap": 0.148,
+      "spy_growth": 121.21,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2000-09",
+      "adaptive_composite": 0.013,
+      "fixed_composite": 0.043,
+      "gap": 0.063,
+      "spy_growth": 114.56,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2000-10",
+      "adaptive_composite": -0.051,
+      "fixed_composite": -0.016,
+      "gap": 0.052,
+      "spy_growth": 114.03,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2000-11",
+      "adaptive_composite": -0.217,
+      "fixed_composite": -0.189,
+      "gap": 0.03,
+      "spy_growth": 105.52,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2000-12",
+      "adaptive_composite": -0.175,
+      "fixed_composite": -0.176,
+      "gap": -0.171,
+      "spy_growth": 104.96,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2001-01",
+      "adaptive_composite": -0.085,
+      "fixed_composite": -0.108,
+      "gap": -0.094,
+      "spy_growth": 109.63,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2001-02",
+      "adaptive_composite": -0.338,
+      "fixed_composite": -0.256,
+      "gap": -0.355,
+      "spy_growth": 99.17,
+      "regime": "Risk-Off"
+    },
+    {
+      "date": "2001-03",
+      "adaptive_composite": -0.329,
+      "fixed_composite": -0.287,
+      "gap": -0.253,
+      "spy_growth": 93.62,
+      "regime": "Risk-Off"
+    },
+    {
+      "date": "2001-04",
+      "adaptive_composite": 0.132,
+      "fixed_composite": 0.093,
+      "gap": -0.205,
+      "spy_growth": 101.61,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2001-05",
+      "adaptive_composite": 0.06,
+      "fixed_composite": 0.022,
+      "gap": -0.06,
+      "spy_growth": 101.04,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2001-06",
+      "adaptive_composite": -0.094,
+      "fixed_composite": -0.115,
+      "gap": -0.105,
+      "spy_growth": 98.64,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2001-07",
+      "adaptive_composite": -0.235,
+      "fixed_composite": -0.24,
+      "gap": -0.119,
+      "spy_growth": 97.63,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2001-08",
+      "adaptive_composite": -0.318,
+      "fixed_composite": -0.318,
+      "gap": -0.102,
+      "spy_growth": 91.84,
+      "regime": "Risk-Off"
+    },
+    {
+      "date": "2001-09",
+      "adaptive_composite": -0.322,
+      "fixed_composite": -0.287,
+      "gap": -0.234,
+      "spy_growth": 84.34,
+      "regime": "Risk-Off"
+    },
+    {
+      "date": "2001-10",
+      "adaptive_composite": -0.189,
+      "fixed_composite": -0.159,
+      "gap": -0.273,
+      "spy_growth": 85.44,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2001-11",
+      "adaptive_composite": -0.025,
+      "fixed_composite": -0.054,
+      "gap": -0.064,
+      "spy_growth": 92.1,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2001-12",
+      "adaptive_composite": 0.029,
+      "fixed_composite": -0.007,
+      "gap": -0.069,
+      "spy_growth": 92.62,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2002-01",
+      "adaptive_composite": -0.174,
+      "fixed_composite": -0.164,
+      "gap": 0.013,
+      "spy_growth": 91.71,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2002-02",
+      "adaptive_composite": 0.044,
+      "fixed_composite": 0.011,
+      "gap": -0.047,
+      "spy_growth": 90.07,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2002-03",
+      "adaptive_composite": 0.16,
+      "fixed_composite": 0.147,
+      "gap": -0.015,
+      "spy_growth": 93.07,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2002-04",
+      "adaptive_composite": -0.137,
+      "fixed_composite": -0.145,
+      "gap": -0.015,
+      "spy_growth": 87.65,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2002-05",
+      "adaptive_composite": -0.182,
+      "fixed_composite": -0.187,
+      "gap": -0.01,
+      "spy_growth": 87.13,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2002-06",
+      "adaptive_composite": -0.251,
+      "fixed_composite": -0.255,
+      "gap": -0.109,
+      "spy_growth": 80.7,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2002-07",
+      "adaptive_composite": -0.264,
+      "fixed_composite": -0.212,
+      "gap": -0.304,
+      "spy_growth": 74.34,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2002-08",
+      "adaptive_composite": 0.131,
+      "fixed_composite": 0.103,
+      "gap": -0.251,
+      "spy_growth": 74.85,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2002-09",
+      "adaptive_composite": -0.337,
+      "fixed_composite": -0.242,
+      "gap": -0.386,
+      "spy_growth": 67.0,
+      "regime": "Risk-Off"
+    },
+    {
+      "date": "2002-10",
+      "adaptive_composite": 0.059,
+      "fixed_composite": 0.028,
+      "gap": -0.189,
+      "spy_growth": 72.51,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2002-11",
+      "adaptive_composite": 0.211,
+      "fixed_composite": 0.149,
+      "gap": -0.151,
+      "spy_growth": 76.98,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2002-12",
+      "adaptive_composite": 0.012,
+      "fixed_composite": -0.02,
+      "gap": -0.136,
+      "spy_growth": 72.63,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2003-01",
+      "adaptive_composite": -0.181,
+      "fixed_composite": -0.162,
+      "gap": -0.241,
+      "spy_growth": 70.84,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2003-02",
+      "adaptive_composite": -0.079,
+      "fixed_composite": -0.065,
+      "gap": -0.275,
+      "spy_growth": 69.89,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2003-03",
+      "adaptive_composite": 0.092,
+      "fixed_composite": 0.085,
+      "gap": -0.299,
+      "spy_growth": 70.04,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2003-04",
+      "adaptive_composite": 0.367,
+      "fixed_composite": 0.285,
+      "gap": -0.065,
+      "spy_growth": 75.96,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2003-05",
+      "adaptive_composite": 0.42,
+      "fixed_composite": 0.378,
+      "gap": -0.07,
+      "spy_growth": 80.13,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2003-06",
+      "adaptive_composite": 0.357,
+      "fixed_composite": 0.342,
+      "gap": -0.036,
+      "spy_growth": 80.98,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2003-07",
+      "adaptive_composite": 0.263,
+      "fixed_composite": 0.247,
+      "gap": -0.027,
+      "spy_growth": 82.44,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2003-08",
+      "adaptive_composite": 0.356,
+      "fixed_composite": 0.335,
+      "gap": -0.044,
+      "spy_growth": 84.14,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2003-09",
+      "adaptive_composite": 0.338,
+      "fixed_composite": 0.292,
+      "gap": -0.055,
+      "spy_growth": 83.23,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2003-10",
+      "adaptive_composite": 0.337,
+      "fixed_composite": 0.337,
+      "gap": 0.002,
+      "spy_growth": 87.68,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2003-11",
+      "adaptive_composite": 0.537,
+      "fixed_composite": 0.527,
+      "gap": -0.066,
+      "spy_growth": 88.64,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2003-12",
+      "adaptive_composite": 0.548,
+      "fixed_composite": 0.531,
+      "gap": -0.081,
+      "spy_growth": 93.1,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2004-01",
+      "adaptive_composite": 0.54,
+      "fixed_composite": 0.518,
+      "gap": -0.085,
+      "spy_growth": 94.94,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2004-02",
+      "adaptive_composite": 0.476,
+      "fixed_composite": 0.428,
+      "gap": -0.084,
+      "spy_growth": 96.23,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2004-03",
+      "adaptive_composite": 0.214,
+      "fixed_composite": 0.149,
+      "gap": -0.12,
+      "spy_growth": 94.95,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2004-04",
+      "adaptive_composite": 0.362,
+      "fixed_composite": 0.303,
+      "gap": -0.063,
+      "spy_growth": 93.16,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2004-05",
+      "adaptive_composite": 0.496,
+      "fixed_composite": 0.378,
+      "gap": -0.104,
+      "spy_growth": 94.75,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2004-06",
+      "adaptive_composite": 0.518,
+      "fixed_composite": 0.499,
+      "gap": -0.075,
+      "spy_growth": 96.5,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2004-07",
+      "adaptive_composite": 0.355,
+      "fixed_composite": 0.335,
+      "gap": -0.042,
+      "spy_growth": 93.39,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2004-08",
+      "adaptive_composite": 0.401,
+      "fixed_composite": 0.373,
+      "gap": -0.057,
+      "spy_growth": 93.62,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2004-09",
+      "adaptive_composite": 0.421,
+      "fixed_composite": 0.354,
+      "gap": -0.076,
+      "spy_growth": 94.56,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2004-10",
+      "adaptive_composite": 0.511,
+      "fixed_composite": 0.432,
+      "gap": -0.096,
+      "spy_growth": 95.78,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2004-11",
+      "adaptive_composite": 0.57,
+      "fixed_composite": 0.499,
+      "gap": -0.112,
+      "spy_growth": 100.04,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2004-12",
+      "adaptive_composite": 0.498,
+      "fixed_composite": 0.495,
+      "gap": -0.033,
+      "spy_growth": 103.06,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2005-01",
+      "adaptive_composite": 0.276,
+      "fixed_composite": 0.257,
+      "gap": -0.03,
+      "spy_growth": 100.75,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2005-02",
+      "adaptive_composite": 0.442,
+      "fixed_composite": 0.417,
+      "gap": -0.064,
+      "spy_growth": 102.85,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2005-03",
+      "adaptive_composite": 0.263,
+      "fixed_composite": 0.212,
+      "gap": -0.045,
+      "spy_growth": 100.97,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2005-04",
+      "adaptive_composite": 0.275,
+      "fixed_composite": 0.199,
+      "gap": -0.107,
+      "spy_growth": 99.08,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2005-05",
+      "adaptive_composite": 0.344,
+      "fixed_composite": 0.274,
+      "gap": -0.061,
+      "spy_growth": 102.27,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2005-06",
+      "adaptive_composite": 0.269,
+      "fixed_composite": 0.261,
+      "gap": -0.018,
+      "spy_growth": 102.43,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2005-07",
+      "adaptive_composite": 0.397,
+      "fixed_composite": 0.374,
+      "gap": -0.052,
+      "spy_growth": 106.35,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2005-08",
+      "adaptive_composite": 0.139,
+      "fixed_composite": 0.122,
+      "gap": -0.016,
+      "spy_growth": 105.35,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2005-09",
+      "adaptive_composite": 0.336,
+      "fixed_composite": 0.25,
+      "gap": -0.122,
+      "spy_growth": 106.2,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2005-10",
+      "adaptive_composite": 0.096,
+      "fixed_composite": 0.049,
+      "gap": -0.103,
+      "spy_growth": 103.68,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2005-11",
+      "adaptive_composite": 0.303,
+      "fixed_composite": 0.288,
+      "gap": -0.03,
+      "spy_growth": 108.24,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2005-12",
+      "adaptive_composite": 0.281,
+      "fixed_composite": 0.266,
+      "gap": -0.027,
+      "spy_growth": 108.03,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2006-01",
+      "adaptive_composite": 0.367,
+      "fixed_composite": 0.322,
+      "gap": -0.061,
+      "spy_growth": 110.63,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2006-02",
+      "adaptive_composite": 0.193,
+      "fixed_composite": 0.167,
+      "gap": -0.027,
+      "spy_growth": 111.26,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2006-03",
+      "adaptive_composite": 0.19,
+      "fixed_composite": 0.172,
+      "gap": -0.022,
+      "spy_growth": 113.1,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2006-04",
+      "adaptive_composite": 0.129,
+      "fixed_composite": 0.114,
+      "gap": -0.015,
+      "spy_growth": 114.53,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2006-05",
+      "adaptive_composite": 0.017,
+      "fixed_composite": -0.014,
+      "gap": -0.053,
+      "spy_growth": 111.08,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2006-06",
+      "adaptive_composite": 0.12,
+      "fixed_composite": 0.084,
+      "gap": -0.033,
+      "spy_growth": 111.37,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2006-07",
+      "adaptive_composite": 0.228,
+      "fixed_composite": 0.165,
+      "gap": -0.068,
+      "spy_growth": 111.86,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2006-08",
+      "adaptive_composite": 0.246,
+      "fixed_composite": 0.186,
+      "gap": -0.047,
+      "spy_growth": 114.31,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2006-09",
+      "adaptive_composite": 0.154,
+      "fixed_composite": 0.146,
+      "gap": -0.01,
+      "spy_growth": 117.39,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2006-10",
+      "adaptive_composite": 0.272,
+      "fixed_composite": 0.265,
+      "gap": -0.015,
+      "spy_growth": 121.09,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2006-11",
+      "adaptive_composite": 0.197,
+      "fixed_composite": 0.198,
+      "gap": 0.003,
+      "spy_growth": 123.5,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2006-12",
+      "adaptive_composite": 0.135,
+      "fixed_composite": 0.143,
+      "gap": 0.015,
+      "spy_growth": 125.15,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2007-01",
+      "adaptive_composite": 0.116,
+      "fixed_composite": 0.134,
+      "gap": 0.043,
+      "spy_growth": 127.03,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2007-02",
+      "adaptive_composite": -0.035,
+      "fixed_composite": -0.007,
+      "gap": 0.036,
+      "spy_growth": 124.54,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2007-03",
+      "adaptive_composite": 0.068,
+      "fixed_composite": 0.026,
+      "gap": -0.075,
+      "spy_growth": 125.99,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2007-04",
+      "adaptive_composite": 0.21,
+      "fixed_composite": 0.157,
+      "gap": -0.046,
+      "spy_growth": 131.57,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2007-05",
+      "adaptive_composite": 0.161,
+      "fixed_composite": 0.117,
+      "gap": -0.039,
+      "spy_growth": 136.03,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2007-06",
+      "adaptive_composite": -0.057,
+      "fixed_composite": -0.067,
+      "gap": -0.012,
+      "spy_growth": 134.04,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2007-07",
+      "adaptive_composite": -0.132,
+      "fixed_composite": -0.151,
+      "gap": -0.087,
+      "spy_growth": 129.84,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2007-08",
+      "adaptive_composite": -0.038,
+      "fixed_composite": -0.034,
+      "gap": -0.261,
+      "spy_growth": 131.51,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2007-09",
+      "adaptive_composite": 0.181,
+      "fixed_composite": 0.122,
+      "gap": -0.121,
+      "spy_growth": 136.6,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2007-10",
+      "adaptive_composite": 0.099,
+      "fixed_composite": 0.053,
+      "gap": -0.098,
+      "spy_growth": 138.45,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2007-11",
+      "adaptive_composite": -0.077,
+      "fixed_composite": -0.077,
+      "gap": -0.227,
+      "spy_growth": 133.09,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2007-12",
+      "adaptive_composite": 0.009,
+      "fixed_composite": -0.016,
+      "gap": -0.178,
+      "spy_growth": 131.59,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2008-01",
+      "adaptive_composite": -0.135,
+      "fixed_composite": -0.115,
+      "gap": -0.264,
+      "spy_growth": 123.64,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2008-02",
+      "adaptive_composite": -0.171,
+      "fixed_composite": -0.087,
+      "gap": -0.423,
+      "spy_growth": 120.44,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2008-03",
+      "adaptive_composite": -0.025,
+      "fixed_composite": -0.021,
+      "gap": -0.267,
+      "spy_growth": 119.36,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2008-04",
+      "adaptive_composite": 0.241,
+      "fixed_composite": 0.18,
+      "gap": -0.193,
+      "spy_growth": 125.05,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2008-05",
+      "adaptive_composite": 0.247,
+      "fixed_composite": 0.185,
+      "gap": -0.195,
+      "spy_growth": 126.94,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2008-06",
+      "adaptive_composite": -0.128,
+      "fixed_composite": -0.091,
+      "gap": -0.32,
+      "spy_growth": 116.33,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2008-07",
+      "adaptive_composite": -0.015,
+      "fixed_composite": -0.003,
+      "gap": -0.3,
+      "spy_growth": 115.29,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2008-08",
+      "adaptive_composite": 0.036,
+      "fixed_composite": 0.034,
+      "gap": -0.282,
+      "spy_growth": 117.07,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2008-09",
+      "adaptive_composite": -0.299,
+      "fixed_composite": -0.205,
+      "gap": -0.399,
+      "spy_growth": 106.05,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2008-10",
+      "adaptive_composite": -0.247,
+      "fixed_composite": -0.195,
+      "gap": -0.312,
+      "spy_growth": 88.53,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2008-11",
+      "adaptive_composite": -0.273,
+      "fixed_composite": -0.225,
+      "gap": -0.289,
+      "spy_growth": 82.37,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2008-12",
+      "adaptive_composite": -0.108,
+      "fixed_composite": -0.097,
+      "gap": -0.25,
+      "spy_growth": 83.17,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2009-01",
+      "adaptive_composite": -0.384,
+      "fixed_composite": -0.348,
+      "gap": -0.213,
+      "spy_growth": 76.34,
+      "regime": "Risk-Off"
+    },
+    {
+      "date": "2009-02",
+      "adaptive_composite": -0.457,
+      "fixed_composite": -0.424,
+      "gap": -0.179,
+      "spy_growth": 68.14,
+      "regime": "Risk-Off"
+    },
+    {
+      "date": "2009-03",
+      "adaptive_composite": -0.086,
+      "fixed_composite": -0.1,
+      "gap": -0.162,
+      "spy_growth": 73.82,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2009-04",
+      "adaptive_composite": -0.158,
+      "fixed_composite": -0.172,
+      "gap": -0.111,
+      "spy_growth": 81.15,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2009-05",
+      "adaptive_composite": -0.058,
+      "fixed_composite": -0.084,
+      "gap": -0.075,
+      "spy_growth": 85.89,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2009-06",
+      "adaptive_composite": -0.214,
+      "fixed_composite": -0.222,
+      "gap": -0.111,
+      "spy_growth": 85.84,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2009-07",
+      "adaptive_composite": -0.022,
+      "fixed_composite": -0.051,
+      "gap": -0.056,
+      "spy_growth": 92.24,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2009-08",
+      "adaptive_composite": -0.038,
+      "fixed_composite": -0.066,
+      "gap": -0.07,
+      "spy_growth": 95.65,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2009-09",
+      "adaptive_composite": -0.005,
+      "fixed_composite": -0.03,
+      "gap": -0.035,
+      "spy_growth": 99.04,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2009-10",
+      "adaptive_composite": -0.231,
+      "fixed_composite": -0.236,
+      "gap": -0.014,
+      "spy_growth": 97.14,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2009-11",
+      "adaptive_composite": 0.012,
+      "fixed_composite": -0.016,
+      "gap": -0.043,
+      "spy_growth": 103.12,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2009-12",
+      "adaptive_composite": 0.127,
+      "fixed_composite": 0.12,
+      "gap": -0.008,
+      "spy_growth": 105.09,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2010-01",
+      "adaptive_composite": -0.087,
+      "fixed_composite": -0.098,
+      "gap": -0.017,
+      "spy_growth": 101.27,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2010-02",
+      "adaptive_composite": 0.036,
+      "fixed_composite": 0.009,
+      "gap": -0.031,
+      "spy_growth": 104.43,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2010-03",
+      "adaptive_composite": 0.304,
+      "fixed_composite": 0.243,
+      "gap": -0.053,
+      "spy_growth": 110.79,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2010-04",
+      "adaptive_composite": 0.319,
+      "fixed_composite": 0.237,
+      "gap": -0.09,
+      "spy_growth": 112.5,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2010-05",
+      "adaptive_composite": -0.053,
+      "fixed_composite": -0.06,
+      "gap": -0.214,
+      "spy_growth": 103.56,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2010-06",
+      "adaptive_composite": 0.061,
+      "fixed_composite": 0.024,
+      "gap": -0.156,
+      "spy_growth": 98.2,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2010-07",
+      "adaptive_composite": 0.379,
+      "fixed_composite": 0.285,
+      "gap": -0.13,
+      "spy_growth": 104.91,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2010-08",
+      "adaptive_composite": 0.018,
+      "fixed_composite": -0.016,
+      "gap": -0.127,
+      "spy_growth": 100.19,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2010-09",
+      "adaptive_composite": 0.426,
+      "fixed_composite": 0.322,
+      "gap": -0.104,
+      "spy_growth": 109.17,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2010-10",
+      "adaptive_composite": 0.445,
+      "fixed_composite": 0.338,
+      "gap": -0.1,
+      "spy_growth": 113.34,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2010-11",
+      "adaptive_composite": 0.168,
+      "fixed_composite": 0.128,
+      "gap": -0.03,
+      "spy_growth": 113.34,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2010-12",
+      "adaptive_composite": 0.453,
+      "fixed_composite": 0.383,
+      "gap": -0.083,
+      "spy_growth": 120.91,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2011-01",
+      "adaptive_composite": 0.445,
+      "fixed_composite": 0.338,
+      "gap": -0.091,
+      "spy_growth": 123.73,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2011-02",
+      "adaptive_composite": 0.463,
+      "fixed_composite": 0.356,
+      "gap": -0.082,
+      "spy_growth": 128.03,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2011-03",
+      "adaptive_composite": 0.4,
+      "fixed_composite": 0.303,
+      "gap": -0.087,
+      "spy_growth": 128.04,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2011-04",
+      "adaptive_composite": 0.42,
+      "fixed_composite": 0.326,
+      "gap": -0.075,
+      "spy_growth": 131.75,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2011-05",
+      "adaptive_composite": 0.266,
+      "fixed_composite": 0.195,
+      "gap": -0.077,
+      "spy_growth": 130.27,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2011-06",
+      "adaptive_composite": 0.344,
+      "fixed_composite": 0.258,
+      "gap": -0.151,
+      "spy_growth": 128.08,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2011-07",
+      "adaptive_composite": 0.138,
+      "fixed_composite": 0.098,
+      "gap": -0.205,
+      "spy_growth": 125.51,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2011-08",
+      "adaptive_composite": 0.015,
+      "fixed_composite": 0.031,
+      "gap": -0.328,
+      "spy_growth": 118.61,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2011-09",
+      "adaptive_composite": -0.157,
+      "fixed_composite": -0.075,
+      "gap": -0.423,
+      "spy_growth": 110.38,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2011-10",
+      "adaptive_composite": 0.305,
+      "fixed_composite": 0.249,
+      "gap": -0.266,
+      "spy_growth": 122.43,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2011-11",
+      "adaptive_composite": 0.215,
+      "fixed_composite": 0.161,
+      "gap": -0.204,
+      "spy_growth": 121.93,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2011-12",
+      "adaptive_composite": 0.29,
+      "fixed_composite": 0.212,
+      "gap": -0.129,
+      "spy_growth": 123.2,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2012-01",
+      "adaptive_composite": 0.42,
+      "fixed_composite": 0.34,
+      "gap": -0.076,
+      "spy_growth": 128.92,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2012-02",
+      "adaptive_composite": 0.484,
+      "fixed_composite": 0.37,
+      "gap": -0.087,
+      "spy_growth": 134.51,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2012-03",
+      "adaptive_composite": 0.42,
+      "fixed_composite": 0.345,
+      "gap": -0.076,
+      "spy_growth": 138.84,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2012-04",
+      "adaptive_composite": 0.339,
+      "fixed_composite": 0.255,
+      "gap": -0.08,
+      "spy_growth": 137.91,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2012-05",
+      "adaptive_composite": 0.099,
+      "fixed_composite": 0.055,
+      "gap": -0.144,
+      "spy_growth": 129.63,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2012-06",
+      "adaptive_composite": 0.395,
+      "fixed_composite": 0.299,
+      "gap": -0.157,
+      "spy_growth": 134.89,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2012-07",
+      "adaptive_composite": 0.415,
+      "fixed_composite": 0.313,
+      "gap": -0.118,
+      "spy_growth": 136.49,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2012-08",
+      "adaptive_composite": 0.405,
+      "fixed_composite": 0.324,
+      "gap": -0.073,
+      "spy_growth": 139.91,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2012-09",
+      "adaptive_composite": 0.491,
+      "fixed_composite": 0.381,
+      "gap": -0.088,
+      "spy_growth": 143.45,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2012-10",
+      "adaptive_composite": 0.295,
+      "fixed_composite": 0.237,
+      "gap": -0.051,
+      "spy_growth": 140.84,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2012-11",
+      "adaptive_composite": 0.267,
+      "fixed_composite": 0.198,
+      "gap": -0.065,
+      "spy_growth": 141.64,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2012-12",
+      "adaptive_composite": 0.335,
+      "fixed_composite": 0.267,
+      "gap": -0.059,
+      "spy_growth": 142.91,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2013-01",
+      "adaptive_composite": 0.457,
+      "fixed_composite": 0.417,
+      "gap": -0.077,
+      "spy_growth": 150.22,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2013-02",
+      "adaptive_composite": 0.418,
+      "fixed_composite": 0.319,
+      "gap": -0.079,
+      "spy_growth": 152.14,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2013-03",
+      "adaptive_composite": 0.472,
+      "fixed_composite": 0.408,
+      "gap": -0.087,
+      "spy_growth": 157.91,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2013-04",
+      "adaptive_composite": 0.378,
+      "fixed_composite": 0.299,
+      "gap": -0.067,
+      "spy_growth": 160.95,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2013-05",
+      "adaptive_composite": 0.382,
+      "fixed_composite": 0.294,
+      "gap": -0.068,
+      "spy_growth": 164.75,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2013-06",
+      "adaptive_composite": 0.178,
+      "fixed_composite": 0.128,
+      "gap": -0.049,
+      "spy_growth": 162.55,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2013-07",
+      "adaptive_composite": 0.459,
+      "fixed_composite": 0.422,
+      "gap": -0.075,
+      "spy_growth": 170.95,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2013-08",
+      "adaptive_composite": 0.12,
+      "fixed_composite": 0.079,
+      "gap": -0.044,
+      "spy_growth": 165.82,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2013-09",
+      "adaptive_composite": 0.439,
+      "fixed_composite": 0.334,
+      "gap": -0.096,
+      "spy_growth": 171.07,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2013-10",
+      "adaptive_composite": 0.467,
+      "fixed_composite": 0.394,
+      "gap": -0.086,
+      "spy_growth": 178.99,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2013-11",
+      "adaptive_composite": 0.383,
+      "fixed_composite": 0.363,
+      "gap": -0.047,
+      "spy_growth": 184.3,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2013-12",
+      "adaptive_composite": 0.552,
+      "fixed_composite": 0.547,
+      "gap": -0.059,
+      "spy_growth": 189.07,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2014-01",
+      "adaptive_composite": 0.311,
+      "fixed_composite": 0.265,
+      "gap": -0.051,
+      "spy_growth": 182.41,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2014-02",
+      "adaptive_composite": 0.48,
+      "fixed_composite": 0.445,
+      "gap": -0.079,
+      "spy_growth": 190.71,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2014-03",
+      "adaptive_composite": 0.399,
+      "fixed_composite": 0.346,
+      "gap": -0.069,
+      "spy_growth": 192.29,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2014-04",
+      "adaptive_composite": 0.388,
+      "fixed_composite": 0.358,
+      "gap": -0.057,
+      "spy_growth": 193.63,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2014-05",
+      "adaptive_composite": 0.447,
+      "fixed_composite": 0.387,
+      "gap": -0.081,
+      "spy_growth": 198.12,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2014-06",
+      "adaptive_composite": 0.51,
+      "fixed_composite": 0.467,
+      "gap": -0.091,
+      "spy_growth": 202.22,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2014-07",
+      "adaptive_composite": 0.221,
+      "fixed_composite": 0.178,
+      "gap": -0.037,
+      "spy_growth": 199.5,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2014-08",
+      "adaptive_composite": 0.502,
+      "fixed_composite": 0.459,
+      "gap": -0.089,
+      "spy_growth": 207.37,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2014-09",
+      "adaptive_composite": 0.264,
+      "fixed_composite": 0.206,
+      "gap": -0.046,
+      "spy_growth": 204.51,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2014-10",
+      "adaptive_composite": 0.476,
+      "fixed_composite": 0.448,
+      "gap": -0.074,
+      "spy_growth": 209.33,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2014-11",
+      "adaptive_composite": 0.425,
+      "fixed_composite": 0.396,
+      "gap": -0.063,
+      "spy_growth": 215.08,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2014-12",
+      "adaptive_composite": 0.305,
+      "fixed_composite": 0.306,
+      "gap": 0.004,
+      "spy_growth": 214.53,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2015-01",
+      "adaptive_composite": 0.194,
+      "fixed_composite": 0.192,
+      "gap": -0.003,
+      "spy_growth": 208.17,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2015-02",
+      "adaptive_composite": 0.355,
+      "fixed_composite": 0.346,
+      "gap": -0.026,
+      "spy_growth": 219.88,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2015-03",
+      "adaptive_composite": 0.168,
+      "fixed_composite": 0.166,
+      "gap": -0.002,
+      "spy_growth": 216.42,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2015-04",
+      "adaptive_composite": 0.289,
+      "fixed_composite": 0.272,
+      "gap": -0.03,
+      "spy_growth": 218.55,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2015-05",
+      "adaptive_composite": 0.257,
+      "fixed_composite": 0.195,
+      "gap": -0.049,
+      "spy_growth": 221.36,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2015-06",
+      "adaptive_composite": 0.082,
+      "fixed_composite": 0.071,
+      "gap": -0.009,
+      "spy_growth": 216.86,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2015-07",
+      "adaptive_composite": 0.317,
+      "fixed_composite": 0.236,
+      "gap": -0.082,
+      "spy_growth": 221.76,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2015-08",
+      "adaptive_composite": -0.001,
+      "fixed_composite": -0.034,
+      "gap": -0.086,
+      "spy_growth": 208.25,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2015-09",
+      "adaptive_composite": 0.097,
+      "fixed_composite": 0.058,
+      "gap": -0.047,
+      "spy_growth": 202.93,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2015-10",
+      "adaptive_composite": 0.357,
+      "fixed_composite": 0.305,
+      "gap": -0.061,
+      "spy_growth": 220.19,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2015-11",
+      "adaptive_composite": 0.193,
+      "fixed_composite": 0.161,
+      "gap": -0.029,
+      "spy_growth": 221.0,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2015-12",
+      "adaptive_composite": 0.102,
+      "fixed_composite": 0.083,
+      "gap": -0.016,
+      "spy_growth": 217.18,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2016-01",
+      "adaptive_composite": 0.043,
+      "fixed_composite": 0.019,
+      "gap": -0.025,
+      "spy_growth": 206.37,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2016-02",
+      "adaptive_composite": 0.15,
+      "fixed_composite": 0.095,
+      "gap": -0.104,
+      "spy_growth": 206.2,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2016-03",
+      "adaptive_composite": 0.283,
+      "fixed_composite": 0.216,
+      "gap": -0.052,
+      "spy_growth": 220.07,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2016-04",
+      "adaptive_composite": 0.168,
+      "fixed_composite": 0.123,
+      "gap": -0.039,
+      "spy_growth": 220.93,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2016-05",
+      "adaptive_composite": 0.285,
+      "fixed_composite": 0.244,
+      "gap": -0.045,
+      "spy_growth": 224.69,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2016-06",
+      "adaptive_composite": 0.237,
+      "fixed_composite": 0.172,
+      "gap": -0.067,
+      "spy_growth": 225.47,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2016-07",
+      "adaptive_composite": 0.291,
+      "fixed_composite": 0.252,
+      "gap": -0.046,
+      "spy_growth": 233.7,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2016-08",
+      "adaptive_composite": 0.215,
+      "fixed_composite": 0.185,
+      "gap": -0.031,
+      "spy_growth": 233.98,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2016-09",
+      "adaptive_composite": 0.23,
+      "fixed_composite": 0.195,
+      "gap": -0.035,
+      "spy_growth": 233.99,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2016-10",
+      "adaptive_composite": 0.18,
+      "fixed_composite": 0.133,
+      "gap": -0.039,
+      "spy_growth": 229.93,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2016-11",
+      "adaptive_composite": 0.404,
+      "fixed_composite": 0.403,
+      "gap": -0.005,
+      "spy_growth": 238.4,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2016-12",
+      "adaptive_composite": 0.424,
+      "fixed_composite": 0.409,
+      "gap": -0.049,
+      "spy_growth": 243.24,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2017-01",
+      "adaptive_composite": 0.382,
+      "fixed_composite": 0.366,
+      "gap": -0.041,
+      "spy_growth": 247.59,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2017-02",
+      "adaptive_composite": 0.387,
+      "fixed_composite": 0.364,
+      "gap": -0.051,
+      "spy_growth": 257.32,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2017-03",
+      "adaptive_composite": 0.238,
+      "fixed_composite": 0.198,
+      "gap": -0.038,
+      "spy_growth": 257.64,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2017-04",
+      "adaptive_composite": 0.314,
+      "fixed_composite": 0.305,
+      "gap": -0.022,
+      "spy_growth": 260.2,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2017-05",
+      "adaptive_composite": 0.305,
+      "fixed_composite": 0.295,
+      "gap": -0.022,
+      "spy_growth": 263.87,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2017-06",
+      "adaptive_composite": 0.228,
+      "fixed_composite": 0.21,
+      "gap": -0.024,
+      "spy_growth": 265.55,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2017-07",
+      "adaptive_composite": 0.433,
+      "fixed_composite": 0.413,
+      "gap": -0.056,
+      "spy_growth": 271.01,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2017-08",
+      "adaptive_composite": 0.277,
+      "fixed_composite": 0.241,
+      "gap": -0.042,
+      "spy_growth": 271.8,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2017-09",
+      "adaptive_composite": 0.369,
+      "fixed_composite": 0.348,
+      "gap": -0.047,
+      "spy_growth": 277.28,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2017-10",
+      "adaptive_composite": 0.321,
+      "fixed_composite": 0.322,
+      "gap": 0.005,
+      "spy_growth": 283.81,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2017-11",
+      "adaptive_composite": 0.41,
+      "fixed_composite": 0.4,
+      "gap": -0.036,
+      "spy_growth": 292.48,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2017-12",
+      "adaptive_composite": 0.348,
+      "fixed_composite": 0.345,
+      "gap": -0.011,
+      "spy_growth": 296.03,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2018-01",
+      "adaptive_composite": 0.349,
+      "fixed_composite": 0.343,
+      "gap": -0.021,
+      "spy_growth": 312.72,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2018-02",
+      "adaptive_composite": 0.104,
+      "fixed_composite": 0.114,
+      "gap": 0.017,
+      "spy_growth": 301.35,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2018-03",
+      "adaptive_composite": 0.18,
+      "fixed_composite": 0.142,
+      "gap": -0.03,
+      "spy_growth": 293.08,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2018-04",
+      "adaptive_composite": 0.326,
+      "fixed_composite": 0.289,
+      "gap": -0.05,
+      "spy_growth": 294.6,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2018-05",
+      "adaptive_composite": 0.261,
+      "fixed_composite": 0.217,
+      "gap": -0.043,
+      "spy_growth": 301.76,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2018-06",
+      "adaptive_composite": 0.18,
+      "fixed_composite": 0.124,
+      "gap": -0.068,
+      "spy_growth": 303.5,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2018-07",
+      "adaptive_composite": 0.342,
+      "fixed_composite": 0.299,
+      "gap": -0.055,
+      "spy_growth": 314.74,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2018-08",
+      "adaptive_composite": 0.3,
+      "fixed_composite": 0.284,
+      "gap": -0.03,
+      "spy_growth": 324.79,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2018-09",
+      "adaptive_composite": 0.177,
+      "fixed_composite": 0.168,
+      "gap": -0.011,
+      "spy_growth": 326.72,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2018-10",
+      "adaptive_composite": 0.089,
+      "fixed_composite": 0.05,
+      "gap": -0.047,
+      "spy_growth": 304.14,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2018-11",
+      "adaptive_composite": 0.243,
+      "fixed_composite": 0.211,
+      "gap": -0.036,
+      "spy_growth": 309.78,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2018-12",
+      "adaptive_composite": 0.014,
+      "fixed_composite": -0.018,
+      "gap": -0.053,
+      "spy_growth": 282.51,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2019-01",
+      "adaptive_composite": 0.333,
+      "fixed_composite": 0.27,
+      "gap": -0.058,
+      "spy_growth": 305.12,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2019-02",
+      "adaptive_composite": 0.327,
+      "fixed_composite": 0.301,
+      "gap": -0.043,
+      "spy_growth": 315.02,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2019-03",
+      "adaptive_composite": 0.267,
+      "fixed_composite": 0.242,
+      "gap": -0.034,
+      "spy_growth": 320.72,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2019-04",
+      "adaptive_composite": 0.234,
+      "fixed_composite": 0.232,
+      "gap": -0.003,
+      "spy_growth": 333.82,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2019-05",
+      "adaptive_composite": 0.03,
+      "fixed_composite": -0.003,
+      "gap": -0.049,
+      "spy_growth": 312.53,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2019-06",
+      "adaptive_composite": 0.302,
+      "fixed_composite": 0.246,
+      "gap": -0.052,
+      "spy_growth": 334.28,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2019-07",
+      "adaptive_composite": 0.146,
+      "fixed_composite": 0.134,
+      "gap": -0.013,
+      "spy_growth": 339.33,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2019-08",
+      "adaptive_composite": -0.054,
+      "fixed_composite": -0.081,
+      "gap": -0.085,
+      "spy_growth": 333.65,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2019-09",
+      "adaptive_composite": 0.235,
+      "fixed_composite": 0.167,
+      "gap": -0.097,
+      "spy_growth": 340.14,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2019-10",
+      "adaptive_composite": 0.318,
+      "fixed_composite": 0.278,
+      "gap": -0.05,
+      "spy_growth": 347.66,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2019-11",
+      "adaptive_composite": 0.277,
+      "fixed_composite": 0.248,
+      "gap": -0.038,
+      "spy_growth": 360.25,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2019-12",
+      "adaptive_composite": 0.409,
+      "fixed_composite": 0.407,
+      "gap": -0.015,
+      "spy_growth": 370.71,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2020-01",
+      "adaptive_composite": 0.129,
+      "fixed_composite": 0.122,
+      "gap": -0.008,
+      "spy_growth": 370.57,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2020-02",
+      "adaptive_composite": -0.086,
+      "fixed_composite": -0.106,
+      "gap": -0.044,
+      "spy_growth": 341.23,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2020-03",
+      "adaptive_composite": -0.245,
+      "fixed_composite": -0.209,
+      "gap": -0.265,
+      "spy_growth": 298.62,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2020-04",
+      "adaptive_composite": -0.064,
+      "fixed_composite": -0.072,
+      "gap": -0.207,
+      "spy_growth": 336.54,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2020-05",
+      "adaptive_composite": -0.108,
+      "fixed_composite": -0.127,
+      "gap": -0.115,
+      "spy_growth": 352.57,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2020-06",
+      "adaptive_composite": -0.315,
+      "fixed_composite": -0.319,
+      "gap": -0.067,
+      "spy_growth": 358.83,
+      "regime": "Risk-Off"
+    },
+    {
+      "date": "2020-07",
+      "adaptive_composite": -0.129,
+      "fixed_composite": -0.147,
+      "gap": -0.096,
+      "spy_growth": 379.96,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2020-08",
+      "adaptive_composite": -0.147,
+      "fixed_composite": -0.155,
+      "gap": -0.017,
+      "spy_growth": 406.48,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2020-09",
+      "adaptive_composite": -0.283,
+      "fixed_composite": -0.287,
+      "gap": -0.016,
+      "spy_growth": 391.26,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2020-10",
+      "adaptive_composite": -0.215,
+      "fixed_composite": -0.218,
+      "gap": -0.007,
+      "spy_growth": 381.5,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2020-11",
+      "adaptive_composite": 0.034,
+      "fixed_composite": 0.039,
+      "gap": 0.005,
+      "spy_growth": 423.0,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2020-12",
+      "adaptive_composite": 0.052,
+      "fixed_composite": 0.043,
+      "gap": -0.007,
+      "spy_growth": 438.67,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2021-01",
+      "adaptive_composite": -0.007,
+      "fixed_composite": -0.035,
+      "gap": -0.046,
+      "spy_growth": 434.2,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2021-02",
+      "adaptive_composite": 0.065,
+      "fixed_composite": 0.047,
+      "gap": -0.014,
+      "spy_growth": 446.28,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2021-03",
+      "adaptive_composite": 0.349,
+      "fixed_composite": 0.293,
+      "gap": -0.06,
+      "spy_growth": 466.54,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2021-04",
+      "adaptive_composite": 0.379,
+      "fixed_composite": 0.362,
+      "gap": -0.042,
+      "spy_growth": 491.22,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2021-05",
+      "adaptive_composite": 0.27,
+      "fixed_composite": 0.227,
+      "gap": -0.044,
+      "spy_growth": 494.45,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2021-06",
+      "adaptive_composite": 0.278,
+      "fixed_composite": 0.264,
+      "gap": -0.026,
+      "spy_growth": 505.54,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2021-07",
+      "adaptive_composite": 0.272,
+      "fixed_composite": 0.233,
+      "gap": -0.043,
+      "spy_growth": 517.88,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2021-08",
+      "adaptive_composite": 0.356,
+      "fixed_composite": 0.285,
+      "gap": -0.063,
+      "spy_growth": 533.29,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2021-09",
+      "adaptive_composite": 0.094,
+      "fixed_composite": 0.052,
+      "gap": -0.152,
+      "spy_growth": 508.43,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2021-10",
+      "adaptive_composite": 0.472,
+      "fixed_composite": 0.387,
+      "gap": -0.087,
+      "spy_growth": 544.11,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2021-11",
+      "adaptive_composite": 0.19,
+      "fixed_composite": 0.134,
+      "gap": -0.062,
+      "spy_growth": 539.74,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2021-12",
+      "adaptive_composite": 0.483,
+      "fixed_composite": 0.37,
+      "gap": -0.086,
+      "spy_growth": 564.7,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2022-01",
+      "adaptive_composite": 0.045,
+      "fixed_composite": 0.019,
+      "gap": -0.201,
+      "spy_growth": 534.92,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2022-02",
+      "adaptive_composite": 0.154,
+      "fixed_composite": 0.167,
+      "gap": -0.387,
+      "spy_growth": 519.13,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2022-03",
+      "adaptive_composite": 0.347,
+      "fixed_composite": 0.262,
+      "gap": -0.165,
+      "spy_growth": 538.64,
+      "regime": "Risk-On"
+    },
+    {
+      "date": "2022-04",
+      "adaptive_composite": -0.102,
+      "fixed_composite": -0.092,
+      "gap": -0.247,
+      "spy_growth": 491.36,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2022-05",
+      "adaptive_composite": 0.119,
+      "fixed_composite": 0.137,
+      "gap": -0.383,
+      "spy_growth": 492.47,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2022-06",
+      "adaptive_composite": -0.13,
+      "fixed_composite": -0.098,
+      "gap": -0.304,
+      "spy_growth": 451.86,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2022-07",
+      "adaptive_composite": 0.201,
+      "fixed_composite": 0.181,
+      "gap": -0.318,
+      "spy_growth": 493.48,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2022-08",
+      "adaptive_composite": 0.005,
+      "fixed_composite": -0.004,
+      "gap": -0.242,
+      "spy_growth": 473.34,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2022-09",
+      "adaptive_composite": -0.245,
+      "fixed_composite": -0.174,
+      "gap": -0.361,
+      "spy_growth": 429.58,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2022-10",
+      "adaptive_composite": 0.193,
+      "fixed_composite": 0.168,
+      "gap": -0.298,
+      "spy_growth": 464.5,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2022-11",
+      "adaptive_composite": 0.235,
+      "fixed_composite": 0.174,
+      "gap": -0.188,
+      "spy_growth": 490.32,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2022-12",
+      "adaptive_composite": -0.078,
+      "fixed_composite": -0.098,
+      "gap": -0.136,
+      "spy_growth": 462.06,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2023-01",
+      "adaptive_composite": 0.151,
+      "fixed_composite": 0.097,
+      "gap": -0.111,
+      "spy_growth": 491.12,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2023-02",
+      "adaptive_composite": -0.065,
+      "fixed_composite": -0.089,
+      "gap": -0.057,
+      "spy_growth": 478.77,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2023-03",
+      "adaptive_composite": 0.081,
+      "fixed_composite": 0.049,
+      "gap": -0.198,
+      "spy_growth": 496.52,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2023-04",
+      "adaptive_composite": 0.223,
+      "fixed_composite": 0.167,
+      "gap": -0.2,
+      "spy_growth": 504.46,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2023-05",
+      "adaptive_composite": -0.076,
+      "fixed_composite": -0.092,
+      "gap": -0.161,
+      "spy_growth": 506.78,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2023-06",
+      "adaptive_composite": 0.247,
+      "fixed_composite": 0.183,
+      "gap": -0.058,
+      "spy_growth": 539.62,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2023-07",
+      "adaptive_composite": 0.248,
+      "fixed_composite": 0.232,
+      "gap": -0.025,
+      "spy_growth": 557.29,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2023-08",
+      "adaptive_composite": -0.01,
+      "fixed_composite": -0.022,
+      "gap": -0.012,
+      "spy_growth": 548.23,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2023-09",
+      "adaptive_composite": -0.085,
+      "fixed_composite": -0.108,
+      "gap": -0.062,
+      "spy_growth": 522.23,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2023-10",
+      "adaptive_composite": -0.139,
+      "fixed_composite": -0.156,
+      "gap": -0.097,
+      "spy_growth": 510.89,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2023-11",
+      "adaptive_composite": 0.098,
+      "fixed_composite": 0.11,
+      "gap": 0.019,
+      "spy_growth": 557.56,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2023-12",
+      "adaptive_composite": 0.205,
+      "fixed_composite": 0.217,
+      "gap": 0.054,
+      "spy_growth": 583.01,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2024-01",
+      "adaptive_composite": 0.058,
+      "fixed_composite": 0.079,
+      "gap": 0.039,
+      "spy_growth": 592.3,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2024-02",
+      "adaptive_composite": 0.177,
+      "fixed_composite": 0.191,
+      "gap": 0.053,
+      "spy_growth": 623.21,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2024-03",
+      "adaptive_composite": 0.18,
+      "fixed_composite": 0.194,
+      "gap": 0.082,
+      "spy_growth": 643.59,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2024-04",
+      "adaptive_composite": -0.148,
+      "fixed_composite": -0.104,
+      "gap": 0.044,
+      "spy_growth": 617.64,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2024-05",
+      "adaptive_composite": 0.115,
+      "fixed_composite": 0.124,
+      "gap": 0.015,
+      "spy_growth": 648.88,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2024-06",
+      "adaptive_composite": -0.001,
+      "fixed_composite": 0.025,
+      "gap": 0.038,
+      "spy_growth": 671.77,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2024-07",
+      "adaptive_composite": -0.018,
+      "fixed_composite": 0.006,
+      "gap": 0.028,
+      "spy_growth": 679.9,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2024-08",
+      "adaptive_composite": 0.09,
+      "fixed_composite": 0.104,
+      "gap": 0.024,
+      "spy_growth": 695.79,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2024-09",
+      "adaptive_composite": -0.001,
+      "fixed_composite": 0.03,
+      "gap": 0.064,
+      "spy_growth": 710.41,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2024-10",
+      "adaptive_composite": -0.071,
+      "fixed_composite": -0.035,
+      "gap": 0.05,
+      "spy_growth": 704.07,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2024-11",
+      "adaptive_composite": 0.08,
+      "fixed_composite": 0.102,
+      "gap": 0.049,
+      "spy_growth": 746.05,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2024-12",
+      "adaptive_composite": -0.144,
+      "fixed_composite": -0.094,
+      "gap": 0.065,
+      "spy_growth": 728.1,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2025-01",
+      "adaptive_composite": 0.117,
+      "fixed_composite": 0.114,
+      "gap": -0.003,
+      "spy_growth": 747.66,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2025-02",
+      "adaptive_composite": 0.045,
+      "fixed_composite": 0.015,
+      "gap": -0.038,
+      "spy_growth": 738.16,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2025-03",
+      "adaptive_composite": -0.124,
+      "fixed_composite": -0.143,
+      "gap": -0.095,
+      "spy_growth": 697.03,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2025-04",
+      "adaptive_composite": -0.137,
+      "fixed_composite": -0.143,
+      "gap": -0.17,
+      "spy_growth": 690.99,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2025-05",
+      "adaptive_composite": 0.074,
+      "fixed_composite": 0.034,
+      "gap": -0.059,
+      "spy_growth": 734.42,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2025-06",
+      "adaptive_composite": 0.158,
+      "fixed_composite": 0.112,
+      "gap": -0.044,
+      "spy_growth": 772.16,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2025-07",
+      "adaptive_composite": 0.005,
+      "fixed_composite": 0.012,
+      "gap": 0.005,
+      "spy_growth": 789.94,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2025-08",
+      "adaptive_composite": 0.02,
+      "fixed_composite": 0.022,
+      "gap": 0.001,
+      "spy_growth": 806.15,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2025-09",
+      "adaptive_composite": 0.072,
+      "fixed_composite": 0.052,
+      "gap": -0.016,
+      "spy_growth": 834.86,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2025-10",
+      "adaptive_composite": 0.006,
+      "fixed_composite": 0.006,
+      "gap": -0.0,
+      "spy_growth": 854.76,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2025-11",
+      "adaptive_composite": 0.084,
+      "fixed_composite": 0.049,
+      "gap": -0.039,
+      "spy_growth": 856.43,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2025-12",
+      "adaptive_composite": 0.082,
+      "fixed_composite": 0.074,
+      "gap": -0.007,
+      "spy_growth": 857.11,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2026-01",
+      "adaptive_composite": 0.044,
+      "fixed_composite": 0.049,
+      "gap": 0.006,
+      "spy_growth": 869.75,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2026-02",
+      "adaptive_composite": 0.069,
+      "fixed_composite": 0.034,
+      "gap": -0.042,
+      "spy_growth": 862.23,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2026-03",
+      "adaptive_composite": -0.075,
+      "fixed_composite": -0.099,
+      "gap": -0.103,
+      "spy_growth": 819.65,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2026-04",
+      "adaptive_composite": 0.144,
+      "fixed_composite": 0.101,
+      "gap": -0.042,
+      "spy_growth": 905.76,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2026-05",
+      "adaptive_composite": 0.065,
+      "fixed_composite": 0.044,
+      "gap": -0.017,
+      "spy_growth": 953.43,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2026-06",
+      "adaptive_composite": 0.121,
+      "fixed_composite": 0.138,
+      "gap": 0.046,
+      "spy_growth": 943.61,
+      "regime": "Neutral"
+    },
+    {
+      "date": "2026-07",
+      "adaptive_composite": 0.128,
+      "fixed_composite": 0.115,
+      "gap": -0.013,
+      "spy_growth": 933.91,
+      "regime": "Neutral"
+    }
+  ],
+  "regime_disagreement": {
+    "days": 530,
+    "total_days": 6879,
+    "pct": 7.7
+  },
+  "gap_deciles": [
+    {
+      "decile": 0,
+      "fwd_1m": 0.936,
+      "fwd_3m": 0.416,
+      "fwd_6m": 0.092,
+      "n": 688
+    },
+    {
+      "decile": 1,
+      "fwd_1m": 0.082,
+      "fwd_3m": 2.227,
+      "fwd_6m": 4.651,
+      "n": 688
+    },
+    {
+      "decile": 2,
+      "fwd_1m": 1.571,
+      "fwd_3m": 3.613,
+      "fwd_6m": 6.038,
+      "n": 688
+    },
+    {
+      "decile": 3,
+      "fwd_1m": 1.292,
+      "fwd_3m": 3.622,
+      "fwd_6m": 6.466,
+      "n": 688
+    },
+    {
+      "decile": 4,
+      "fwd_1m": 0.487,
+      "fwd_3m": 2.68,
+      "fwd_6m": 5.042,
+      "n": 688
+    },
+    {
+      "decile": 5,
+      "fwd_1m": 1.215,
+      "fwd_3m": 2.732,
+      "fwd_6m": 5.532,
+      "n": 687
+    },
+    {
+      "decile": 6,
+      "fwd_1m": 0.561,
+      "fwd_3m": 2.178,
+      "fwd_6m": 5.124,
+      "n": 688
+    },
+    {
+      "decile": 7,
+      "fwd_1m": 0.678,
+      "fwd_3m": 2.327,
+      "fwd_6m": 5.292,
+      "n": 688
+    },
+    {
+      "decile": 8,
+      "fwd_1m": 0.635,
+      "fwd_3m": 2.163,
+      "fwd_6m": 5.097,
+      "n": 688
+    },
+    {
+      "decile": 9,
+      "fwd_1m": 0.476,
+      "fwd_3m": 1.522,
+      "fwd_6m": 3.842,
+      "n": 688
+    }
+  ],
+  "adaptive_composite_deciles": [
+    {
+      "decile": 0,
+      "fwd_1m": 1.6,
+      "fwd_3m": 3.516,
+      "fwd_6m": 6.592,
+      "n": 688
+    },
+    {
+      "decile": 1,
+      "fwd_1m": 1.419,
+      "fwd_3m": 2.713,
+      "fwd_6m": 5.306,
+      "n": 688
+    },
+    {
+      "decile": 2,
+      "fwd_1m": 1.054,
+      "fwd_3m": 3.042,
+      "fwd_6m": 4.665,
+      "n": 688
+    },
+    {
+      "decile": 3,
+      "fwd_1m": 0.786,
+      "fwd_3m": 2.404,
+      "fwd_6m": 4.542,
+      "n": 688
+    },
+    {
+      "decile": 4,
+      "fwd_1m": 0.256,
+      "fwd_3m": 1.991,
+      "fwd_6m": 4.56,
+      "n": 688
+    },
+    {
+      "decile": 5,
+      "fwd_1m": 0.42,
+      "fwd_3m": 1.831,
+      "fwd_6m": 3.822,
+      "n": 687
+    },
+    {
+      "decile": 6,
+      "fwd_1m": 0.559,
+      "fwd_3m": 1.675,
+      "fwd_6m": 3.633,
+      "n": 688
+    },
+    {
+      "decile": 7,
+      "fwd_1m": 0.449,
+      "fwd_3m": 1.225,
+      "fwd_6m": 3.512,
+      "n": 688
+    },
+    {
+      "decile": 8,
+      "fwd_1m": 0.737,
+      "fwd_3m": 2.099,
+      "fwd_6m": 5.017,
+      "n": 688
+    },
+    {
+      "decile": 9,
+      "fwd_1m": 0.65,
+      "fwd_3m": 2.987,
+      "fwd_6m": 5.414,
+      "n": 688
+    }
+  ],
+  "fixed_composite_deciles": [
+    {
+      "decile": 0,
+      "fwd_1m": 1.518,
+      "fwd_3m": 3.481,
+      "fwd_6m": 7.035,
+      "n": 688
+    },
+    {
+      "decile": 1,
+      "fwd_1m": 1.593,
+      "fwd_3m": 3.305,
+      "fwd_6m": 5.858,
+      "n": 688
+    },
+    {
+      "decile": 2,
+      "fwd_1m": 0.963,
+      "fwd_3m": 2.612,
+      "fwd_6m": 4.301,
+      "n": 688
+    },
+    {
+      "decile": 3,
+      "fwd_1m": 0.716,
+      "fwd_3m": 2.274,
+      "fwd_6m": 3.851,
+      "n": 688
+    },
+    {
+      "decile": 4,
+      "fwd_1m": 0.412,
+      "fwd_3m": 2.333,
+      "fwd_6m": 4.588,
+      "n": 688
+    },
+    {
+      "decile": 5,
+      "fwd_1m": 0.5,
+      "fwd_3m": 1.665,
+      "fwd_6m": 3.373,
+      "n": 687
+    },
+    {
+      "decile": 6,
+      "fwd_1m": 0.207,
+      "fwd_3m": 1.293,
+      "fwd_6m": 3.625,
+      "n": 688
+    },
+    {
+      "decile": 7,
+      "fwd_1m": 0.461,
+      "fwd_3m": 1.633,
+      "fwd_6m": 3.823,
+      "n": 688
+    },
+    {
+      "decile": 8,
+      "fwd_1m": 1.0,
+      "fwd_3m": 2.459,
+      "fwd_6m": 5.523,
+      "n": 688
+    },
+    {
+      "decile": 9,
+      "fwd_1m": 0.56,
+      "fwd_3m": 2.424,
+      "fwd_6m": 5.025,
+      "n": 688
+    }
+  ],
+  "regressions": {
+    "fwd_1m": {
+      "gap_vs_forward_return": {
+        "n": 6858,
+        "beta": -0.01557,
+        "beta_tstat": -0.601,
+        "beta_pvalue": 0.5477,
+        "r_squared": 0.0012,
+        "newey_west_lag": 21
+      },
+      "adaptive_composite_vs_forward_return": {
+        "n": 6858,
+        "beta": -0.0177,
+        "beta_tstat": -1.56,
+        "beta_pvalue": 0.1188,
+        "r_squared": 0.0068,
+        "newey_west_lag": 21
+      },
+      "fixed_composite_vs_forward_return": {
+        "n": 6858,
+        "beta": -0.01927,
+        "beta_tstat": -1.567,
+        "beta_pvalue": 0.1171,
+        "r_squared": 0.0065,
+        "newey_west_lag": 21
+      }
+    },
+    "fwd_3m": {
+      "gap_vs_forward_return": {
+        "n": 6816,
+        "beta": 0.01641,
+        "beta_tstat": 0.229,
+        "beta_pvalue": 0.8193,
+        "r_squared": 0.0005,
+        "newey_west_lag": 63
+      },
+      "adaptive_composite_vs_forward_return": {
+        "n": 6816,
+        "beta": -0.02156,
+        "beta_tstat": -0.73,
+        "beta_pvalue": 0.4654,
+        "r_squared": 0.0038,
+        "newey_west_lag": 63
+      },
+      "fixed_composite_vs_forward_return": {
+        "n": 6816,
+        "beta": -0.0279,
+        "beta_tstat": -0.859,
+        "beta_pvalue": 0.3905,
+        "r_squared": 0.0052,
+        "newey_west_lag": 63
+      }
+    },
+    "fwd_6m": {
+      "gap_vs_forward_return": {
+        "n": 6753,
+        "beta": 0.08637,
+        "beta_tstat": 0.624,
+        "beta_pvalue": 0.5328,
+        "r_squared": 0.0067,
+        "newey_west_lag": 126
+      },
+      "adaptive_composite_vs_forward_return": {
+        "n": 6753,
+        "beta": -0.02659,
+        "beta_tstat": -0.5,
+        "beta_pvalue": 0.6169,
+        "r_squared": 0.0028,
+        "newey_west_lag": 126
+      },
+      "fixed_composite_vs_forward_return": {
+        "n": 6753,
+        "beta": -0.03409,
+        "beta_tstat": -0.576,
+        "beta_pvalue": 0.5645,
+        "r_squared": 0.0037,
+        "newey_west_lag": 126
+      }
+    }
+  }
+}

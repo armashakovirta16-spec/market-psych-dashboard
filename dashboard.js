@@ -52,7 +52,7 @@ function signColors(values) {
 // Chart.js sizes a canvas at creation time, so charts inside a panel that
 // starts hidden (display:none) render at 0x0 until resized after becoming
 // visible — track instances per panel so showTab() can fix that up.
-const PANEL_CHARTS = { finance: [], economics: [], psychology: [], strategy: [] };
+const PANEL_CHARTS = { finance: [], economics: [], psychology: [], strategy: [], backtesting: [] };
 const ALL_CHARTS = [];
 
 function trackChart(panel, chart) {
@@ -191,6 +191,153 @@ function renderStrategies(strategies) {
   listEl.innerHTML = (strategies || []).map(strategyItemHTML).join('');
 }
 
+function regimeLineColor(regime) {
+  if (regime === 'Risk-On') return CHART_COLORS.green;
+  if (regime === 'Risk-Off') return CHART_COLORS.red;
+  if (regime === 'Neutral') return CHART_COLORS.amber;
+  return CHART_COLORS.finance; // warm-up months before the psychology pillar has enough history
+}
+
+function renderRegimeChart(monthlySeries) {
+  const labels = monthlySeries.map((m) => m.date);
+  const spyValues = monthlySeries.map((m) => m.spy_growth);
+  const regimes = monthlySeries.map((m) => m.regime);
+
+  const opts = chartDefaults();
+  opts.scales.x.ticks.maxTicksLimit = 9;
+  opts.plugins = {
+    legend: { display: false },
+    tooltip: {
+      callbacks: {
+        label: (ctx) => `SPY: ${ctx.parsed.y.toFixed(1)} (${regimes[ctx.dataIndex] || 'warm-up period'})`,
+      },
+    },
+  };
+  opts.elements = { point: { radius: 0 } };
+
+  trackChart('backtesting', new Chart(document.getElementById('regimeChart'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: spyValues,
+        borderWidth: 2,
+        fill: false,
+        segment: { borderColor: (ctx) => regimeLineColor(regimes[ctx.p1DataIndex]) },
+      }],
+    },
+    options: opts,
+  }));
+}
+
+function renderDecileChart(gapDeciles) {
+  const labels = gapDeciles.map((d) => `D${d.decile}`);
+  const c = THEME_CHART_COLORS[getCurrentTheme()];
+  const opts = chartDefaults();
+  opts.plugins = { legend: { display: true, position: 'top', labels: { color: c.tick, font: { size: 11 }, boxWidth: 10 } } };
+
+  trackChart('backtesting', new Chart(document.getElementById('decileChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: '1M fwd. return %', data: gapDeciles.map((d) => d.fwd_1m), backgroundColor: CHART_COLORS.finance, borderRadius: 4 },
+        { label: '3M fwd. return %', data: gapDeciles.map((d) => d.fwd_3m), backgroundColor: CHART_COLORS.economics, borderRadius: 4 },
+        { label: '6M fwd. return %', data: gapDeciles.map((d) => d.fwd_6m), backgroundColor: CHART_COLORS.psychology, borderRadius: 4 },
+      ],
+    },
+    options: opts,
+  }));
+}
+
+function significanceBadge(pvalue) {
+  if (pvalue < 0.05) return '<span class="sbadge risk-on">p &lt; 0.05</span>';
+  if (pvalue < 0.10) return '<span class="sbadge neutral">p &lt; 0.10</span>';
+  return '<span class="sbadge risk-off">not significant</span>';
+}
+
+const HORIZON_LABELS = { fwd_1m: '1 month', fwd_3m: '3 months', fwd_6m: '6 months' };
+const REGRESSION_SIGNAL_LABELS = {
+  gap_vs_forward_return: 'Fundamentals-psychology gap',
+  adaptive_composite_vs_forward_return: 'Adaptive composite (15-55%)',
+  fixed_composite_vs_forward_return: 'Fixed composite (35%)',
+};
+
+function renderRegressionTable(regressions) {
+  let rows = '';
+  for (const [horizon, signals] of Object.entries(regressions)) {
+    for (const [signalKey, stats] of Object.entries(signals)) {
+      rows += `<tr>
+        <td>${HORIZON_LABELS[horizon] || horizon}</td>
+        <td>${REGRESSION_SIGNAL_LABELS[signalKey] || signalKey}</td>
+        <td>${stats.beta}</td>
+        <td>${stats.beta_tstat}</td>
+        <td>${stats.beta_pvalue}</td>
+        <td>${stats.r_squared}</td>
+        <td>${significanceBadge(stats.beta_pvalue)}</td>
+      </tr>`;
+    }
+  }
+  document.getElementById('regressionTable').innerHTML =
+    '<thead><tr><th>Horizon</th><th>Signal</th><th>&beta;</th><th>t-stat</th><th>p-value</th><th>R&sup2;</th><th>Result</th></tr></thead>' +
+    `<tbody>${rows}</tbody>`;
+}
+
+function computeVerdict(regressions) {
+  let minP = 1;
+  for (const signals of Object.values(regressions)) {
+    for (const stats of Object.values(signals)) {
+      if (stats.beta_pvalue < minP) minP = stats.beta_pvalue;
+    }
+  }
+  if (minP < 0.05) return { text: `Significant result found (min p = ${minP.toFixed(3)})`, className: 'risk-on' };
+  if (minP < 0.10) return { text: `Borderline signal only (min p = ${minP.toFixed(3)}, not p<0.05)`, className: 'neutral' };
+  return { text: `No significant predictive edge found (min p = ${minP.toFixed(3)})`, className: 'risk-off' };
+}
+
+const BACKTEST_CAVEATS = [
+  'ISM PMI has no free historical source anywhere — the Economics pillar runs on only 2 of its usual 3 components for the entire backtest, and the VIX cycle-stage adjustment never activates historically (it requires PMI to classify the cycle stage).',
+  'HY OAS\'s free FRED history only starts 2023-07-28 — excluded from the reconstruction before that date.',
+  'Cboe\'s downloadable put/call archives stop at 2019-10-04 — despite the live daily scraper working fine today, no free bulk file bridges 2019-2026, so put/call is excluded from that stretch.',
+  'The window is ~27 years (1999-2026), not the full 30 years initially targeted — bounded by the 5 sector ETFs\' 1998-12-22 inception.',
+  'Monthly/weekly series (CPI, unemployment, fed funds, consumer sentiment, AAII, NAAIM, S&P 500 P/E) are forward-filled with an assumed publication lag, not each series\' actual historical release calendar.',
+  'CPI and unemployment use today\'s revised FRED values throughout history, not the real-time-as-then vintages that would actually have been known on each date.',
+  'Extreme-decile results are dominated by a handful of crisis episodes (2008, 2020, etc.), not many independent events — daily observations are highly serially correlated, which is why Newey-West errors were used for the regressions above.',
+];
+
+function renderBacktesting(data) {
+  const verdict = computeVerdict(data.regressions);
+  document.getElementById('backtestVerdict').innerHTML =
+    `<span class="sbadge ${verdict.className}">${verdict.text}</span>`;
+
+  const [startYear] = data.meta.start_date.split('-');
+  const [endYear] = data.meta.end_date.split('-');
+  let significantCount = 0, totalCount = 0;
+  for (const signals of Object.values(data.regressions)) {
+    for (const stats of Object.values(signals)) {
+      totalCount += 1;
+      if (stats.beta_pvalue < 0.05) significantCount += 1;
+    }
+  }
+  document.getElementById('backtestKeyMetrics').innerHTML =
+    metricHTML(`${startYear}–${endYear}`, 'Sample Period', '', 'The full window this backtest was run over.') +
+    metricHTML(data.meta.n_trading_days.toLocaleString(), 'Trading Days', '', 'Total daily observations in the reconstruction.') +
+    metricHTML(`${significantCount} / ${totalCount}`, 'Significant Results (p<0.05)', '', 'How many of the 9 regressions (3 signals × 3 horizons) cleared conventional statistical significance.') +
+    metricHTML(`${data.regime_disagreement.pct}%`, 'Adaptive vs. Fixed Disagreement', '', 'Share of trading days the adaptive-weight and fixed-35%-weight composites would have called a different regime (Risk-On/Neutral/Risk-Off).');
+
+  renderRegimeChart(data.monthly_series);
+  renderDecileChart(data.gap_deciles);
+  renderRegressionTable(data.regressions);
+
+  document.getElementById('disagreementNote').textContent =
+    `Across this ~${endYear - startYear}-year backtest, the adaptive and fixed-weight composites called a different regime on ${data.regime_disagreement.pct}% of trading days ` +
+    `(${data.regime_disagreement.days.toLocaleString()} of ${data.regime_disagreement.total_days.toLocaleString()}). Neither showed a statistically significant return edge over the ` +
+    'other at any horizon in this sample — see the regression table above.';
+
+  document.getElementById('caveatsList').innerHTML =
+    BACKTEST_CAVEATS.map((c) => `<li>${c}</li>`).join('');
+}
+
 // Each metric's "improving" direction, used to color the day-over-day
 // diff chips consistently with how the same metric feeds the composite
 // score (e.g. a rising VIX is colored as unfavorable, a rising PMI as
@@ -286,6 +433,22 @@ async function loadHistory() {
     return res.json();
   } catch {
     return { entries: [] };
+  }
+}
+
+// Static research output (regenerated by scripts/backtest.py, not the daily
+// live pipeline) — fetched once and cached, unlike snapshot/history which
+// poll every 5 minutes for genuinely live data.
+let cachedBacktestData = null;
+async function loadBacktest() {
+  if (cachedBacktestData) return cachedBacktestData;
+  try {
+    const res = await fetch('data/backtest_frontend.json', { cache: 'no-store' });
+    if (!res.ok) return null;
+    cachedBacktestData = await res.json();
+    return cachedBacktestData;
+  } catch {
+    return null;
   }
 }
 
@@ -400,6 +563,7 @@ function destroyAllCharts() {
   PANEL_CHARTS.economics.length = 0;
   PANEL_CHARTS.psychology.length = 0;
   PANEL_CHARTS.strategy.length = 0;
+  PANEL_CHARTS.backtesting.length = 0;
 }
 
 let isFirstLoad = true;
@@ -414,7 +578,7 @@ function hideLoadingOverlay() {
 
 async function refreshDashboard() {
   const loadStartedAt = Date.now();
-  const [snapshot, history] = await Promise.all([loadSnapshot(), loadHistory()]);
+  const [snapshot, history, backtest] = await Promise.all([loadSnapshot(), loadHistory(), loadBacktest()]);
   destroyAllCharts();
   const pillarScores = (snapshot.composite && snapshot.composite.pillar_scores) || {};
   renderComposite(snapshot.composite, snapshot.meta.last_updated);
@@ -425,6 +589,7 @@ async function refreshDashboard() {
   renderEconomics(snapshot.economics, pillarScores.economics, history.entries, snapshot.cycle_stage);
   renderPsychology(snapshot.psychology, pillarScores.psychology, history.entries);
   renderStrategies(snapshot.strategies);
+  if (backtest) renderBacktesting(backtest);
   // Re-render always rebuilds the active panel's chart at full size; other
   // panels' charts get fixed up on next tab switch same as on first load.
   const activeTab = document.querySelector('.tab.active');
