@@ -320,10 +320,10 @@ function renderBacktesting(data) {
     }
   }
   document.getElementById('backtestKeyMetrics').innerHTML =
-    metricHTML(`${startYear}–${endYear}`, 'Sample Period', '', 'The full window this backtest was run over.') +
-    metricHTML(data.meta.n_trading_days.toLocaleString(), 'Trading Days', '', 'Total daily observations in the reconstruction.') +
-    metricHTML(`${significantCount} / ${totalCount}`, 'Significant Results (p<0.05)', '', 'How many of the 9 regressions (3 signals × 3 horizons) cleared conventional statistical significance.') +
-    metricHTML(`${data.regime_disagreement.pct}%`, 'Adaptive vs. Fixed Disagreement', '', 'Share of trading days the adaptive-weight and fixed-35%-weight composites would have called a different regime (Risk-On/Neutral/Risk-Off).');
+    metricHTML(`${startYear}–${endYear}`, 'Sample Period', '', 'The full window this backtest reconstructs the composite over, bounded by the earliest date every required input has real data (the five sector ETFs, inception 1998-12-22, are the binding constraint). A longer, more diverse sample gives more confidence that any pattern found isn\'t just an artifact of one market regime — take findings from a short or single-regime sample with real caution.') +
+    metricHTML(data.meta.n_trading_days.toLocaleString(), 'Trading Days', '', 'Total daily observations behind every stat on this page. A large count sounds reassuring, but daily observations are highly serially correlated — the effective number of independent "events" (distinct market episodes) is much smaller, which is exactly why Newey-West errors are used for the regressions rather than treating each day as fully independent evidence.') +
+    metricHTML(`${significantCount} / ${totalCount}`, 'Significant Results (p<0.05)', '', 'How many of the 9 regressions (3 signals × 3 horizons) cleared the conventional p < 0.05 significance bar. A low count is the headline finding of this whole study: it means you shouldn\'t currently size real positions off this composite\'s gap reading alone — treat it as one input among many, not a standalone timing signal.') +
+    metricHTML(`${data.regime_disagreement.pct}%`, 'Adaptive vs. Fixed Disagreement', '', 'Share of trading days the adaptive-weight (15-55%) and fixed-35%-weight composites would have called a different regime (Risk-On/Neutral/Risk-Off). A high disagreement rate with no accompanying edge in the regression table (see above) means the adaptive-weighting mechanism changes the read fairly often without demonstrably improving it in this sample — worth knowing before leaning on the adaptive weight as if it were proven to add value.');
 
   renderRegimeChart(data.monthly_series);
   renderDecileChart(data.gap_deciles);
@@ -638,13 +638,26 @@ async function handleRefreshClick() {
 // 5, gated on item 2's teaching-audience decision) — a native title
 // attribute rather than a custom widget, so it stays keyboard/AT-neutral
 // and needs no new dependency.
+// `explain` is the full "what this means, and what it implies for
+// positioning" writeup — a clean dropdown per metric (native
+// details/summary, same progressive-disclosure pattern as the composite
+// banner's "Full breakdown" toggle), not just a hover tooltip.
 function metricHTML(value, label, suffix = '', explain = '') {
   const display = (value === null || value === undefined) ? '—' : `${value}${suffix}`;
-  const titleAttr = explain ? ` title="${explain}"` : '';
-  return `<div class="metric"${titleAttr}>
+  const explainBlock = explain
+    ? `<details class="metric-explain"><summary>What this means</summary><p>${explain}</p></details>`
+    : '';
+  return `<div class="metric">
     <div class="metric-value">${display}</div>
     <div class="metric-label">${label}</div>
+    ${explainBlock}
   </div>`;
+}
+
+// Same dropdown pattern for a chart/visual that isn't backed by a single
+// metric tile (sector returns, asset returns, AAII donut, Fear/Greed gauge).
+function chartExplainHTML(explain) {
+  return `<details class="metric-explain chart-explain"><summary>What this means</summary><p>${explain}</p></details>`;
 }
 
 function renderComposite(composite, lastUpdated) {
@@ -708,8 +721,8 @@ function renderFinance(finance, score, historyEntries) {
 
   const metrics = document.getElementById('financeKeyMetrics');
   metrics.innerHTML =
-    metricHTML(finance.sp500_pe, 'S&P 500 P/E', '', 'Price-to-earnings ratio for the S&P 500 — how expensive stocks are relative to their trailing earnings. Higher means more expensive versus history.') +
-    metricHTML(finance.yield_curve_10y_2y, '10y-2y Spread', '%', '10-year minus 2-year Treasury yield. A negative (inverted) spread has historically preceded recessions.');
+    metricHTML(finance.sp500_pe, 'S&P 500 P/E', '', 'The S&P 500\'s price-to-earnings ratio measures how much investors are paying for each dollar of trailing corporate earnings. A P/E meaningfully above its long-run average (~16.5x) signals stocks are priced for continued strong growth and leaves less margin for error — a valuation headwind that argues for a more cautious, quality-focused equity stance rather than chasing further multiple expansion. A P/E below the historical average suggests stocks are comparatively cheap, which has historically supported higher forward returns and a more constructive stance on adding equity exposure.') +
+    metricHTML(finance.yield_curve_10y_2y, '10y-2y Spread', '%', 'This is the gap between the 10-year and 2-year U.S. Treasury yields — the classic yield curve. A positive, upward-sloping curve reflects a market pricing in continued growth and is historically consistent with a risk-on posture toward equities. An inverted curve (negative spread) has preceded nearly every U.S. recession since the 1970s and historically argues for de-risking toward quality and shorter-duration fixed income ahead of a potential downturn — though the lag before a recession actually arrives can run well over a year.');
 
   renderMiniTrend(
     'finance', 'peTrendLabel', 'peTrendWrap', 'peTrendChart',
@@ -756,10 +769,10 @@ function renderEconomics(economics, score, historyEntries, cycleStage) {
 
   const metrics = document.getElementById('economicsKeyMetrics');
   metrics.innerHTML =
-    metricHTML(economics.cpi_yoy, 'CPI YoY', '%', 'Consumer Price Index, year-over-year — the headline U.S. inflation rate.') +
-    metricHTML(economics.ism_pmi, 'ISM PMI', '', 'ISM Manufacturing Purchasing Managers’ Index. Above 50 signals expansion, below 50 signals contraction.') +
-    metricHTML(economics.unemployment_rate, 'Unemployment', '%', 'Share of the labor force without a job and actively looking for one.') +
-    metricHTML(economics.fed_funds_rate, 'Fed Funds Rate', '%', 'The Federal Reserve’s target interest rate — the cost of overnight borrowing between banks.');
+    metricHTML(economics.cpi_yoy, 'CPI YoY', '%', 'The Consumer Price Index year-over-year captures the economy\'s headline inflation rate. Inflation running hot above the Fed\'s ~2% target pressures the Fed to keep policy restrictive, which is a headwind for both equity valuations and bond prices — supporting a tilt toward real assets (commodities, gold, TIPS) as an inflation hedge. Cooling inflation gives the Fed room to ease, which is typically supportive for both stocks and bonds and argues for adding duration and risk exposure.') +
+    metricHTML(economics.ism_pmi, 'ISM PMI', '', 'The ISM Manufacturing Purchasing Managers\' Index is a monthly survey of manufacturing activity; a reading above 50 signals expansion, below 50 signals contraction. A PMI comfortably above 50 supports cyclical, economically-sensitive sectors (industrials, materials, financials) and a growth-oriented equity tilt. A PMI below 50 — especially if falling — is an early warning of economic slowing, historically favoring a defensive rotation into staples, healthcare, and utilities.') +
+    metricHTML(economics.unemployment_rate, 'Unemployment', '%', 'The U.S. unemployment rate measures the share of the labor force without a job and actively looking for one. A rising rate signals a weakening labor market and slowing consumer spending power, arguing for defensive positioning and caution on consumer-discretionary and cyclical names. A very low rate is double-edged: it reflects a healthy economy, but can also indicate late-cycle labor-market tightness that risks overheating and keeps the Fed restrictive for longer — read this one relative to where the cycle stands, not in isolation.') +
+    metricHTML(economics.fed_funds_rate, 'Fed Funds Rate', '%', 'The Federal Reserve\'s target interest rate is its primary lever for cooling or stimulating the economy. A high rate relative to inflation (a restrictive real rate) is a headwind for equities and long-duration bonds alike, and historically favors holding more cash/short-duration instruments and being selective on rate-sensitive sectors (real estate, high-growth tech). A rate that\'s falling, or low relative to inflation, is typically supportive of risk assets and argues for extending duration in fixed income and leaning into growth equities.');
 
   renderCycleStage(cycleStage);
 
@@ -787,12 +800,12 @@ function renderPsychology(psychology, score, historyEntries) {
 
   const metrics = document.getElementById('psychologyKeyMetrics');
   metrics.innerHTML =
-    metricHTML(psychology.vix, 'VIX', '', 'The "fear gauge" — implied volatility priced into S&P 500 options. Low means calm/complacent, high means fearful.') +
-    metricHTML(psychology.put_call_ratio, 'Put/Call Ratio', '', 'Ratio of put to call option volume across Cboe exchanges. Above roughly 1 means more downside hedging demand than usual.') +
-    metricHTML(psychology.consumer_sentiment, 'Consumer Sentiment (U. Mich.)', '', 'University of Michigan\'s monthly survey of how optimistic consumers feel about the economy and their own finances.') +
-    metricHTML(psychology.hy_oas, 'HY Credit Spread (OAS)', '%', 'Extra yield investors demand to hold high-yield ("junk") bonds over Treasuries. Widening spreads price in more credit/default risk.') +
-    metricHTML(psychology.news_sentiment, 'SF Fed News Sentiment', '', 'A daily index of how positive or negative U.S. economic news coverage reads, built with NLP over major newspapers.') +
-    metricHTML(psychology.naaim_exposure, 'NAAIM Manager Exposure', '', 'Active investment managers\' self-reported average equity exposure, -200% to +200%. Real reported positioning, not just stated opinion like AAII.');
+    metricHTML(psychology.vix, 'VIX', '', 'The VIX — the market\'s "fear gauge" — reflects the volatility investors expect priced into S&P 500 options over the next 30 days. A low, stable VIX reflects market calm and typically coincides with strong risk appetite, but persistently low volatility can also breed complacency (per Minsky\'s Financial Instability Hypothesis) that leaves portfolios vulnerable to a sharp reversal. A spiking VIX signals acute fear and de-risking — historically these spikes have also marked attractive entry points for contrarian investors willing to buy into panic, though timing the bottom is difficult.') +
+    metricHTML(psychology.put_call_ratio, 'Put/Call Ratio', '', 'This compares the volume of put options (bets on/hedges against a decline) to call options (bets on a rise) traded across Cboe exchanges. A ratio meaningfully above 1 shows investors paying up for downside protection — a Prospect Theory-style loss-aversion signal that can mean either genuine fear (bearish) or, when extreme, an overly-hedged market poised for a relief rally as protection unwinds (a contrarian bullish tell). A low ratio shows call-heavy, optimistic positioning, supporting a risk-on stance but also flagging complacency if valuations are already stretched.') +
+    metricHTML(psychology.consumer_sentiment, 'Consumer Sentiment (U. Mich.)', '', 'This monthly survey captures how optimistic U.S. consumers feel about the economy and their own finances. Rising sentiment supports continued consumer spending — the majority of U.S. GDP — and favors consumer-discretionary and broader risk-asset exposure. Falling sentiment, especially from already-depressed levels, warns on consumer-facing sectors and argues for a more defensive tilt, though extremely depressed sentiment has historically also coincided with market bottoms, since it often means the bad news is already priced in.') +
+    metricHTML(psychology.hy_oas, 'HY Credit Spread (OAS)', '%', 'This measures the extra yield investors demand to hold high-yield ("junk") corporate bonds over safe Treasuries — effectively the bond market\'s price on default/credit risk. A widening spread signals the credit market pricing in more economic stress, often an earlier and more clear-eyed warning than equities, historically favoring de-risking equity exposure and rotating toward higher-quality credit. A tight spread reflects confidence in corporate health and generally supports a risk-on equity stance, though spreads this tight leave little cushion if sentiment turns.') +
+    metricHTML(psychology.news_sentiment, 'SF Fed News Sentiment', '', 'A daily index built from NLP analysis of how positive or negative U.S. economic news coverage reads across major newspapers. Improving news sentiment tends to coincide with (and can reinforce) risk-on positioning as media narratives turn constructive. Deteriorating sentiment can precede or amplify broader risk-off moves, since negative narratives can become self-reinforcing — treat a sharp swing as a corroborating signal alongside the other Psychology readings rather than acting on it alone.') +
+    metricHTML(psychology.naaim_exposure, 'NAAIM Manager Exposure', '', 'This is the actual self-reported average equity exposure of active investment managers, from -200% (fully leveraged short) to +200% (fully leveraged long) — real positioning, not just stated opinion like AAII. High exposure shows managers already leaning heavily long, which can be a bullish confirmation but also a contrarian caution flag when combined with stretched valuations, since there\'s less dry powder left to keep buying. Low or negative exposure shows managers defensively positioned, which can flag genuine caution — or, if fundamentals hold up despite the pessimism, a contrarian buying opportunity.');
 
   const gaugeMarker = document.getElementById('psychGaugeMarker');
   if (score !== undefined && score !== null) {
