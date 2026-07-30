@@ -184,6 +184,28 @@
       "cpi_yoy": 3.46,
       "unemployment_rate": 4.2,
       "fed_funds_rate": 3.63
+    },
+    {
+      "date": "2026-07-30",
+      "composite_score": -0.081,
+      "psychology_weight": 0.202,
+      "pillar_scores": {
+        "finance": -0.189,
+        "economics": 0.091,
+        "psychology": -0.129
+      },
+      "vix": 20.66,
+      "sp500_pe": 28.14,
+      "ism_pmi": 53.3,
+      "put_call_ratio": 0.96,
+      "consumer_sentiment": 44.8,
+      "hy_oas": 2.84,
+      "news_sentiment": 0.02,
+      "naaim_exposure": 84.02,
+      "aaii_spread": -12.699999999999996,
+      "cpi_yoy": 3.46,
+      "unemployment_rate": 4.2,
+      "fed_funds_rate": 3.63
     }
   ]
 }
