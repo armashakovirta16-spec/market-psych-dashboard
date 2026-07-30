@@ -44,6 +44,7 @@ import re
 from datetime import datetime, timezone
 
 import openpyxl
+import pandas as pd
 import requests
 import yfinance as yf
 from fredapi import Fred
@@ -51,7 +52,10 @@ from fredapi import Fred
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "snapshot.json")
 HISTORY_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "history.json")
 MANUAL_OVERRIDES_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "manual_overrides.json")
+BACKTEST_SERIES_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "backtest_daily_series.csv")
 HISTORY_MAX_ENTRIES = 90  # keep ~3 months; a daily-cadence dashboard doesn't need more
+ANALOGUE_COUNT = 3  # show several nearest matches, not one cherry-picked date
+ANALOGUE_FORWARD_DAYS = 126  # ~6 months — also the natural "must have this much future data" cutoff
 
 # A browser UA avoids the bot-blocking a bare "python-requests" UA hits on some sites.
 REQUEST_HEADERS = {
@@ -793,6 +797,62 @@ def compute_composite(finance, economics, psychology, cycle_stage, history_entri
     }
 
 
+def compute_historical_analogues(finance_score, economics_score, psychology_score):
+    """
+    Finds the N historical trading days (from the item-4 backtest's daily
+    reconstruction, scripts/backtest.py) whose Finance/Economics/Psychology
+    pillar scores were closest to today's — the same "regime analogue"
+    technique macro strategists actually use — and reports what the S&P 500
+    did in the 1/3/6 months that followed each one.
+
+    Deliberately returns several matches, not the single closest one: if the
+    three nearest historical analogues disagree on what happened next (they
+    usually do), that disagreement is itself the honest takeaway, consistent
+    with this project's backtest finding no reliable predictive edge. A
+    single cherry-picked "this is just like March 2016!" framing would
+    overstate what a lone historical instance can actually tell you.
+
+    Returns None if the backtest series isn't present (e.g. a
+    fetch_data.py run before scripts/backtest.py has ever been run) or has
+    no candidates with enough forward data — this is best-effort context,
+    not a required part of the pipeline.
+    """
+    if not os.path.exists(BACKTEST_SERIES_PATH):
+        return None
+
+    df = pd.read_csv(BACKTEST_SERIES_PATH, parse_dates=["date"])
+    df = df.dropna(subset=["finance_score", "economics_score", "psychology_score", "spy_close"]).reset_index(drop=True)
+
+    df["fwd_1m"] = df["spy_close"].shift(-21) / df["spy_close"] - 1
+    df["fwd_3m"] = df["spy_close"].shift(-63) / df["spy_close"] - 1
+    df["fwd_6m"] = df["spy_close"].shift(-ANALOGUE_FORWARD_DAYS) / df["spy_close"] - 1
+    candidates = df.dropna(subset=["fwd_6m"])  # implicitly excludes the last ~6 months (no future to compare against yet)
+    if candidates.empty:
+        return None
+
+    distance = (
+        (candidates["finance_score"] - finance_score) ** 2
+        + (candidates["economics_score"] - economics_score) ** 2
+        + (candidates["psychology_score"] - psychology_score) ** 2
+    ) ** 0.5
+
+    nearest = distance.nsmallest(ANALOGUE_COUNT).index
+    matches = []
+    for idx in nearest:
+        row = candidates.loc[idx]
+        matches.append({
+            "date": row["date"].strftime("%Y-%m-%d"),
+            "distance": round(float(distance.loc[idx]), 3),
+            "finance_score": round(float(row["finance_score"]), 3),
+            "economics_score": round(float(row["economics_score"]), 3),
+            "psychology_score": round(float(row["psychology_score"]), 3),
+            "fwd_1m_return": round(float(row["fwd_1m"]) * 100, 2),
+            "fwd_3m_return": round(float(row["fwd_3m"]) * 100, 2),
+            "fwd_6m_return": round(float(row["fwd_6m"]) * 100, 2),
+        })
+    return matches
+
+
 CYCLICAL_SECTORS = {"Tech (XLK)", "Financials (XLF)", "Energy (XLE)"}
 DEFENSIVE_SECTORS = {"Healthcare (XLV)", "Utilities (XLU)"}
 
@@ -1101,6 +1161,11 @@ def main():
     composite = compute_composite(finance, economics, psychology, cycle_stage, history.get("entries"))
     allocation_tilts = compute_allocation_tilts(finance, economics, psychology, composite)
     strategies = compute_strategies(composite, economics, allocation_tilts)
+    historical_analogues = compute_historical_analogues(
+        composite["pillar_scores"]["finance"],
+        composite["pillar_scores"]["economics"],
+        composite["pillar_scores"]["psychology"],
+    )
 
     snapshot = {
         "meta": {
@@ -1123,6 +1188,7 @@ def main():
         "composite": composite,
         "allocation_tilts": allocation_tilts,
         "strategies": strategies,
+        "historical_analogues": historical_analogues,
     }
 
     # allow_nan=False: a NaN slipping through some other computation should

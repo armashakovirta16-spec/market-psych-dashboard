@@ -582,6 +582,7 @@ async function refreshDashboard() {
   destroyAllCharts();
   const pillarScores = (snapshot.composite && snapshot.composite.pillar_scores) || {};
   renderComposite(snapshot.composite, snapshot.meta.last_updated);
+  renderHistoricalAnalogues(snapshot.historical_analogues, pillarScores);
   renderDiffs(history.entries);
   renderTrend(history.entries);
   renderFinance(snapshot.finance, pillarScores.finance, history.entries);
@@ -714,6 +715,57 @@ function renderComposite(composite, lastUpdated) {
 
   document.getElementById('lastUpdated').textContent =
     `Last updated: ${new Date(lastUpdated).toLocaleString()}`;
+}
+
+function formatAnalogueDate(dateStr) {
+  const d = new Date(`${dateStr}T00:00:00`);
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+function signedPct(value) {
+  return `${value >= 0 ? '+' : ''}${value.toFixed(1)}%`;
+}
+
+// Finds the 3 historical trading days (since 1999) whose Finance/Economics/
+// Psychology mix most closely matched today's, and shows what the S&P 500
+// did next — computed backend-side in compute_historical_analogues()
+// against scripts/backtest.py's daily reconstruction. Shown as a one-line
+// teaser plus an expandable comparison table, not a big new section, so it
+// adds a genuinely interesting signal without undoing the "don't overwhelm
+// on first look" cleanup elsewhere on this page.
+function renderHistoricalAnalogues(matches, todayScores) {
+  const block = document.getElementById('analogueBlock');
+  if (!matches || matches.length === 0) {
+    block.style.display = 'none';
+    return;
+  }
+  block.style.display = '';
+
+  const top = matches[0];
+  document.getElementById('analogueTeaser').innerHTML =
+    `Closest match: <strong>${formatAnalogueDate(top.date)}</strong> — the S&P 500 went on to return ` +
+    `<strong>${signedPct(top.fwd_1m_return)}</strong> over the next month and <strong>${signedPct(top.fwd_6m_return)}</strong> over the next 6.`;
+
+  const todayRow = `<tr class="analogue-today-row">
+    <td>Today</td>
+    <td>${(todayScores.finance ?? 0).toFixed(2)}</td>
+    <td>${(todayScores.economics ?? 0).toFixed(2)}</td>
+    <td>${(todayScores.psychology ?? 0).toFixed(2)}</td>
+    <td>—</td><td>—</td><td>—</td>
+  </tr>`;
+  const matchRows = matches.map((m) => `<tr>
+    <td>${formatAnalogueDate(m.date)}</td>
+    <td>${m.finance_score.toFixed(2)}</td>
+    <td>${m.economics_score.toFixed(2)}</td>
+    <td>${m.psychology_score.toFixed(2)}</td>
+    <td>${signedPct(m.fwd_1m_return)}</td>
+    <td>${signedPct(m.fwd_3m_return)}</td>
+    <td>${signedPct(m.fwd_6m_return)}</td>
+  </tr>`).join('');
+
+  document.getElementById('analogueTable').innerHTML =
+    '<thead><tr><th>Date</th><th>Finance</th><th>Economics</th><th>Psychology</th><th>+1M</th><th>+3M</th><th>+6M</th></tr></thead>' +
+    `<tbody>${todayRow}${matchRows}</tbody>`;
 }
 
 function renderFinance(finance, score, historyEntries) {

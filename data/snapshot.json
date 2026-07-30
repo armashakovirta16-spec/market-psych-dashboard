@@ -169,5 +169,37 @@
       "indicated": true,
       "rationale": "The composite regime is genuinely balanced (-0.08) \u2014 no pillar is dominant enough to justify a strong directional tilt on overall market exposure."
     }
+  ],
+  "historical_analogues": [
+    {
+      "date": "2000-04-14",
+      "distance": 0.055,
+      "finance_score": -0.212,
+      "economics_score": 0.1,
+      "psychology_score": -0.08,
+      "fwd_1m_return": 7.86,
+      "fwd_3m_return": 11.29,
+      "fwd_6m_return": 1.64
+    },
+    {
+      "date": "2000-05-08",
+      "distance": 0.056,
+      "finance_score": -0.156,
+      "economics_score": 0.05,
+      "psychology_score": -0.149,
+      "fwd_1m_return": 3.53,
+      "fwd_3m_return": 4.23,
+      "fwd_6m_return": 0.72
+    },
+    {
+      "date": "2000-05-05",
+      "distance": 0.058,
+      "finance_score": -0.162,
+      "economics_score": 0.05,
+      "psychology_score": -0.161,
+      "fwd_1m_return": 2.05,
+      "fwd_3m_return": 2.22,
+      "fwd_6m_return": -0.09
+    }
   ]
 }

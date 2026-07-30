@@ -414,6 +414,29 @@ body {
   max-width: 80ch;
 }
 
+.analogue-block {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border2);
+}
+
+.analogue-teaser {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.55;
+  margin: 6px 0 0;
+  max-width: 80ch;
+}
+
+.analogue-teaser strong {
+  font-weight: 600;
+}
+
+.analogue-today-row td {
+  font-weight: 600;
+  background: var(--surface2);
+}
+
 .composite-details {
   margin-top: 20px;
   border-top: 1px solid var(--border2);

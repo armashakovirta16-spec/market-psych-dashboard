@@ -81,6 +81,16 @@
     <div class="chart-label" id="diffLabel" style="display:none;">Since yesterday</div>
     <p class="diff-narrative" id="diffNarrative"></p>
 
+    <div class="analogue-block" id="analogueBlock" style="display:none;">
+      <div class="chart-label" title="Finds the 3 trading days (since 1999) whose Finance/Economics/Psychology mix most closely matches today's, and shows what the S&P 500 actually did next — the same regime-analogue technique macro strategists use. Deliberately shows several matches rather than one: if they disagree on what happened next, that disagreement is the honest takeaway.">Closest historical analogue</div>
+      <p class="analogue-teaser" id="analogueTeaser">—</p>
+      <details class="trends-details" id="analogueDetails">
+        <summary>Compare all 3 nearest matches</summary>
+        <div class="backtest-table-wrap"><table class="backtest-table" id="analogueTable"></table></div>
+        <p class="tilt-disclaimer">A handful of historical instances is context, not a forecast — one past episode (or three) proves nothing about what happens this time. Matches are found across the 1999-2026 backtest window (see the Backtesting tab), so they carry the same data-coverage limitations documented there.</p>
+      </details>
+    </div>
+
     <details class="composite-details" id="compositeDetails">
       <summary>Full breakdown — pillar scores, narrative, and trend</summary>
       <div class="pillar-score-row" id="pillarScoreRow"></div>
