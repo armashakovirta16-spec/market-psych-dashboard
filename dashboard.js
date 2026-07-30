@@ -893,5 +893,16 @@ document.getElementById('compositeDetails').addEventListener('toggle', (e) => {
   if (e.target.open) ALL_CHARTS.forEach((chart) => chart.resize());
 });
 
+// Same fix for each tab's collapsed "Historical trends" section — bundling
+// every sparkline behind one toggle is the main "don't overwhelm on first
+// look" change, but it means those charts are born hidden too.
+['financeTrendsDetails', 'economicsTrendsDetails', 'psychologyTrendsDetails'].forEach((id) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('toggle', () => {
+    if (el.open) ALL_CHARTS.forEach((chart) => chart.resize());
+  });
+});
+
 refreshDashboard();
 setInterval(refreshDashboard, AUTO_REFRESH_MS);

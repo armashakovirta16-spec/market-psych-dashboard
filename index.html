@@ -105,8 +105,6 @@
     <section class="panel active" id="pillar-finance" data-panel="finance">
       <div class="pillar-signal" id="financeSignal"></div>
       <div class="metric-row" id="financeKeyMetrics"></div>
-      <div class="chart-label" id="peTrendLabel">S&amp;P 500 P/E trend</div>
-      <div class="chart-wrap sparkline-wrap" id="peTrendWrap"><canvas id="peTrendChart"></canvas></div>
 
       <div class="chart-label">Sector returns, 1M</div>
       <div class="chart-wrap"><canvas id="sectorChart"></canvas></div>
@@ -127,6 +125,12 @@
 
       <div class="chart-label">Sector read</div>
       <div class="tilt-list" id="sectorTiltList"></div>
+
+      <details class="trends-details" id="financeTrendsDetails">
+        <summary>Historical trends</summary>
+        <div class="chart-label" id="peTrendLabel">S&amp;P 500 P/E trend</div>
+        <div class="chart-wrap sparkline-wrap" id="peTrendWrap"><canvas id="peTrendChart"></canvas></div>
+      </details>
     </section>
 
     <section class="panel" id="pillar-economics" data-panel="economics">
@@ -136,20 +140,23 @@
       <div class="chart-label">Business-cycle stage</div>
       <div class="tilt-list" id="cycleStageList"></div>
 
-      <div class="chart-label" id="pmiTrendLabel">ISM PMI trend</div>
-      <div class="chart-wrap sparkline-wrap" id="pmiTrendWrap"><canvas id="pmiTrendChart"></canvas></div>
-
-      <div class="chart-label" id="cpiTrendLabel">CPI YoY trend</div>
-      <div class="chart-wrap sparkline-wrap" id="cpiTrendWrap"><canvas id="cpiTrendChart"></canvas></div>
-
-      <div class="chart-label" id="unemploymentTrendLabel">Unemployment trend</div>
-      <div class="chart-wrap sparkline-wrap" id="unemploymentTrendWrap"><canvas id="unemploymentTrendChart"></canvas></div>
-
-      <div class="chart-label" id="fedFundsTrendLabel">Fed funds rate trend</div>
-      <div class="chart-wrap sparkline-wrap" id="fedFundsTrendWrap"><canvas id="fedFundsTrendChart"></canvas></div>
-
       <div class="chart-label">Fed Funds Rate vs. CPI YoY</div>
       <div class="chart-wrap"><canvas id="realRateChart"></canvas></div>
+
+      <details class="trends-details" id="economicsTrendsDetails">
+        <summary>Historical trends</summary>
+        <div class="chart-label" id="pmiTrendLabel">ISM PMI trend</div>
+        <div class="chart-wrap sparkline-wrap" id="pmiTrendWrap"><canvas id="pmiTrendChart"></canvas></div>
+
+        <div class="chart-label" id="cpiTrendLabel">CPI YoY trend</div>
+        <div class="chart-wrap sparkline-wrap" id="cpiTrendWrap"><canvas id="cpiTrendChart"></canvas></div>
+
+        <div class="chart-label" id="unemploymentTrendLabel">Unemployment trend</div>
+        <div class="chart-wrap sparkline-wrap" id="unemploymentTrendWrap"><canvas id="unemploymentTrendChart"></canvas></div>
+
+        <div class="chart-label" id="fedFundsTrendLabel">Fed funds rate trend</div>
+        <div class="chart-wrap sparkline-wrap" id="fedFundsTrendWrap"><canvas id="fedFundsTrendChart"></canvas></div>
+      </details>
     </section>
 
     <section class="panel" id="pillar-psychology" data-panel="psychology">
@@ -172,32 +179,35 @@
         <p>This is the average of every Psychology signal on this tab, standardized and blended into one -1 (fear) to +1 (greed) read. Toward Greed, positioning is stretched optimistic — historically a time to be more selective about adding new risk and to trim into strength rather than chase. Toward Fear, positioning is stretched pessimistic — historically often (though not always) a better entry point than the headlines suggest, since markets tend to overshoot on the downside. Near Neutral, psychology isn't offering a strong directional lean either way, and the composite leans more heavily on Finance and Economics fundamentals instead (see the adaptive weight gauge at the top of the page).</p>
       </details>
 
-      <div class="chart-label" id="vixTrendLabel">VIX trend</div>
-      <div class="chart-wrap sparkline-wrap" id="vixTrendWrap"><canvas id="vixTrendChart"></canvas></div>
-
-      <div class="chart-label" id="putCallTrendLabel">Put/Call ratio trend</div>
-      <div class="chart-wrap sparkline-wrap" id="putCallTrendWrap"><canvas id="putCallTrendChart"></canvas></div>
-
-      <div class="chart-label" id="aaiiSpreadTrendLabel">AAII bull-bear spread trend</div>
-      <div class="chart-wrap sparkline-wrap" id="aaiiSpreadTrendWrap"><canvas id="aaiiSpreadTrendChart"></canvas></div>
-
-      <div class="chart-label" id="consumerSentimentTrendLabel">Consumer sentiment trend</div>
-      <div class="chart-wrap sparkline-wrap" id="consumerSentimentTrendWrap"><canvas id="consumerSentimentTrendChart"></canvas></div>
-
-      <div class="chart-label" id="hyOasTrendLabel">HY credit spread trend</div>
-      <div class="chart-wrap sparkline-wrap" id="hyOasTrendWrap"><canvas id="hyOasTrendChart"></canvas></div>
-
-      <div class="chart-label" id="newsSentimentTrendLabel">SF Fed news sentiment trend</div>
-      <div class="chart-wrap sparkline-wrap" id="newsSentimentTrendWrap"><canvas id="newsSentimentTrendChart"></canvas></div>
-
-      <div class="chart-label" id="naaimTrendLabel">NAAIM manager exposure trend</div>
-      <div class="chart-wrap sparkline-wrap" id="naaimTrendWrap"><canvas id="naaimTrendChart"></canvas></div>
-
       <div class="chart-label">AAII sentiment survey</div>
       <div class="chart-wrap chart-wrap-donut"><canvas id="sentimentChart"></canvas></div>
       <details class="metric-explain chart-explain">
         <summary>What this means</summary>
         <p>This is a weekly survey of individual investors' stated 6-month market outlook — costless opinion, not real money at stake (unlike NAAIM above). A heavily bullish skew feeding into a market that's already stretched is a herding/social-proof warning sign — per behavioral finance, when nearly everyone agrees, there's little marginal buying power left and positioning is vulnerable to disappointment. A heavily bearish skew, especially alongside resilient fundamentals, has historically been a contrarian bullish tell, since excessive pessimism often means the selling is exhausted. A roughly even three-way split suggests no crowd to fade in either direction.</p>
+      </details>
+
+      <details class="trends-details" id="psychologyTrendsDetails">
+        <summary>Historical trends</summary>
+        <div class="chart-label" id="vixTrendLabel">VIX trend</div>
+        <div class="chart-wrap sparkline-wrap" id="vixTrendWrap"><canvas id="vixTrendChart"></canvas></div>
+
+        <div class="chart-label" id="putCallTrendLabel">Put/Call ratio trend</div>
+        <div class="chart-wrap sparkline-wrap" id="putCallTrendWrap"><canvas id="putCallTrendChart"></canvas></div>
+
+        <div class="chart-label" id="aaiiSpreadTrendLabel">AAII bull-bear spread trend</div>
+        <div class="chart-wrap sparkline-wrap" id="aaiiSpreadTrendWrap"><canvas id="aaiiSpreadTrendChart"></canvas></div>
+
+        <div class="chart-label" id="consumerSentimentTrendLabel">Consumer sentiment trend</div>
+        <div class="chart-wrap sparkline-wrap" id="consumerSentimentTrendWrap"><canvas id="consumerSentimentTrendChart"></canvas></div>
+
+        <div class="chart-label" id="hyOasTrendLabel">HY credit spread trend</div>
+        <div class="chart-wrap sparkline-wrap" id="hyOasTrendWrap"><canvas id="hyOasTrendChart"></canvas></div>
+
+        <div class="chart-label" id="newsSentimentTrendLabel">SF Fed news sentiment trend</div>
+        <div class="chart-wrap sparkline-wrap" id="newsSentimentTrendWrap"><canvas id="newsSentimentTrendChart"></canvas></div>
+
+        <div class="chart-label" id="naaimTrendLabel">NAAIM manager exposure trend</div>
+        <div class="chart-wrap sparkline-wrap" id="naaimTrendWrap"><canvas id="naaimTrendChart"></canvas></div>
       </details>
     </section>
 

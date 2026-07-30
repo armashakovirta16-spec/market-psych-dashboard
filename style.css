@@ -21,6 +21,7 @@
   --green: #248a3d;
   --red: #d70015;
   --amber: #c76c00;
+  --pink: #ff2d55;
 
   --color-finance: var(--blue);
   --color-economics: var(--green);
@@ -46,6 +47,7 @@
   --green: #30d158;
   --red: #ff453a;
   --amber: #ff9f0a;
+  --pink: #ff375f;
   --color-psychology: #bf8fe0;
 
   --shadow-card: none;
@@ -400,7 +402,10 @@ body {
 }
 
 .gauge-track {
-  background: linear-gradient(to right, var(--border2), var(--color-psychology));
+  /* Cool-to-hot fade (calm floor -> extreme ceiling), deliberately a
+     different hue journey than the red-amber-green risk score-track right
+     above it, so the two stacked bars stay visually distinct. */
+  background: linear-gradient(to right, var(--blue), var(--color-psychology), var(--pink));
 }
 
 .diff-narrative {
@@ -432,6 +437,45 @@ body {
 
 .composite-details[open] summary {
   margin-bottom: 4px;
+}
+
+/* Groups every historical sparkline in a tab behind one toggle, so a panel
+   leads with its current-state metrics/charts and doesn't dump 4-7 stacked
+   trend charts on first look — the main "too much at once" fix. */
+.trends-details {
+  margin: 20px 0 4px;
+  border-top: 1px solid var(--border2);
+  padding-top: 14px;
+}
+
+.trends-details summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding-bottom: 14px;
+  transition: color .15s ease;
+}
+
+.trends-details summary::-webkit-details-marker { display: none; }
+
+.trends-details summary::before {
+  content: '▸';
+  font-size: 10px;
+  color: var(--text-dim);
+  transition: transform .15s ease;
+}
+
+.trends-details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.trends-details summary:hover {
+  color: var(--blue);
 }
 
 .pillar-signal {
