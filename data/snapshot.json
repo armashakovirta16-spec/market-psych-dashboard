@@ -26,7 +26,13 @@
       "Gold (GLD)": 2.38
     },
     "sp500_pe": 28.63,
-    "yield_curve_10y_2y": 0.45
+    "yield_curve_10y_2y": 0.45,
+    "index_returns_1m": {
+      "S&P 500 (SPY)": -0.68,
+      "Nasdaq 100 (QQQ)": -7.18,
+      "Dow Jones (DIA)": -0.14,
+      "Russell 2000 (IWM)": -2.62
+    }
   },
   "economics": {
     "cpi_yoy": 3.46,
@@ -201,5 +207,26 @@
       "fwd_3m_return": 4.23,
       "fwd_6m_return": 0.72
     }
-  ]
+  ],
+  "index_calls": {
+    "disclaimer": "Covers major indices only, not individual stocks \u2014 nothing this dashboard computes (macro data, credit spreads, sentiment surveys, positioning) says anything about any single company's fundamentals, so a per-stock call would not actually be based on what's calculated here. Illustrative, rules-based starting points only, extending the same logic as the Finance tab's Allocation read \u2014 not personalized investment advice.",
+    "indices": {
+      "S&P 500 (SPY)": {
+        "tilt": "Hold",
+        "rationale": "Composite regime is balanced (-0.06) and this index has no standout momentum (-0.7%). Broad-market valuations are also stretched (valuation component -1.00). This index is the broad U.S. large-cap benchmark this whole dashboard is already built around."
+      },
+      "Nasdaq 100 (QQQ)": {
+        "tilt": "Hold",
+        "rationale": "Composite regime is balanced (-0.06), but this index has notable negative 1-month momentum (-7.2%). Broad-market valuations are also stretched (valuation component -1.00). This index is roughly half-weighted to mega-cap technology, so it tends to amplify both the composite regime and the Tech sector's own momentum."
+      },
+      "Dow Jones (DIA)": {
+        "tilt": "Hold",
+        "rationale": "Composite regime is balanced (-0.06) and this index has no standout momentum (-0.1%). Broad-market valuations are also stretched (valuation component -1.00). This index is a narrower basket of 30 blue-chip industrials and financials, historically less volatile than the broader market."
+      },
+      "Russell 2000 (IWM)": {
+        "tilt": "Hold",
+        "rationale": "Composite regime is balanced (-0.06) and this index has no standout momentum (-2.6%). Broad-market valuations are also stretched (valuation component -1.00). This index is small-cap and more sensitive to financing costs and the domestic cycle, so it tends to swing harder with both the regime and real interest rates."
+      }
+    }
+  }
 }

@@ -79,6 +79,13 @@ ASSET_CLASS_ETFS = {
     "Gold (GLD)": "GLD",
 }
 
+INDEX_ETFS = {
+    "S&P 500 (SPY)": "SPY",
+    "Nasdaq 100 (QQQ)": "QQQ",
+    "Dow Jones (DIA)": "DIA",
+    "Russell 2000 (IWM)": "IWM",
+}
+
 FRED_SERIES = {
     "cpi_yoy": "CPIAUCSL",          # you'll want to transform this to YoY % change
     "unemployment_rate": "UNRATE",
@@ -117,6 +124,7 @@ def pct_change_1m(ticker: str) -> float:
 def fetch_finance_and_psychology():
     sector_returns = {name: pct_change_1m(t) for name, t in SECTOR_ETFS.items()}
     asset_returns = {name: pct_change_1m(t) for name, t in ASSET_CLASS_ETFS.items()}
+    index_returns = {name: pct_change_1m(t) for name, t in INDEX_ETFS.items()}
 
     vix_closes = yf.Ticker("^VIX").history(period="5d")["Close"].dropna()
     vix = round(vix_closes.iloc[-1], 2) if not vix_closes.empty else None
@@ -124,6 +132,7 @@ def fetch_finance_and_psychology():
     return {
         "sector_returns_1m": sector_returns,
         "asset_class_returns_1m": asset_returns,
+        "index_returns_1m": index_returns,
     }, {
         "vix": vix,
     }
@@ -961,6 +970,81 @@ def compute_allocation_tilts(finance, economics, psychology, composite) -> dict:
     }
 
 
+# Factual, verifiable composition notes only — never a claim about any
+# individual company, since nothing this dashboard computes (macro data,
+# credit spreads, sentiment surveys, positioning) has anything to say about
+# a specific company's fundamentals. Extending the Equities tilt logic to
+# indices already tracked as ETFs is a defensible read-through of signals
+# that actually exist; extending it to single stocks would not be.
+INDEX_CHARACTER = {
+    "S&P 500 (SPY)": "the broad U.S. large-cap benchmark this whole dashboard is already built around",
+    "Nasdaq 100 (QQQ)": "roughly half-weighted to mega-cap technology, so it tends to amplify both the composite regime and the Tech sector's own momentum",
+    "Dow Jones (DIA)": "a narrower basket of 30 blue-chip industrials and financials, historically less volatile than the broader market",
+    "Russell 2000 (IWM)": "small-cap and more sensitive to financing costs and the domestic cycle, so it tends to swing harder with both the regime and real interest rates",
+}
+INDEX_RATE_SENSITIVE = {"Russell 2000 (IWM)"}
+
+
+def compute_index_calls(finance, economics, composite) -> dict:
+    """
+    Extends the Finance tab's Equities tilt logic (same Risk-On/Off
+    thresholds, same valuation caveat) to the 3 other major U.S. equity
+    indices, each with a real, verifiable composition note (e.g. QQQ's tech
+    weighting) rather than any fabricated company-specific signal. Deliberately
+    does not cover individual stocks — see the disclaimer below for why.
+    """
+    score = composite["score"]
+    components = composite.get("pillar_components", {})
+    valuation = (components.get("finance") or {}).get("valuation")
+    real_rate = (components.get("economics") or {}).get("real_rate")
+    index_returns = finance.get("index_returns_1m", {})
+
+    calls = {}
+    for name in INDEX_ETFS:
+        ret = index_returns.get(name)
+        if score > TILT_RISK_ON:
+            call, reason = "Invest", f"Composite regime is Risk-On ({score:+.2f})."
+        elif score < TILT_RISK_OFF:
+            call, reason = "Sell", f"Composite regime is Risk-Off ({score:+.2f})."
+        else:
+            call = "Hold"
+            if ret is not None and abs(ret) >= SECTOR_MOMENTUM_NOTE:
+                direction = "positive" if ret > 0 else "negative"
+                reason = f"Composite regime is balanced ({score:+.2f}), but this index has notable {direction} 1-month momentum ({ret:+.1f}%)."
+            elif ret is not None:
+                reason = f"Composite regime is balanced ({score:+.2f}) and this index has no standout momentum ({ret:+.1f}%)."
+            else:
+                reason = f"Composite regime is balanced ({score:+.2f})."
+
+        if valuation is not None and valuation <= VALUATION_CAVEAT:
+            if call == "Invest":
+                call = "Hold"
+                reason += f" Downgraded from Invest — broad-market valuations are stretched (valuation component {valuation:+.2f})."
+            else:
+                reason += f" Broad-market valuations are also stretched (valuation component {valuation:+.2f})."
+
+        if name in INDEX_RATE_SENSITIVE and real_rate is not None and real_rate <= REAL_YIELD_ATTRACTIVE:
+            reason += f" Real policy rates look historically high (real-rate component {real_rate:+.2f}), typically a headwind for smaller, more financing-dependent companies."
+
+        character = INDEX_CHARACTER.get(name)
+        if character:
+            reason += f" This index is {character}."
+
+        calls[name] = {"tilt": call, "rationale": reason}
+
+    return {
+        "disclaimer": (
+            "Covers major indices only, not individual stocks — nothing this dashboard "
+            "computes (macro data, credit spreads, sentiment surveys, positioning) says "
+            "anything about any single company's fundamentals, so a per-stock call would "
+            "not actually be based on what's calculated here. Illustrative, rules-based "
+            "starting points only, extending the same logic as the Finance tab's "
+            "Allocation read — not personalized investment advice."
+        ),
+        "indices": calls,
+    }
+
+
 NEUTRAL_BAND = 0.2  # |composite score| at or below this counts as "genuinely balanced"
 
 
@@ -1161,6 +1245,7 @@ def main():
     composite = compute_composite(finance, economics, psychology, cycle_stage, history.get("entries"))
     allocation_tilts = compute_allocation_tilts(finance, economics, psychology, composite)
     strategies = compute_strategies(composite, economics, allocation_tilts)
+    index_calls = compute_index_calls(finance, economics, composite)
     historical_analogues = compute_historical_analogues(
         composite["pillar_scores"]["finance"],
         composite["pillar_scores"]["economics"],
@@ -1188,6 +1273,7 @@ def main():
         "composite": composite,
         "allocation_tilts": allocation_tilts,
         "strategies": strategies,
+        "index_calls": index_calls,
         "historical_analogues": historical_analogues,
     }
 

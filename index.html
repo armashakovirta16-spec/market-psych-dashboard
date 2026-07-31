@@ -108,6 +108,7 @@
     <div class="tab" data-tab="psychology" onclick="showTab('psychology', this)">Psychology</div>
     <div class="tab" data-tab="strategy" onclick="showTab('strategy', this)">Strategy</div>
     <div class="tab" data-tab="backtesting" onclick="showTab('backtesting', this)">Backtesting</div>
+    <div class="tab" data-tab="markets" onclick="showTab('markets', this)">Markets</div>
   </div>
 
   <main class="tab-panels">
@@ -253,6 +254,15 @@
       <div class="chart-label">Known limitations</div>
       <ul class="backtest-caveats" id="caveatsList"></ul>
       <p class="tilt-disclaimer">Full methodology and writeup: <code>Financial_Hub_Session_Summary.docx</code> in the project repository.</p>
+    </section>
+
+    <section class="panel" id="pillar-markets" data-panel="markets">
+      <p class="tilt-disclaimer" id="indexCallsDisclaimer"></p>
+      <div class="tilt-list" id="indexCallsList"></div>
+      <details class="metric-explain chart-explain">
+        <summary>Why no individual stocks?</summary>
+        <p>Every signal on this dashboard describes the broad market or economy — volatility, credit spreads, valuation, positioning surveys, macro data — none of it is company-specific. There's no earnings data, no analyst estimates, no competitive analysis anywhere in this pipeline. A "buy Apple" or "sell Tesla" call would have nothing real behind it; it would just be a guess wearing this dashboard's numbers as a costume. The four calls above are broad index ETFs, built by extending the exact same regime + valuation logic already used for the Finance tab's Allocation read — a defensible read-through of signals that actually exist, not an invented one.</p>
+      </details>
     </section>
 
   </main>

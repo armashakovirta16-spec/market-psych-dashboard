@@ -52,7 +52,7 @@ function signColors(values) {
 // Chart.js sizes a canvas at creation time, so charts inside a panel that
 // starts hidden (display:none) render at 0x0 until resized after becoming
 // visible — track instances per panel so showTab() can fix that up.
-const PANEL_CHARTS = { finance: [], economics: [], psychology: [], strategy: [], backtesting: [] };
+const PANEL_CHARTS = { finance: [], economics: [], psychology: [], strategy: [], backtesting: [], markets: [] };
 const ALL_CHARTS = [];
 
 function trackChart(panel, chart) {
@@ -121,8 +121,8 @@ function pillarSignalHTML(label, score, title) {
 }
 
 function tiltBadgeClass(tilt) {
-  if (tilt === 'Overweight') return 'risk-on';
-  if (tilt === 'Underweight') return 'risk-off';
+  if (tilt === 'Overweight' || tilt === 'Invest') return 'risk-on';
+  if (tilt === 'Underweight' || tilt === 'Sell') return 'risk-off';
   return 'neutral';
 }
 
@@ -173,6 +173,22 @@ function renderAllocationTilts(tilts) {
   assetListEl.innerHTML = Object.entries(tilts.asset_classes || {})
     .map(([name, data]) => tiltItemHTML(name, data)).join('');
   sectorListEl.innerHTML = Object.entries(tilts.sectors || {})
+    .map(([name, data]) => tiltItemHTML(name, data)).join('');
+}
+
+// Markets tab: extends the same tilt logic/UI already used for the Finance
+// tab's Allocation read to 4 major indices — deliberately no individual
+// stocks (see the tab's own "Why no individual stocks?" explainer).
+function renderIndexCalls(indexCalls) {
+  const disclaimerEl = document.getElementById('indexCallsDisclaimer');
+  const listEl = document.getElementById('indexCallsList');
+  if (!indexCalls) {
+    disclaimerEl.textContent = '';
+    listEl.innerHTML = '';
+    return;
+  }
+  disclaimerEl.textContent = indexCalls.disclaimer;
+  listEl.innerHTML = Object.entries(indexCalls.indices || {})
     .map(([name, data]) => tiltItemHTML(name, data)).join('');
 }
 
@@ -564,6 +580,7 @@ function destroyAllCharts() {
   PANEL_CHARTS.psychology.length = 0;
   PANEL_CHARTS.strategy.length = 0;
   PANEL_CHARTS.backtesting.length = 0;
+  PANEL_CHARTS.markets.length = 0;
 }
 
 let isFirstLoad = true;
@@ -590,6 +607,7 @@ async function refreshDashboard() {
   renderEconomics(snapshot.economics, pillarScores.economics, history.entries, snapshot.cycle_stage);
   renderPsychology(snapshot.psychology, pillarScores.psychology, history.entries);
   renderStrategies(snapshot.strategies);
+  renderIndexCalls(snapshot.index_calls);
   if (backtest) renderBacktesting(backtest);
   // Re-render always rebuilds the active panel's chart at full size; other
   // panels' charts get fixed up on next tab switch same as on first load.
