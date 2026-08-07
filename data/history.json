@@ -319,24 +319,24 @@
     },
     {
       "date": "2026-08-07",
-      "composite_score": 0.045,
-      "psychology_weight": 0.151,
+      "composite_score": 0.047,
+      "psychology_weight": 0.15,
       "pillar_scores": {
-        "finance": -0.033,
-        "economics": 0.168,
-        "psychology": -0.002
+        "finance": -0.036,
+        "economics": 0.176,
+        "psychology": 0.001
       },
-      "vix": 15.15,
-      "sp500_pe": 29.69,
+      "vix": 14.9,
+      "sp500_pe": 29.88,
       "ism_pmi": 55.6,
       "put_call_ratio": 0.86,
       "consumer_sentiment": 49.5,
-      "hy_oas": 2.75,
+      "hy_oas": 2.71,
       "news_sentiment": 0.02,
       "naaim_exposure": 84.02,
       "aaii_spread": -1.0,
       "cpi_yoy": 3.46,
-      "unemployment_rate": 4.2,
+      "unemployment_rate": 4.1,
       "fed_funds_rate": 3.63
     }
   ]
