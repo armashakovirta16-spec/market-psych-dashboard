@@ -308,6 +308,42 @@ body {
   pointer-events: none;
 }
 
+/* The regime bar specifically: --off-pct/--on-pct are set from the real,
+   data-derived (and asymmetric) Risk-Off/Risk-On thresholds — not a fixed
+   34%/66% split — so the coloring and tick marks show a PM exactly where
+   the label actually changes, not a generic midpoint decoration. Hard
+   color stops (not a blend) so the three zones read as distinct regions. */
+#scoreTrack {
+  --off-pct: 34%;
+  --on-pct: 66%;
+  background: linear-gradient(to right,
+    var(--red) 0%, var(--red) var(--off-pct),
+    var(--amber) var(--off-pct), var(--amber) var(--on-pct),
+    var(--green) var(--on-pct), var(--green) 100%);
+}
+
+#scoreTrack::after { content: none; }
+
+#scoreTrack .score-tick {
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 12px;
+  background: var(--surface);
+  opacity: 0.85;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+#scoreTickOff { left: var(--off-pct); }
+#scoreTickOn { left: var(--on-pct); }
+
+.score-percentile {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
 .score-marker {
   position: absolute;
   top: -5px;

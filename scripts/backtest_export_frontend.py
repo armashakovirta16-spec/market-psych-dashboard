@@ -9,21 +9,22 @@ decile/regression summaries straight from backtest_results.json.
 
 import json
 import os
+import sys
 
 import pandas as pd
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
+sys.path.insert(0, os.path.dirname(__file__))
+import fetch_data as fd  # single source of truth for TILT_RISK_ON/TILT_RISK_OFF — see fetch_data.py for how they're derived
 
-TILT_RISK_ON = 0.3
-TILT_RISK_OFF = -0.3
+DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 
 
 def regime_for(score):
     if pd.isna(score):
         return None
-    if score > TILT_RISK_ON:
+    if score > fd.TILT_RISK_ON:
         return "Risk-On"
-    if score < TILT_RISK_OFF:
+    if score < fd.TILT_RISK_OFF:
         return "Risk-Off"
     return "Neutral"
 

@@ -694,6 +694,36 @@ function renderComposite(composite, lastUpdated) {
   const pct = ((composite.score - min) / (max - min)) * 100;
   document.getElementById('scoreMarker').style.left = `${pct}%`;
 
+  // Zone coloring and tick marks reflect the real, data-derived (and
+  // asymmetric) Risk-Off/Risk-On thresholds rather than a generic 34%/66%
+  // split — see TILT_RISK_ON/TILT_RISK_OFF in fetch_data.py for how
+  // tilt_thresholds is calibrated (20th/80th percentile of the composite's
+  // own 1999-present distribution).
+  const scoreTrack = document.getElementById('scoreTrack');
+  const [tiltOff, tiltOn] = composite.tilt_thresholds || [];
+  if (tiltOff !== undefined && tiltOn !== undefined) {
+    const offPct = ((tiltOff - min) / (max - min)) * 100;
+    const onPct = ((tiltOn - min) / (max - min)) * 100;
+    scoreTrack.style.setProperty('--off-pct', `${offPct}%`);
+    scoreTrack.style.setProperty('--on-pct', `${onPct}%`);
+  }
+
+  function ordinal(n) {
+    const rem100 = n % 100;
+    if (rem100 >= 11 && rem100 <= 13) return `${n}th`;
+    const rem10 = n % 10;
+    return `${n}${{ 1: 'st', 2: 'nd', 3: 'rd' }[rem10] || 'th'}`;
+  }
+
+  const percentileEl = document.getElementById('scorePercentile');
+  if (composite.percentile !== undefined && composite.percentile !== null) {
+    const p = Math.round(composite.percentile);
+    const compareClause = p >= 50 ? `more bullish than ${p}%` : `more bearish than ${100 - p}%`;
+    percentileEl.textContent = `${ordinal(p)} percentile of all trading days since 1999 — ${compareClause} of history.`;
+  } else {
+    percentileEl.textContent = '';
+  }
+
   // Hero number, per Will's memo item 5: lead with the gap and current
   // posture, large, first on screen — everything else is progressive
   // disclosure below.

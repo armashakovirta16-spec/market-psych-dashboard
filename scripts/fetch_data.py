@@ -405,6 +405,37 @@ NAAIM_LONG_RUN_MEAN = 67.4  # NAAIM Number's mean since inception (~2006, full h
 NAAIM_LONG_RUN_STD = 23.6
 ZSCORE_CAP = 2.5  # standard deviations mapped to the +/-1 unit scale
 
+# Risk-On / Cautiously Neutral / Risk-Off classification for the composite
+# score — this is THE headline read the whole site is built around, so it
+# needs to actually discriminate, not just sit on "Neutral" by default.
+# Calibrated as the 20th/80th percentile of the composite's own 1999-present
+# distribution (data/backtest_daily_series.csv, adaptive_composite column),
+# not a round symmetric number picked by feel: with the Finance pillar fix
+# above, the composite's real distribution is mean +0.04 / std 0.19, and a
+# flat +/-0.3 cutoff (roughly 1.5 std out) only classified ~11% of trading
+# days as anything other than Neutral since 1999 — accurate, but useless as
+# a signal a PM would actually watch day to day. A 20/80 percentile split
+# guarantees the label is genuinely informative (bottom-quintile and
+# top-quintile conditions, by construction, ~20% of days each) while still
+# reserving Risk-On/Risk-Off for real outliers rather than ordinary noise.
+# The two thresholds are intentionally NOT symmetric around 0 — the
+# composite's own history isn't symmetric around 0 either (it skews mildly
+# positive, reflecting that equities trend up over multi-decade samples),
+# so a symmetric cutoff would over-count Risk-On or under-count Risk-Off
+# relative to what's actually unusual. Recompute periodically (e.g. after
+# major backtest revisions) by re-running scripts/backtest.py and taking
+# the 20th/80th percentile of its adaptive_composite column.
+TILT_RISK_ON = 0.209
+TILT_RISK_OFF = -0.115
+# An intentionally softer/earlier warning bar than TILT_RISK_OFF itself,
+# for the "quality/defensive rotation" strategy check below — the 30th
+# percentile of the same 1999-present distribution, so this flags roughly a
+# decile of days *before* the composite is bad enough to earn the full
+# Risk-Off label outright, matching the original design intent that
+# defensive positioning should look attractive a bit ahead of a hard
+# Risk-Off call, not only once it's already arrived.
+DEFENSIVE_ROTATION_THRESHOLD = -0.052
+
 # Thresholds for the behavioral-bias callouts in the narrative — each is a
 # compound or extreme condition, not just "any signal in one direction", so
 # a callout only fires when positioning genuinely looks like that bias.
@@ -734,6 +765,29 @@ def _bias_callouts(finance, psychology, cycle_stage, history_entries):
     return callouts
 
 
+def compute_score_percentile(score: float):
+    """
+    Where today's composite score ranks against the full 1999-present
+    backtest distribution (data/backtest_daily_series.csv) — e.g. "more
+    bullish than 74% of trading days since 1999." Gives a precise,
+    continuous read alongside the three-way Risk-On/Neutral/Risk-Off label,
+    since a PM deciding how much conviction to put behind a "Risk-On" call
+    should be able to see whether that's a borderline top-quintile reading
+    or a genuine multi-decade extreme, not just the category name.
+
+    Returns None if the backtest series isn't present (mirrors
+    compute_historical_analogues()'s same fallback) — this is supplementary
+    context, not a required field.
+    """
+    if not os.path.exists(BACKTEST_SERIES_PATH):
+        return None
+    df = pd.read_csv(BACKTEST_SERIES_PATH, usecols=["adaptive_composite"])
+    history = df["adaptive_composite"].dropna()
+    if history.empty:
+        return None
+    return round(float((history < score).mean() * 100), 1)
+
+
 def compute_composite(finance, economics, psychology, cycle_stage, history_entries=None) -> dict:
     """
     Transparent scoring: each pillar averages a handful of explainable
@@ -777,20 +831,23 @@ def compute_composite(finance, economics, psychology, cycle_stage, history_entri
 
     psychology_gap = round(score - baseline_score, 3)
 
-    if score > 0.3:
+    if score > TILT_RISK_ON:
         regime = "Risk-On"
-    elif score < -0.3:
+    elif score < TILT_RISK_OFF:
         regime = "Risk-Off"
     else:
         regime = "Cautiously Neutral"
 
+    percentile = compute_score_percentile(score)
+
     stage_name = cycle_stage.get("stage", "Unknown")
     stage_article = "an" if stage_name[:1] in "AEIOU" else "a"
 
+    percentile_clause = f", {percentile:.0f}th percentile of all trading days since 1999" if percentile is not None else ""
     overview = (
-        f"Regime read: {regime} (composite score {score:+.2f} on a -1 to +1 scale). Finance conditions are "
-        f"{_describe(finance_score, 'supportive', 'cautious')} ({finance_score:+.2f}), economic data is "
-        f"{_describe(economics_score, 'supportive', 'cautious')} ({economics_score:+.2f}), and market "
+        f"Regime read: {regime} (composite score {score:+.2f} on a -1 to +1 scale{percentile_clause}). Finance "
+        f"conditions are {_describe(finance_score, 'supportive', 'cautious')} ({finance_score:+.2f}), economic "
+        f"data is {_describe(economics_score, 'supportive', 'cautious')} ({economics_score:+.2f}), and market "
         f"psychology leans {_describe(psychology_score, 'greedy', 'fearful')} ({psychology_score:+.2f}), with "
         f"the economy in {stage_article} {stage_name} phase."
     )
@@ -834,6 +891,8 @@ def compute_composite(finance, economics, psychology, cycle_stage, history_entri
         "regime": regime,
         "score": score,
         "score_range": [-1, 1],
+        "percentile": percentile,
+        "tilt_thresholds": [TILT_RISK_OFF, TILT_RISK_ON],
         "baseline_score": baseline_score,
         "psychology_gap": psychology_gap,
         "psychology_weight": psychology_weight,
@@ -911,8 +970,9 @@ def compute_historical_analogues(finance_score, economics_score, psychology_scor
 CYCLICAL_SECTORS = {"Tech (XLK)", "Financials (XLF)", "Energy (XLE)"}
 DEFENSIVE_SECTORS = {"Healthcare (XLV)", "Utilities (XLU)"}
 
-TILT_RISK_ON = 0.3
-TILT_RISK_OFF = -0.3
+# TILT_RISK_ON / TILT_RISK_OFF are defined once, near ZSCORE_CAP above —
+# reused here (allocation tilts, index calls, strategies below) so every
+# Risk-On/Risk-Off call on the site comes from the same calibrated cutoff.
 VALUATION_CAVEAT = -0.5      # finance "valuation" component this negative = stretched vs. history
 REAL_YIELD_ATTRACTIVE = -0.5  # economics "real_rate" component this negative = real yields historically high
 GOLD_FEAR = -0.2             # psychology score this negative = fear-driven hedge demand
@@ -1115,7 +1175,7 @@ def compute_strategies(composite, economics, allocation_tilts) -> list:
 
     strategies = []
 
-    momentum_ok = score > 0.3 and (breadth or 0) > 0 and psychology_score < 0.5
+    momentum_ok = score > TILT_RISK_ON and (breadth or 0) > 0 and psychology_score < 0.5
     strategies.append({
         "name": "Broad equity risk-on / momentum continuation",
         "indicated": bool(momentum_ok),
@@ -1128,7 +1188,7 @@ def compute_strategies(composite, economics, allocation_tilts) -> list:
         ),
     })
 
-    defensive_ok = score < -0.2 or (valuation is not None and valuation <= -0.5 and psychology_score < 0)
+    defensive_ok = score < DEFENSIVE_ROTATION_THRESHOLD or (valuation is not None and valuation <= -0.5 and psychology_score < 0)
     strategies.append({
         "name": "Quality / defensive rotation",
         "indicated": bool(defensive_ok),

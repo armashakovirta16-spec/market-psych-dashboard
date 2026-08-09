@@ -54,7 +54,9 @@
           <span class="sbadge neutral" id="compositeBadge">—</span>
         </div>
         <div class="composite-score-bar">
-          <div class="score-track">
+          <div class="score-track" id="scoreTrack">
+            <div class="score-tick" id="scoreTickOff" title="Risk-Off boundary"></div>
+            <div class="score-tick" id="scoreTickOn" title="Risk-On boundary"></div>
             <div class="score-marker" id="scoreMarker"></div>
           </div>
           <div class="score-labels">
@@ -63,6 +65,7 @@
             <span>Risk-On</span>
           </div>
         </div>
+        <p class="score-percentile" id="scorePercentile"></p>
       </div>
     </div>
 

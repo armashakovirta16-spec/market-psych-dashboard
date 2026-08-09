@@ -44,7 +44,7 @@
       "fixed_composite": -0.093,
       "gap": 0.021,
       "spy_growth": 102.24,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "1999-06",
@@ -84,7 +84,7 @@
       "fixed_composite": 0.149,
       "gap": -0.093,
       "spy_growth": 108.21,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "1999-11",
@@ -148,7 +148,7 @@
       "fixed_composite": -0.15,
       "gap": 0.029,
       "spy_growth": 115.59,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2000-07",
@@ -188,7 +188,7 @@
       "fixed_composite": -0.172,
       "gap": 0.025,
       "spy_growth": 105.52,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2000-12",
@@ -196,7 +196,7 @@
       "fixed_composite": -0.142,
       "gap": -0.189,
       "spy_growth": 104.96,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2001-01",
@@ -212,7 +212,7 @@
       "fixed_composite": -0.196,
       "gap": -0.397,
       "spy_growth": 99.17,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2001-03",
@@ -220,7 +220,7 @@
       "fixed_composite": -0.192,
       "gap": -0.314,
       "spy_growth": 93.62,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2001-04",
@@ -252,7 +252,7 @@
       "fixed_composite": -0.251,
       "gap": -0.114,
       "spy_growth": 97.63,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2001-08",
@@ -276,7 +276,7 @@
       "fixed_composite": -0.158,
       "gap": -0.273,
       "spy_growth": 85.44,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2001-11",
@@ -300,7 +300,7 @@
       "fixed_composite": -0.179,
       "gap": 0.018,
       "spy_growth": 91.71,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2002-02",
@@ -324,7 +324,7 @@
       "fixed_composite": -0.145,
       "gap": -0.015,
       "spy_growth": 87.65,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2002-05",
@@ -332,7 +332,7 @@
       "fixed_composite": -0.194,
       "gap": -0.007,
       "spy_growth": 87.13,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2002-06",
@@ -340,7 +340,7 @@
       "fixed_composite": -0.282,
       "gap": -0.095,
       "spy_growth": 80.7,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2002-07",
@@ -348,7 +348,7 @@
       "fixed_composite": -0.25,
       "gap": -0.28,
       "spy_growth": 74.34,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2002-08",
@@ -396,7 +396,7 @@
       "fixed_composite": -0.219,
       "gap": -0.208,
       "spy_growth": 70.84,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2003-02",
@@ -404,7 +404,7 @@
       "fixed_composite": -0.132,
       "gap": -0.237,
       "spy_growth": 69.89,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2003-03",
@@ -420,7 +420,7 @@
       "fixed_composite": 0.224,
       "gap": -0.051,
       "spy_growth": 75.96,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2003-05",
@@ -436,7 +436,7 @@
       "fixed_composite": 0.271,
       "gap": -0.009,
       "spy_growth": 80.98,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2003-07",
@@ -452,7 +452,7 @@
       "fixed_composite": 0.276,
       "gap": -0.022,
       "spy_growth": 84.14,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2003-09",
@@ -460,7 +460,7 @@
       "fixed_composite": 0.229,
       "gap": -0.037,
       "spy_growth": 83.23,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2003-10",
@@ -468,7 +468,7 @@
       "fixed_composite": 0.277,
       "gap": 0.028,
       "spy_growth": 87.68,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2003-11",
@@ -516,7 +516,7 @@
       "fixed_composite": 0.222,
       "gap": -0.04,
       "spy_growth": 93.16,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2004-05",
@@ -540,7 +540,7 @@
       "fixed_composite": 0.24,
       "gap": -0.008,
       "spy_growth": 93.39,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2004-08",
@@ -548,7 +548,7 @@
       "fixed_composite": 0.274,
       "gap": -0.021,
       "spy_growth": 93.62,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2004-09",
@@ -556,7 +556,7 @@
       "fixed_composite": 0.235,
       "gap": -0.042,
       "spy_growth": 94.56,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2004-10",
@@ -620,7 +620,7 @@
       "fixed_composite": 0.172,
       "gap": -0.035,
       "spy_growth": 102.27,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2005-06",
@@ -636,7 +636,7 @@
       "fixed_composite": 0.274,
       "gap": -0.014,
       "spy_growth": 106.35,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2005-08",
@@ -652,7 +652,7 @@
       "fixed_composite": 0.155,
       "gap": -0.092,
       "spy_growth": 106.2,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2005-10",
@@ -684,7 +684,7 @@
       "fixed_composite": 0.23,
       "gap": -0.033,
       "spy_growth": 110.63,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2006-02",
@@ -788,7 +788,7 @@
       "fixed_composite": -0.093,
       "gap": 0.062,
       "spy_growth": 124.54,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2007-03",
@@ -820,7 +820,7 @@
       "fixed_composite": -0.159,
       "gap": 0.015,
       "spy_growth": 134.04,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2007-07",
@@ -828,7 +828,7 @@
       "fixed_composite": -0.245,
       "gap": -0.045,
       "spy_growth": 129.84,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2007-08",
@@ -836,7 +836,7 @@
       "fixed_composite": -0.133,
       "gap": -0.207,
       "spy_growth": 131.51,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2007-09",
@@ -860,7 +860,7 @@
       "fixed_composite": -0.189,
       "gap": -0.167,
       "spy_growth": 133.09,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2007-12",
@@ -876,7 +876,7 @@
       "fixed_composite": -0.242,
       "gap": -0.19,
       "spy_growth": 123.64,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2008-02",
@@ -884,7 +884,7 @@
       "fixed_composite": -0.194,
       "gap": -0.352,
       "spy_growth": 120.44,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2008-03",
@@ -892,7 +892,7 @@
       "fixed_composite": -0.131,
       "gap": -0.208,
       "spy_growth": 119.36,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2008-04",
@@ -916,7 +916,7 @@
       "fixed_composite": -0.193,
       "gap": -0.257,
       "spy_growth": 116.33,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2008-07",
@@ -924,7 +924,7 @@
       "fixed_composite": -0.112,
       "gap": -0.239,
       "spy_growth": 115.29,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2008-08",
@@ -948,7 +948,7 @@
       "fixed_composite": -0.246,
       "gap": -0.279,
       "spy_growth": 88.53,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2008-11",
@@ -956,7 +956,7 @@
       "fixed_composite": -0.245,
       "gap": -0.276,
       "spy_growth": 82.37,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2008-12",
@@ -964,7 +964,7 @@
       "fixed_composite": -0.177,
       "gap": -0.205,
       "spy_growth": 83.17,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2009-01",
@@ -988,7 +988,7 @@
       "fixed_composite": -0.177,
       "gap": -0.124,
       "spy_growth": 73.82,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2009-04",
@@ -996,7 +996,7 @@
       "fixed_composite": -0.23,
       "gap": -0.083,
       "spy_growth": 81.15,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2009-05",
@@ -1012,7 +1012,7 @@
       "fixed_composite": -0.273,
       "gap": -0.085,
       "spy_growth": 85.84,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2009-07",
@@ -1044,7 +1044,7 @@
       "fixed_composite": -0.22,
       "gap": -0.02,
       "spy_growth": 97.14,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2009-11",
@@ -1068,7 +1068,7 @@
       "fixed_composite": -0.227,
       "gap": 0.025,
       "spy_growth": 101.27,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2010-02",
@@ -1100,7 +1100,7 @@
       "fixed_composite": -0.173,
       "gap": -0.155,
       "spy_growth": 103.56,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2010-06",
@@ -1116,7 +1116,7 @@
       "fixed_composite": 0.182,
       "gap": -0.098,
       "spy_growth": 104.91,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2010-08",
@@ -1124,7 +1124,7 @@
       "fixed_composite": -0.135,
       "gap": -0.076,
       "spy_growth": 100.19,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2010-09",
@@ -1132,7 +1132,7 @@
       "fixed_composite": 0.205,
       "gap": -0.073,
       "spy_growth": 109.17,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2010-10",
@@ -1140,7 +1140,7 @@
       "fixed_composite": 0.224,
       "gap": -0.07,
       "spy_growth": 113.34,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2010-11",
@@ -1180,7 +1180,7 @@
       "fixed_composite": 0.197,
       "gap": -0.06,
       "spy_growth": 128.04,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2011-04",
@@ -1188,7 +1188,7 @@
       "fixed_composite": 0.218,
       "gap": -0.049,
       "spy_growth": 131.75,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2011-05",
@@ -1204,7 +1204,7 @@
       "fixed_composite": 0.16,
       "gap": -0.118,
       "spy_growth": 128.08,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2011-07",
@@ -1228,7 +1228,7 @@
       "fixed_composite": -0.198,
       "gap": -0.341,
       "spy_growth": 110.38,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2011-10",
@@ -1260,7 +1260,7 @@
       "fixed_composite": 0.187,
       "gap": -0.035,
       "spy_growth": 128.92,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2012-02",
@@ -1268,7 +1268,7 @@
       "fixed_composite": 0.212,
       "gap": -0.05,
       "spy_growth": 134.51,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2012-03",
@@ -1276,7 +1276,7 @@
       "fixed_composite": 0.193,
       "gap": -0.034,
       "spy_growth": 138.84,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2012-04",
@@ -1324,7 +1324,7 @@
       "fixed_composite": 0.196,
       "gap": -0.044,
       "spy_growth": 143.45,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2012-10",
@@ -1356,7 +1356,7 @@
       "fixed_composite": 0.236,
       "gap": -0.013,
       "spy_growth": 150.22,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2013-02",
@@ -1372,7 +1372,7 @@
       "fixed_composite": 0.213,
       "gap": -0.027,
       "spy_growth": 157.91,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2013-04",
@@ -1404,7 +1404,7 @@
       "fixed_composite": 0.261,
       "gap": -0.017,
       "spy_growth": 170.95,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2013-08",
@@ -1420,7 +1420,7 @@
       "fixed_composite": 0.173,
       "gap": -0.055,
       "spy_growth": 171.07,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2013-10",
@@ -1428,7 +1428,7 @@
       "fixed_composite": 0.232,
       "gap": -0.039,
       "spy_growth": 178.99,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2013-11",
@@ -1460,7 +1460,7 @@
       "fixed_composite": 0.288,
       "gap": -0.02,
       "spy_growth": 190.71,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2014-03",
@@ -1484,7 +1484,7 @@
       "fixed_composite": 0.22,
       "gap": -0.029,
       "spy_growth": 198.12,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2014-06",
@@ -1508,7 +1508,7 @@
       "fixed_composite": 0.282,
       "gap": -0.025,
       "spy_growth": 207.37,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2014-09",
@@ -1524,7 +1524,7 @@
       "fixed_composite": 0.27,
       "gap": -0.004,
       "spy_growth": 209.33,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2014-11",
@@ -1532,7 +1532,7 @@
       "fixed_composite": 0.216,
       "gap": 0.003,
       "spy_growth": 215.08,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2014-12",
@@ -1588,7 +1588,7 @@
       "fixed_composite": -0.095,
       "gap": 0.033,
       "spy_growth": 216.86,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2015-07",
@@ -1604,7 +1604,7 @@
       "fixed_composite": -0.21,
       "gap": -0.017,
       "spy_growth": 208.25,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2015-09",
@@ -1612,7 +1612,7 @@
       "fixed_composite": -0.12,
       "gap": 0.005,
       "spy_growth": 202.93,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2015-10",
@@ -1644,7 +1644,7 @@
       "fixed_composite": -0.146,
       "gap": 0.02,
       "spy_growth": 206.37,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2016-02",
@@ -1724,7 +1724,7 @@
       "fixed_composite": 0.245,
       "gap": 0.07,
       "spy_growth": 238.4,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2016-12",
@@ -1732,7 +1732,7 @@
       "fixed_composite": 0.254,
       "gap": 0.015,
       "spy_growth": 243.24,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2017-01",
@@ -1748,7 +1748,7 @@
       "fixed_composite": 0.212,
       "gap": 0.005,
       "spy_growth": 257.32,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2017-03",
@@ -1788,7 +1788,7 @@
       "fixed_composite": 0.265,
       "gap": 0.002,
       "spy_growth": 271.01,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2017-08",
@@ -1820,7 +1820,7 @@
       "fixed_composite": 0.265,
       "gap": 0.021,
       "spy_growth": 292.48,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2017-12",
@@ -1924,7 +1924,7 @@
       "fixed_composite": -0.155,
       "gap": -0.007,
       "spy_growth": 282.51,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2019-01",
@@ -1964,7 +1964,7 @@
       "fixed_composite": -0.13,
       "gap": -0.008,
       "spy_growth": 312.53,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2019-06",
@@ -1988,7 +1988,7 @@
       "fixed_composite": -0.199,
       "gap": -0.037,
       "spy_growth": 333.65,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2019-09",
@@ -2020,7 +2020,7 @@
       "fixed_composite": 0.286,
       "gap": 0.04,
       "spy_growth": 370.71,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2020-01",
@@ -2036,7 +2036,7 @@
       "fixed_composite": -0.202,
       "gap": -0.009,
       "spy_growth": 341.23,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2020-03",
@@ -2052,7 +2052,7 @@
       "fixed_composite": -0.182,
       "gap": -0.15,
       "spy_growth": 336.54,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2020-05",
@@ -2060,7 +2060,7 @@
       "fixed_composite": -0.218,
       "gap": -0.072,
       "spy_growth": 352.57,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2020-06",
@@ -2076,7 +2076,7 @@
       "fixed_composite": -0.2,
       "gap": -0.072,
       "spy_growth": 379.96,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2020-08",
@@ -2084,7 +2084,7 @@
       "fixed_composite": -0.194,
       "gap": -0.003,
       "spy_growth": 406.48,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2020-09",
@@ -2100,7 +2100,7 @@
       "fixed_composite": -0.253,
       "gap": 0.006,
       "spy_growth": 381.5,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2020-11",
@@ -2140,7 +2140,7 @@
       "fixed_composite": 0.198,
       "gap": -0.033,
       "spy_growth": 466.54,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2021-04",
@@ -2148,7 +2148,7 @@
       "fixed_composite": 0.258,
       "gap": -0.002,
       "spy_growth": 491.22,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2021-05",
@@ -2236,7 +2236,7 @@
       "fixed_composite": 0.147,
       "gap": -0.124,
       "spy_growth": 538.64,
-      "regime": "Neutral"
+      "regime": "Risk-On"
     },
     {
       "date": "2022-04",
@@ -2244,7 +2244,7 @@
       "fixed_composite": -0.21,
       "gap": -0.182,
       "spy_growth": 491.36,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2022-05",
@@ -2260,7 +2260,7 @@
       "fixed_composite": -0.219,
       "gap": -0.231,
       "spy_growth": 451.86,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2022-07",
@@ -2308,7 +2308,7 @@
       "fixed_composite": -0.189,
       "gap": -0.093,
       "spy_growth": 462.06,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2023-01",
@@ -2324,7 +2324,7 @@
       "fixed_composite": -0.164,
       "gap": -0.028,
       "spy_growth": 478.77,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2023-03",
@@ -2348,7 +2348,7 @@
       "fixed_composite": -0.169,
       "gap": -0.123,
       "spy_growth": 506.78,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2023-06",
@@ -2380,7 +2380,7 @@
       "fixed_composite": -0.187,
       "gap": -0.031,
       "spy_growth": 522.23,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2023-10",
@@ -2388,7 +2388,7 @@
       "fixed_composite": -0.248,
       "gap": -0.055,
       "spy_growth": 510.89,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2023-11",
@@ -2436,7 +2436,7 @@
       "fixed_composite": -0.167,
       "gap": 0.061,
       "spy_growth": 617.64,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2024-05",
@@ -2484,7 +2484,7 @@
       "fixed_composite": -0.097,
       "gap": 0.069,
       "spy_growth": 704.07,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2024-11",
@@ -2500,7 +2500,7 @@
       "fixed_composite": -0.162,
       "gap": 0.085,
       "spy_growth": 728.1,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2025-01",
@@ -2524,7 +2524,7 @@
       "fixed_composite": -0.227,
       "gap": -0.057,
       "spy_growth": 697.03,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2025-04",
@@ -2532,7 +2532,7 @@
       "fixed_composite": -0.244,
       "gap": -0.117,
       "spy_growth": 690.99,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2025-05",
@@ -2620,7 +2620,7 @@
       "fixed_composite": -0.193,
       "gap": -0.062,
       "spy_growth": 819.65,
-      "regime": "Neutral"
+      "regime": "Risk-Off"
     },
     {
       "date": "2026-04",
@@ -2656,9 +2656,9 @@
     }
   ],
   "regime_disagreement": {
-    "days": 250,
+    "days": 496,
     "total_days": 6879,
-    "pct": 3.6
+    "pct": 7.2
   },
   "gap_deciles": [
     {
