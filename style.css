@@ -22,11 +22,15 @@
   --red: #d70015;
   --amber: #c76c00;
   --pink: #ff2d55;
+  --teal: #0b8793;
+  --indigo: #5856d6;
 
   --color-finance: var(--blue);
   --color-economics: var(--green);
   --color-psychology: #8a4baf;
   --color-strategy: var(--amber);
+  --color-backtesting: var(--teal);
+  --color-markets: var(--indigo);
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, .04), 0 8px 24px rgba(0, 0, 0, .04);
   --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -48,6 +52,8 @@
   --red: #ff453a;
   --amber: #ff9f0a;
   --pink: #ff375f;
+  --teal: #40c8e0;
+  --indigo: #7d7aff;
   --color-psychology: #bf8fe0;
 
   --shadow-card: none;
@@ -586,6 +592,8 @@ body {
 .tab.active[data-tab="economics"] { color: var(--color-economics); }
 .tab.active[data-tab="psychology"] { color: var(--color-psychology); }
 .tab.active[data-tab="strategy"] { color: var(--color-strategy); }
+.tab.active[data-tab="backtesting"] { color: var(--color-backtesting); }
+.tab.active[data-tab="markets"] { color: var(--color-markets); }
 
 .tab-panels {
   padding: 0 32px 48px;
