@@ -325,8 +325,41 @@ def fetch_economics(fred: Fred):
     }
 
 
-HISTORICAL_AVG_PE = 16.5  # multpl.com's own long-run displayed mean for the S&P 500
 NATURAL_UNEMPLOYMENT_ANCHOR = 4.2  # rough full-employment reference point
+HISTORICAL_AVG_PE = 16.5  # multpl.com's since-1871 long-run mean — used only for the
+# overconfidence bias-callout threshold and narrative text below, NOT for
+# the valuation score itself (see EARNINGS_YIELD_LONG_RUN_MEAN for why: this
+# all-time anchor badly understates how richly the modern market actually
+# trades, so using it for scoring pinned valuation at its worst reading on
+# ~1/3 of days regardless of actual conditions). Still a fair "classic
+# long-run average" reference point for a qualitative callout / narrative
+# sentence, since that's how it's commonly cited, just not as a scoring
+# input anymore.
+
+# Finance pillar's valuation and yield-curve references, standardized against
+# this project's own 1999-present data window (matching the backtest's
+# range) rather than a fixed linear clamp against a stale anchor. This was
+# a real, verified bug: comparing today's P/E to the S&P 500's all-time
+# (since 1871) average of 16.5x pinned "valuation" at its worst possible
+# score on ~1/3 of all trading days since 1999, since markets have
+# structurally traded richer for this project's entire data window — and a
+# fixed +/-1.5pp yield-curve clamp similarly pinned "yield_curve" at its
+# best possible score on ~1/3 of days, since the curve is positively sloped
+# most of the time. Together these skewed the composite so strongly
+# positive that Risk-Off fired on only 2.7% of trading days since 1999
+# (vs. 29% for Risk-On) and never fired at all during the 2022 bear market
+# (verified against data/backtest_daily_series.csv). Fixed by z-scoring
+# both against their own 1999-present mean/std, the same method already
+# used for every Psychology proxy.
+#
+# Uses earnings yield (100/PE) rather than raw P/E: P/E spikes to
+# nonsensical triple digits when earnings collapse near zero (e.g. 123x in
+# 2009), which would badly distort a raw-P/E mean/std; earnings yield stays
+# well-behaved through that same period.
+EARNINGS_YIELD_LONG_RUN_MEAN = 4.36  # 100/PE, S&P 500 monthly P/E table, 1999-present
+EARNINGS_YIELD_LONG_RUN_STD = 1.21
+YIELD_CURVE_LONG_RUN_MEAN = 1.02    # 10y-2y spread (pp), FRED DGS10/DGS2, 1999-present
+YIELD_CURVE_LONG_RUN_STD = 0.96
 
 PILLAR_WEIGHTS = {"finance": 0.4, "economics": 0.3, "psychology": 0.3}  # used only for the fundamentals split (finance vs. economics) — see ADAPTIVE_PSYCHOLOGY_WEIGHT below for how psychology's overall influence is now determined
 
@@ -472,10 +505,20 @@ def _finance_pillar(finance):
     """
     Three equally-weighted, explainable signals:
       - Yield curve (10y-2y): steep/positive reads as healthy growth
-        expectations; inverted is the textbook recession warning.
-      - Valuation: S&P 500 P/E vs. its long-run historical mean — expensive
-        relative to history nudges cautious (less margin of safety), cheap
-        relative to history nudges supportive.
+        expectations; inverted is the textbook recession warning. Z-scored
+        against its own 1999-present mean/std (YIELD_CURVE_LONG_RUN_*)
+        rather than a fixed +/-1.5pp clamp, since the curve is positively
+        sloped most of the time — a fixed clamp pinned this component at
+        its best possible score too easily, dragging the whole pillar
+        positive regardless of what was actually happening.
+      - Valuation: S&P 500 earnings yield (100/P/E) vs. its own
+        1999-present mean/std (EARNINGS_YIELD_LONG_RUN_*), not raw P/E
+        against the market's all-time-since-1871 average — that anchor
+        badly understates how richly this project's entire data window has
+        actually traded, which pinned this component at its worst possible
+        score on ~1/3 of days regardless of actual conditions. Earnings
+        yield (not raw P/E) avoids the triple-digit P/E distortion when
+        earnings collapse near zero (e.g. 2008-09).
       - Breadth: share of the 5 tracked sector ETFs with positive 1-month
         returns — broad-based moves are a simple momentum confirmation.
     """
@@ -483,11 +526,14 @@ def _finance_pillar(finance):
 
     yc = finance.get("yield_curve_10y_2y")
     if yc is not None:
-        parts["yield_curve"] = round(_clamp(yc / 1.5), 3)
+        z = (yc - YIELD_CURVE_LONG_RUN_MEAN) / YIELD_CURVE_LONG_RUN_STD
+        parts["yield_curve"] = round(_zscore_to_unit(z), 3)
 
     pe = finance.get("sp500_pe")
-    if pe is not None:
-        parts["valuation"] = round(_clamp((HISTORICAL_AVG_PE - pe) / 10), 3)
+    if pe is not None and pe > 0:
+        earnings_yield = 100 / pe
+        z = (earnings_yield - EARNINGS_YIELD_LONG_RUN_MEAN) / EARNINGS_YIELD_LONG_RUN_STD
+        parts["valuation"] = round(_zscore_to_unit(z), 3)
 
     sector_returns = [v for v in finance.get("sector_returns_1m", {}).values() if v is not None]
     if sector_returns:

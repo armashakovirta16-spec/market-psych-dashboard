@@ -319,10 +319,10 @@
     },
     {
       "date": "2026-08-07",
-      "composite_score": 0.047,
+      "composite_score": 0.068,
       "psychology_weight": 0.15,
       "pillar_scores": {
-        "finance": -0.036,
+        "finance": 0.008,
         "economics": 0.176,
         "psychology": 0.001
       },

@@ -115,11 +115,20 @@ def build_finance(grid):
 
     pe_monthly = _load("sp500_pe_monthly", "pe")
     pe = _asof_align(pe_monthly, grid, max_staleness_days=45)
-    pe_expanding_mean = pe.shift(1).expanding(min_periods=24).mean()  # replaces fixed HISTORICAL_AVG_PE=16.5
+    earnings_yield = 100 / pe
 
+    # Both z-scored against their own expanding (no-look-ahead) history,
+    # same method as every Psychology proxy below — replaces a fixed
+    # +/-1.5pp yield-curve clamp and a fixed-vs-1871-average P/E clamp,
+    # both of which pinned their component at an extreme on ~1/3 of all
+    # days regardless of actual conditions (see fetch_data.py's
+    # EARNINGS_YIELD_LONG_RUN_MEAN / YIELD_CURVE_LONG_RUN_MEAN comments for
+    # the full writeup — this was a real, verified bug, not a style choice).
+    # Earnings yield (not raw P/E) avoids the triple-digit P/E distortion
+    # when earnings collapse near zero (e.g. 2008-09).
     parts = pd.DataFrame(index=grid)
-    parts["yield_curve"] = (yield_curve / 1.5).clip(-1, 1)
-    parts["valuation"] = ((pe_expanding_mean - pe) / 10).clip(-1, 1)
+    parts["yield_curve"] = expanding_zscore(yield_curve).clip(-2.5, 2.5) / 2.5
+    parts["valuation"] = expanding_zscore(earnings_yield).clip(-2.5, 2.5) / 2.5
 
     sector_df = pd.DataFrame(sector_returns_1m)
     positive_share = (sector_df > 0).sum(axis=1) / sector_df.notna().sum(axis=1).replace(0, np.nan)
