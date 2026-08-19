@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-08-18T21:50:11.670556+00:00",
+    "last_updated": "2026-08-19T21:54:59.819022+00:00",
     "data_sources": {
       "sp500_pe": "scraped",
       "put_call_ratio": "scraped",
@@ -14,25 +14,25 @@
   },
   "finance": {
     "sector_returns_1m": {
-      "Tech (XLK)": 5.64,
-      "Financials (XLF)": 3.21,
-      "Energy (XLE)": 9.91,
-      "Healthcare (XLV)": 6.58,
+      "Tech (XLK)": 4.51,
+      "Financials (XLF)": 2.57,
+      "Energy (XLE)": 9.73,
+      "Healthcare (XLV)": 10.32,
       "Utilities (XLU)": -2.05
     },
     "asset_class_returns_1m": {
-      "Equities (SPY)": 3.42,
-      "Bonds (AGG)": -0.27,
-      "Gold (GLD)": 8.42
+      "Equities (SPY)": 3.63,
+      "Bonds (AGG)": 0.22,
+      "Gold (GLD)": 12.58
     },
     "index_returns_1m": {
-      "S&P 500 (SPY)": 3.42,
-      "Nasdaq 100 (QQQ)": 3.08,
-      "Dow Jones (DIA)": 2.89,
-      "Russell 2000 (IWM)": 2.71
+      "S&P 500 (SPY)": 3.63,
+      "Nasdaq 100 (QQQ)": 2.88,
+      "Dow Jones (DIA)": 3.15,
+      "Russell 2000 (IWM)": 3.22
     },
-    "sp500_pe": 29.65,
-    "yield_curve_10y_2y": 0.53
+    "sp500_pe": 29.71,
+    "yield_curve_10y_2y": 0.52
   },
   "economics": {
     "cpi_yoy": 3.3,
@@ -41,8 +41,8 @@
     "ism_pmi": 55.6
   },
   "psychology": {
-    "vix": 15.84,
-    "put_call_ratio": 0.92,
+    "vix": 14.89,
+    "put_call_ratio": 0.95,
     "aaii_sentiment": {
       "bullish": 34.7,
       "neutral": 27.4,
@@ -50,8 +50,8 @@
       "as_of": "2026-08-12"
     },
     "consumer_sentiment": 49.5,
-    "hy_oas": 2.7,
-    "news_sentiment": 0.02,
+    "hy_oas": 2.75,
+    "news_sentiment": 0.03,
     "naaim_exposure": 84.02
   },
   "cycle_stage": {
@@ -60,17 +60,17 @@
   },
   "composite": {
     "regime": "Cautiously Neutral",
-    "score": 0.063,
+    "score": 0.062,
     "score_range": [
       -1,
       1
     ],
-    "percentile": 50.9,
+    "percentile": 50.6,
     "tilt_thresholds": [
       -0.115,
       0.209
     ],
-    "baseline_score": 0.081,
+    "baseline_score": 0.08,
     "psychology_gap": -0.018,
     "psychology_weight": 0.163,
     "psychology_weight_range": [
@@ -78,14 +78,14 @@
       0.55
     ],
     "pillar_scores": {
-      "finance": 0.023,
+      "finance": 0.021,
       "economics": 0.158,
-      "psychology": -0.032
+      "psychology": -0.033
     },
     "pillar_components": {
       "finance": {
-        "yield_curve": -0.204,
-        "valuation": -0.326,
+        "yield_curve": -0.208,
+        "valuation": -0.329,
         "breadth": 0.6
       },
       "economics": {
@@ -94,20 +94,20 @@
         "unemployment": 0.025
       },
       "psychology": {
-        "vix": 0.195,
-        "put_call": 0.067,
+        "vix": 0.246,
+        "put_call": 0.0,
         "aaii_spread": -0.216,
         "consumer_sentiment": -0.914,
-        "hy_oas": 0.335,
-        "news_sentiment": 0.024,
+        "hy_oas": 0.327,
+        "news_sentiment": 0.047,
         "naaim_exposure": 0.282
       }
     },
     "narrative": [
       "Regime read: Cautiously Neutral (composite score +0.06 on a -1 to +1 scale, 51th percentile of all trading days since 1999). Finance conditions are roughly balanced (+0.02), economic data is supportive (+0.16), and market psychology leans roughly balanced (-0.03), with the economy in an Expansion phase.",
-      "Finance: the yield curve is positively sloped (+0.53pp), the S&P 500 trades at 29.6x earnings against a ~16.5x historical average, and 4 of 5 tracked sectors are positive over the past month \u2014 the classical efficient-market / factor-based baseline this dashboard's behavioral overlay adjusts. Economics: ISM PMI is at 55.6 (expansion), CPI is running 3.3% YoY against a 3.63% Fed funds rate, and unemployment sits at 4.1%. ISM PMI at 55.6 shows expansion, with neither the yield curve nor unemployment flashing late-cycle strain. (standard business-cycle framing \u2014 sentiment reads differently depending on where the cycle stands.)",
+      "Finance: the yield curve is positively sloped (+0.52pp), the S&P 500 trades at 29.7x earnings against a ~16.5x historical average, and 4 of 5 tracked sectors are positive over the past month \u2014 the classical efficient-market / factor-based baseline this dashboard's behavioral overlay adjusts. Economics: ISM PMI is at 55.6 (expansion), CPI is running 3.3% YoY against a 3.63% Fed funds rate, and unemployment sits at 4.1%. ISM PMI at 55.6 shows expansion, with neither the yield curve nor unemployment flashing late-cycle strain. (standard business-cycle framing \u2014 sentiment reads differently depending on where the cycle stands.)",
       "Psychology isn't pulling the read away from fundamentals right now \u2014 the fundamentals-only baseline (+0.08) and the full psychology-adjusted composite (+0.06) are essentially the same. Psychology is calm enough that it's only weighted 16% of the final read (vs. a floor of 15% and a ceiling of 55% when conditions get extreme).",
-      "No single extreme-positioning signal (herding, loss-aversion-driven hedging, overconfidence, or a Minsky-style extended-calm streak) is flashing right now \u2014 sentiment, hedging demand, and volatility all look within a normal range."
+      "Volatility this low (VIX 14.9) alongside valuations well above their historical average (P/E 29.7 vs. a ~16.5 long-run mean) suggests overconfidence / illusion of control \u2014 positioning priced for calm markets to keep going, with little cushion if that assumption breaks."
     ]
   },
   "allocation_tilts": {
@@ -129,19 +129,19 @@
     "sectors": {
       "Tech (XLK)": {
         "tilt": "Neutral",
-        "rationale": "Regime is balanced, but this sector has notable positive 1-month momentum (+5.6%)."
+        "rationale": "Regime is balanced, but this sector has notable positive 1-month momentum (+4.5%)."
       },
       "Financials (XLF)": {
         "tilt": "Neutral",
-        "rationale": "Regime is balanced, but this sector has notable positive 1-month momentum (+3.2%)."
+        "rationale": "Regime is balanced (+0.06) and this sector has no standout momentum (+2.6%)."
       },
       "Energy (XLE)": {
         "tilt": "Neutral",
-        "rationale": "Regime is balanced, but this sector has notable positive 1-month momentum (+9.9%)."
+        "rationale": "Regime is balanced, but this sector has notable positive 1-month momentum (+9.7%)."
       },
       "Healthcare (XLV)": {
         "tilt": "Neutral",
-        "rationale": "Regime is balanced, but this sector has notable positive 1-month momentum (+6.6%)."
+        "rationale": "Regime is balanced, but this sector has notable positive 1-month momentum (+10.3%)."
       },
       "Utilities (XLU)": {
         "tilt": "Neutral",
@@ -186,26 +186,26 @@
     "indices": {
       "S&P 500 (SPY)": {
         "tilt": "Hold",
-        "rationale": "Composite regime is balanced (+0.06), but this index has notable positive 1-month momentum (+3.4%). This index is the broad U.S. large-cap benchmark this whole dashboard is already built around."
+        "rationale": "Composite regime is balanced (+0.06), but this index has notable positive 1-month momentum (+3.6%). This index is the broad U.S. large-cap benchmark this whole dashboard is already built around."
       },
       "Nasdaq 100 (QQQ)": {
         "tilt": "Hold",
-        "rationale": "Composite regime is balanced (+0.06), but this index has notable positive 1-month momentum (+3.1%). This index is roughly half-weighted to mega-cap technology, so it tends to amplify both the composite regime and the Tech sector's own momentum."
+        "rationale": "Composite regime is balanced (+0.06) and this index has no standout momentum (+2.9%). This index is roughly half-weighted to mega-cap technology, so it tends to amplify both the composite regime and the Tech sector's own momentum."
       },
       "Dow Jones (DIA)": {
         "tilt": "Hold",
-        "rationale": "Composite regime is balanced (+0.06) and this index has no standout momentum (+2.9%). This index is a narrower basket of 30 blue-chip industrials and financials, historically less volatile than the broader market."
+        "rationale": "Composite regime is balanced (+0.06), but this index has notable positive 1-month momentum (+3.1%). This index is a narrower basket of 30 blue-chip industrials and financials, historically less volatile than the broader market."
       },
       "Russell 2000 (IWM)": {
         "tilt": "Hold",
-        "rationale": "Composite regime is balanced (+0.06) and this index has no standout momentum (+2.7%). This index is small-cap and more sensitive to financing costs and the domestic cycle, so it tends to swing harder with both the regime and real interest rates."
+        "rationale": "Composite regime is balanced (+0.06), but this index has notable positive 1-month momentum (+3.2%). This index is small-cap and more sensitive to financing costs and the domestic cycle, so it tends to swing harder with both the regime and real interest rates."
       }
     }
   },
   "historical_analogues": [
     {
       "date": "2019-10-22",
-      "distance": 0.04,
+      "distance": 0.041,
       "finance_score": 0.043,
       "economics_score": 0.193,
       "psychology_score": -0.029,
