@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-09-10T22:56:24.652587+00:00",
+    "last_updated": "2026-09-11T22:58:02.845529+00:00",
     "data_sources": {
       "sp500_pe": "scraped",
       "put_call_ratio": "scraped",
@@ -14,35 +14,35 @@
   },
   "finance": {
     "sector_returns_1m": {
-      "Tech (XLK)": -0.47,
-      "Financials (XLF)": -1.61,
-      "Energy (XLE)": 6.56,
-      "Healthcare (XLV)": -1.4,
-      "Utilities (XLU)": -2.54
+      "Tech (XLK)": -0.63,
+      "Financials (XLF)": -1.16,
+      "Energy (XLE)": 6.73,
+      "Healthcare (XLV)": -1.83,
+      "Utilities (XLU)": -3.31
     },
     "asset_class_returns_1m": {
-      "Equities (SPY)": -1.65,
-      "Bonds (AGG)": -0.96,
-      "Gold (GLD)": -1.15
+      "Equities (SPY)": -1.06,
+      "Bonds (AGG)": -1.15,
+      "Gold (GLD)": -1.52
     },
     "index_returns_1m": {
-      "S&P 500 (SPY)": -1.65,
-      "Nasdaq 100 (QQQ)": -1.36,
-      "Dow Jones (DIA)": -3.0,
-      "Russell 2000 (IWM)": -4.42
+      "S&P 500 (SPY)": -1.06,
+      "Nasdaq 100 (QQQ)": -1.22,
+      "Dow Jones (DIA)": -2.03,
+      "Russell 2000 (IWM)": -4.57
     },
-    "sp500_pe": 25.93,
-    "yield_curve_10y_2y": 0.4
+    "sp500_pe": 26.16,
+    "yield_curve_10y_2y": 0.39
   },
   "economics": {
-    "cpi_yoy": 3.3,
+    "cpi_yoy": 3.35,
     "unemployment_rate": 4.1,
     "fed_funds_rate": 3.63,
     "ism_pmi": 54.6
   },
   "psychology": {
-    "vix": 17.84,
-    "put_call_ratio": 0.88,
+    "vix": 15.84,
+    "put_call_ratio": 0.83,
     "aaii_sentiment": {
       "bullish": 38.0,
       "neutral": 22.7,
@@ -50,8 +50,8 @@
       "as_of": "2026-09-09"
     },
     "consumer_sentiment": 55.2,
-    "hy_oas": 2.71,
-    "news_sentiment": -0.0,
+    "hy_oas": 2.7,
+    "news_sentiment": -0.01,
     "naaim_exposure": 84.02
   },
   "cycle_stage": {
@@ -60,52 +60,52 @@
   },
   "composite": {
     "regime": "Risk-Off",
-    "score": -0.121,
+    "score": -0.117,
     "score_range": [
       -1,
       1
     ],
-    "percentile": 19.4,
+    "percentile": 19.8,
     "tilt_thresholds": [
       -0.115,
       0.209
     ],
-    "baseline_score": -0.141,
-    "psychology_gap": 0.02,
-    "psychology_weight": 0.155,
+    "baseline_score": -0.142,
+    "psychology_gap": 0.025,
+    "psychology_weight": 0.156,
     "psychology_weight_range": [
       0.15,
       0.55
     ],
     "pillar_scores": {
-      "finance": -0.341,
-      "economics": 0.125,
-      "psychology": -0.012
+      "finance": -0.347,
+      "economics": 0.131,
+      "psychology": 0.016
     },
     "pillar_components": {
       "finance": {
-        "yield_curve": -0.258,
-        "valuation": -0.166,
+        "yield_curve": -0.263,
+        "valuation": -0.178,
         "breadth": -0.6
       },
       "economics": {
         "pmi": 0.46,
-        "real_rate": -0.11,
+        "real_rate": -0.093,
         "unemployment": 0.025
       },
       "psychology": {
-        "vix": 0.089,
-        "put_call": 0.156,
+        "vix": 0.195,
+        "put_call": 0.267,
         "aaii_spread": -0.172,
         "consumer_sentiment": -0.751,
-        "hy_oas": 0.333,
-        "news_sentiment": -0.02,
+        "hy_oas": 0.335,
+        "news_sentiment": -0.042,
         "naaim_exposure": 0.282
       }
     },
     "narrative": [
-      "Regime read: Risk-Off (composite score -0.12 on a -1 to +1 scale, 19th percentile of all trading days since 1999). Finance conditions are cautious (-0.34), economic data is roughly balanced (+0.12), and market psychology leans roughly balanced (-0.01), with the economy in an Expansion phase.",
-      "Finance: the yield curve is positively sloped (+0.40pp), the S&P 500 trades at 25.9x earnings against a ~16.5x historical average, and 1 of 5 tracked sectors are positive over the past month \u2014 the classical efficient-market / factor-based baseline this dashboard's behavioral overlay adjusts. Economics: ISM PMI is at 54.6 (expansion), CPI is running 3.3% YoY against a 3.63% Fed funds rate, and unemployment sits at 4.1%. ISM PMI at 54.6 shows expansion, with neither the yield curve nor unemployment flashing late-cycle strain. (standard business-cycle framing \u2014 sentiment reads differently depending on where the cycle stands.)",
+      "Regime read: Risk-Off (composite score -0.12 on a -1 to +1 scale, 20th percentile of all trading days since 1999). Finance conditions are cautious (-0.35), economic data is roughly balanced (+0.13), and market psychology leans roughly balanced (+0.02), with the economy in an Expansion phase.",
+      "Finance: the yield curve is positively sloped (+0.39pp), the S&P 500 trades at 26.2x earnings against a ~16.5x historical average, and 1 of 5 tracked sectors are positive over the past month \u2014 the classical efficient-market / factor-based baseline this dashboard's behavioral overlay adjusts. Economics: ISM PMI is at 54.6 (expansion), CPI is running 3.4% YoY against a 3.63% Fed funds rate, and unemployment sits at 4.1%. ISM PMI at 54.6 shows expansion, with neither the yield curve nor unemployment flashing late-cycle strain. (standard business-cycle framing \u2014 sentiment reads differently depending on where the cycle stands.)",
       "Psychology isn't pulling the read away from fundamentals right now \u2014 the fundamentals-only baseline (-0.14) and the full psychology-adjusted composite (-0.12) are essentially the same. Psychology is calm enough that it's only weighted 16% of the final read (vs. a floor of 15% and a ceiling of 55% when conditions get extreme).",
       "No single extreme-positioning signal (herding, loss-aversion-driven hedging, overconfidence, or a Minsky-style extended-calm streak) is flashing right now \u2014 sentiment, hedging demand, and volatility all look within a normal range."
     ]
@@ -123,7 +123,7 @@
       },
       "Gold": {
         "tilt": "Neutral",
-        "rationale": "No strong fear or inflation signal right now (psychology -0.01, CPI 3.3% YoY)."
+        "rationale": "No strong fear or inflation signal right now (psychology +0.02, CPI 3.4% YoY)."
       }
     },
     "sectors": {
@@ -153,12 +153,12 @@
     {
       "name": "Broad equity risk-on / momentum continuation",
       "indicated": false,
-      "rationale": "Composite (-0.12), breadth, or psychology (-0.01) isn't clearly confirming a Risk-On trend worth chasing right now."
+      "rationale": "Composite (-0.12), breadth, or psychology (+0.02) isn't clearly confirming a Risk-On trend worth chasing right now."
     },
     {
       "name": "Quality / defensive rotation",
       "indicated": true,
-      "rationale": "Composite is cautious (-0.12) and/or valuations are stretched with fear-leaning psychology (-0.01) \u2014 a case for rotating toward quality and defensives."
+      "rationale": "Composite is cautious (-0.12) and/or valuations are stretched with fear-leaning psychology (+0.02) \u2014 a case for rotating toward quality and defensives."
     },
     {
       "name": "Barbell: quality equities + duration",
@@ -204,34 +204,34 @@
   },
   "historical_analogues": [
     {
-      "date": "2019-01-15",
-      "distance": 0.042,
-      "finance_score": -0.307,
-      "economics_score": 0.127,
-      "psychology_score": -0.037,
-      "fwd_1m_return": 5.39,
-      "fwd_3m_return": 11.94,
-      "fwd_6m_return": 15.42
-    },
-    {
-      "date": "2019-01-14",
-      "distance": 0.046,
-      "finance_score": -0.309,
-      "economics_score": 0.127,
-      "psychology_score": -0.044,
-      "fwd_1m_return": 6.83,
-      "fwd_3m_return": 13.15,
-      "fwd_6m_return": 17.55
+      "date": "2019-08-01",
+      "distance": 0.04,
+      "finance_score": -0.354,
+      "economics_score": 0.155,
+      "psychology_score": 0.048,
+      "fwd_1m_return": -0.81,
+      "fwd_3m_return": 3.63,
+      "fwd_6m_return": 10.16
     },
     {
       "date": "2016-05-23",
-      "distance": 0.052,
+      "distance": 0.059,
       "finance_score": -0.3,
       "economics_score": 0.096,
       "psychology_score": 0.004,
       "fwd_1m_return": 1.94,
       "fwd_3m_return": 7.04,
       "fwd_6m_return": 7.57
+    },
+    {
+      "date": "2025-01-13",
+      "distance": 0.065,
+      "finance_score": -0.383,
+      "economics_score": 0.089,
+      "psychology_score": 0.05,
+      "fwd_1m_return": 3.78,
+      "fwd_3m_return": -6.99,
+      "fwd_6m_return": 8.01
     }
   ]
 }
