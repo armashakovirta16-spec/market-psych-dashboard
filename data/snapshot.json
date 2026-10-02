@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-10-01T00:20:48.305885+00:00",
+    "last_updated": "2026-10-02T00:31:03.182098+00:00",
     "data_sources": {
       "sp500_pe": "scraped",
       "put_call_ratio": "scraped",
@@ -14,99 +14,99 @@
   },
   "finance": {
     "sector_returns_1m": {
-      "Tech (XLK)": 6.04,
-      "Financials (XLF)": -5.24,
-      "Energy (XLE)": -4.42,
-      "Healthcare (XLV)": -0.17,
-      "Utilities (XLU)": -6.01
+      "Tech (XLK)": 6.74,
+      "Financials (XLF)": -7.06,
+      "Energy (XLE)": -4.97,
+      "Healthcare (XLV)": -2.25,
+      "Utilities (XLU)": -6.89
     },
     "asset_class_returns_1m": {
-      "Equities (SPY)": 0.57,
-      "Bonds (AGG)": -2.24,
-      "Gold (GLD)": -3.49
+      "Equities (SPY)": -0.08,
+      "Bonds (AGG)": -2.38,
+      "Gold (GLD)": -5.45
     },
     "index_returns_1m": {
-      "S&P 500 (SPY)": 0.57,
-      "Nasdaq 100 (QQQ)": 4.39,
-      "Dow Jones (DIA)": -2.59,
-      "Russell 2000 (IWM)": -3.73
+      "S&P 500 (SPY)": -0.08,
+      "Nasdaq 100 (QQQ)": 4.41,
+      "Dow Jones (DIA)": -3.94,
+      "Russell 2000 (IWM)": -5.24
     },
-    "sp500_pe": 26.1,
-    "yield_curve_10y_2y": 0.37
+    "sp500_pe": 26.15,
+    "yield_curve_10y_2y": 0.41
   },
   "economics": {
     "cpi_yoy": 3.35,
     "unemployment_rate": 4.1,
-    "fed_funds_rate": 3.63,
-    "ism_pmi": 54.6
+    "fed_funds_rate": 3.75,
+    "ism_pmi": 54.5
   },
   "psychology": {
-    "vix": 16.34,
-    "put_call_ratio": 0.76,
+    "vix": 16.39,
+    "put_call_ratio": 0.88,
     "aaii_sentiment": {
-      "bullish": 32.7,
-      "neutral": 19.2,
-      "bearish": 48.1,
-      "as_of": "2026-09-23"
+      "bullish": 34.6,
+      "neutral": 18.9,
+      "bearish": 46.5,
+      "as_of": "2026-09-30"
     },
     "consumer_sentiment": 51.7,
-    "hy_oas": 3.08,
+    "hy_oas": 3.12,
     "news_sentiment": 0.02,
     "naaim_exposure": 84.02
   },
   "cycle_stage": {
     "stage": "Expansion",
-    "rationale": "ISM PMI at 54.6 shows expansion, with neither the yield curve nor unemployment flashing late-cycle strain."
+    "rationale": "ISM PMI at 54.5 shows expansion, with neither the yield curve nor unemployment flashing late-cycle strain."
   },
   "composite": {
     "regime": "Risk-Off",
-    "score": -0.124,
+    "score": -0.132,
     "score_range": [
       -1,
       1
     ],
-    "percentile": 19.0,
+    "percentile": 18.3,
     "tilt_thresholds": [
       -0.115,
       0.209
     ],
-    "baseline_score": -0.143,
-    "psychology_gap": 0.019,
-    "psychology_weight": 0.16,
+    "baseline_score": -0.148,
+    "psychology_gap": 0.016,
+    "psychology_weight": 0.171,
     "psychology_weight_range": [
       0.15,
       0.55
     ],
     "pillar_scores": {
-      "finance": -0.349,
-      "economics": 0.131,
-      "psychology": -0.026
+      "finance": -0.344,
+      "economics": 0.114,
+      "psychology": -0.053
     },
     "pillar_components": {
       "finance": {
-        "yield_curve": -0.271,
-        "valuation": -0.175,
+        "yield_curve": -0.254,
+        "valuation": -0.177,
         "breadth": -0.6
       },
       "economics": {
-        "pmi": 0.46,
-        "real_rate": -0.093,
+        "pmi": 0.45,
+        "real_rate": -0.133,
         "unemployment": 0.025
       },
       "psychology": {
-        "vix": 0.169,
-        "put_call": 0.422,
-        "aaii_spread": -0.504,
+        "vix": 0.166,
+        "put_call": 0.156,
+        "aaii_spread": -0.421,
         "consumer_sentiment": -0.851,
-        "hy_oas": 0.279,
+        "hy_oas": 0.273,
         "news_sentiment": 0.024,
         "naaim_exposure": 0.282
       }
     },
     "narrative": [
-      "Regime read: Risk-Off (composite score -0.12 on a -1 to +1 scale, 19th percentile of all trading days since 1999). Finance conditions are cautious (-0.35), economic data is roughly balanced (+0.13), and market psychology leans roughly balanced (-0.03), with the economy in an Expansion phase.",
-      "Finance: the yield curve is positively sloped (+0.37pp), the S&P 500 trades at 26.1x earnings against a ~16.5x historical average, and 1 of 5 tracked sectors are positive over the past month \u2014 the classical efficient-market / factor-based baseline this dashboard's behavioral overlay adjusts. Economics: ISM PMI is at 54.6 (expansion), CPI is running 3.4% YoY against a 3.63% Fed funds rate, and unemployment sits at 4.1%. ISM PMI at 54.6 shows expansion, with neither the yield curve nor unemployment flashing late-cycle strain. (standard business-cycle framing \u2014 sentiment reads differently depending on where the cycle stands.)",
-      "Psychology isn't pulling the read away from fundamentals right now \u2014 the fundamentals-only baseline (-0.14) and the full psychology-adjusted composite (-0.12) are essentially the same. Psychology is calm enough that it's only weighted 16% of the final read (vs. a floor of 15% and a ceiling of 55% when conditions get extreme).",
+      "Regime read: Risk-Off (composite score -0.13 on a -1 to +1 scale, 18th percentile of all trading days since 1999). Finance conditions are cautious (-0.34), economic data is roughly balanced (+0.11), and market psychology leans roughly balanced (-0.05), with the economy in an Expansion phase.",
+      "Finance: the yield curve is positively sloped (+0.41pp), the S&P 500 trades at 26.1x earnings against a ~16.5x historical average, and 1 of 5 tracked sectors are positive over the past month \u2014 the classical efficient-market / factor-based baseline this dashboard's behavioral overlay adjusts. Economics: ISM PMI is at 54.5 (expansion), CPI is running 3.4% YoY against a 3.75% Fed funds rate, and unemployment sits at 4.1%. ISM PMI at 54.5 shows expansion, with neither the yield curve nor unemployment flashing late-cycle strain. (standard business-cycle framing \u2014 sentiment reads differently depending on where the cycle stands.)",
+      "Psychology isn't pulling the read away from fundamentals right now \u2014 the fundamentals-only baseline (-0.15) and the full psychology-adjusted composite (-0.13) are essentially the same. Psychology is calm enough that it's only weighted 17% of the final read (vs. a floor of 15% and a ceiling of 55% when conditions get extreme).",
       "No single extreme-positioning signal (herding, loss-aversion-driven hedging, overconfidence, or a Minsky-style extended-calm streak) is flashing right now \u2014 sentiment, hedging demand, and volatility all look within a normal range."
     ]
   },
@@ -115,37 +115,37 @@
     "asset_classes": {
       "Equities": {
         "tilt": "Underweight",
-        "rationale": "Composite regime is Risk-Off (-0.12)."
+        "rationale": "Composite regime is Risk-Off (-0.13)."
       },
       "Bonds": {
         "tilt": "Overweight",
-        "rationale": "Regime is Risk-Off (-0.12); flight-to-quality demand typically firms up."
+        "rationale": "Regime is Risk-Off (-0.13); flight-to-quality demand typically firms up."
       },
       "Gold": {
         "tilt": "Neutral",
-        "rationale": "No strong fear or inflation signal right now (psychology -0.03, CPI 3.4% YoY)."
+        "rationale": "No strong fear or inflation signal right now (psychology -0.05, CPI 3.4% YoY)."
       }
     },
     "sectors": {
       "Tech (XLK)": {
         "tilt": "Underweight",
-        "rationale": "Cyclical sector in a Risk-Off regime (-0.12)."
+        "rationale": "Cyclical sector in a Risk-Off regime (-0.13)."
       },
       "Financials (XLF)": {
         "tilt": "Underweight",
-        "rationale": "Cyclical sector in a Risk-Off regime (-0.12)."
+        "rationale": "Cyclical sector in a Risk-Off regime (-0.13)."
       },
       "Energy (XLE)": {
         "tilt": "Underweight",
-        "rationale": "Cyclical sector in a Risk-Off regime (-0.12)."
+        "rationale": "Cyclical sector in a Risk-Off regime (-0.13)."
       },
       "Healthcare (XLV)": {
         "tilt": "Overweight",
-        "rationale": "Defensive sector, and the regime is Risk-Off (-0.12)."
+        "rationale": "Defensive sector, and the regime is Risk-Off (-0.13)."
       },
       "Utilities (XLU)": {
         "tilt": "Overweight",
-        "rationale": "Defensive sector, and the regime is Risk-Off (-0.12)."
+        "rationale": "Defensive sector, and the regime is Risk-Off (-0.13)."
       }
     }
   },
@@ -153,12 +153,12 @@
     {
       "name": "Broad equity risk-on / momentum continuation",
       "indicated": false,
-      "rationale": "Composite (-0.12), breadth, or psychology (-0.03) isn't clearly confirming a Risk-On trend worth chasing right now."
+      "rationale": "Composite (-0.13), breadth, or psychology (-0.05) isn't clearly confirming a Risk-On trend worth chasing right now."
     },
     {
       "name": "Quality / defensive rotation",
       "indicated": true,
-      "rationale": "Composite is cautious (-0.12) and/or valuations are stretched with fear-leaning psychology (-0.03) \u2014 a case for rotating toward quality and defensives."
+      "rationale": "Composite is cautious (-0.13) and/or valuations are stretched with fear-leaning psychology (-0.05) \u2014 a case for rotating toward quality and defensives."
     },
     {
       "name": "Barbell: quality equities + duration",
@@ -178,7 +178,7 @@
     {
       "name": "Stay neutral on net exposure",
       "indicated": true,
-      "rationale": "The composite regime is genuinely balanced (-0.12) \u2014 no pillar is dominant enough to justify a strong directional tilt on overall market exposure."
+      "rationale": "The composite regime is genuinely balanced (-0.13) \u2014 no pillar is dominant enough to justify a strong directional tilt on overall market exposure."
     }
   ],
   "index_calls": {
@@ -186,36 +186,26 @@
     "indices": {
       "S&P 500 (SPY)": {
         "tilt": "Sell",
-        "rationale": "Composite regime is Risk-Off (-0.12). This index is the broad U.S. large-cap benchmark this whole dashboard is already built around."
+        "rationale": "Composite regime is Risk-Off (-0.13). This index is the broad U.S. large-cap benchmark this whole dashboard is already built around."
       },
       "Nasdaq 100 (QQQ)": {
         "tilt": "Sell",
-        "rationale": "Composite regime is Risk-Off (-0.12). This index is roughly half-weighted to mega-cap technology, so it tends to amplify both the composite regime and the Tech sector's own momentum."
+        "rationale": "Composite regime is Risk-Off (-0.13). This index is roughly half-weighted to mega-cap technology, so it tends to amplify both the composite regime and the Tech sector's own momentum."
       },
       "Dow Jones (DIA)": {
         "tilt": "Sell",
-        "rationale": "Composite regime is Risk-Off (-0.12). This index is a narrower basket of 30 blue-chip industrials and financials, historically less volatile than the broader market."
+        "rationale": "Composite regime is Risk-Off (-0.13). This index is a narrower basket of 30 blue-chip industrials and financials, historically less volatile than the broader market."
       },
       "Russell 2000 (IWM)": {
         "tilt": "Sell",
-        "rationale": "Composite regime is Risk-Off (-0.12). This index is small-cap and more sensitive to financing costs and the domestic cycle, so it tends to swing harder with both the regime and real interest rates."
+        "rationale": "Composite regime is Risk-Off (-0.13). This index is small-cap and more sensitive to financing costs and the domestic cycle, so it tends to swing harder with both the regime and real interest rates."
       }
     }
   },
   "historical_analogues": [
     {
-      "date": "2019-01-15",
-      "distance": 0.043,
-      "finance_score": -0.307,
-      "economics_score": 0.127,
-      "psychology_score": -0.037,
-      "fwd_1m_return": 5.39,
-      "fwd_3m_return": 11.94,
-      "fwd_6m_return": 15.42
-    },
-    {
       "date": "2019-01-14",
-      "distance": 0.044,
+      "distance": 0.038,
       "finance_score": -0.309,
       "economics_score": 0.127,
       "psychology_score": -0.044,
@@ -224,14 +214,24 @@
       "fwd_6m_return": 17.55
     },
     {
-      "date": "2019-05-28",
-      "distance": 0.05,
-      "finance_score": -0.348,
-      "economics_score": 0.18,
-      "psychology_score": -0.034,
-      "fwd_1m_return": 4.19,
-      "fwd_3m_return": 3.3,
-      "fwd_6m_return": 12.05
+      "date": "2000-04-14",
+      "distance": 0.041,
+      "finance_score": -0.372,
+      "economics_score": 0.1,
+      "psychology_score": -0.08,
+      "fwd_1m_return": 7.86,
+      "fwd_3m_return": 11.29,
+      "fwd_6m_return": 1.64
+    },
+    {
+      "date": "2019-01-15",
+      "distance": 0.042,
+      "finance_score": -0.307,
+      "economics_score": 0.127,
+      "psychology_score": -0.037,
+      "fwd_1m_return": 5.39,
+      "fwd_3m_return": 11.94,
+      "fwd_6m_return": 15.42
     }
   ]
 }
