@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-10-13T02:25:00.096568+00:00",
+    "last_updated": "2026-10-14T00:09:13.325697+00:00",
     "data_sources": {
       "sp500_pe": "scraped",
       "put_call_ratio": "scraped",
@@ -32,7 +32,7 @@
       "Russell 2000 (IWM)": -3.22
     },
     "sp500_pe": 26.64,
-    "yield_curve_10y_2y": 0.47
+    "yield_curve_10y_2y": 0.44
   },
   "economics": {
     "cpi_yoy": 3.35,
@@ -41,7 +41,7 @@
     "ism_pmi": 54.5
   },
   "psychology": {
-    "vix": 15.21,
+    "vix": 15.27,
     "put_call_ratio": 0.91,
     "aaii_sentiment": {
       "bullish": 40.3,
@@ -50,7 +50,7 @@
       "as_of": "2026-10-07"
     },
     "consumer_sentiment": 51.7,
-    "hy_oas": 3.15,
+    "hy_oas": 3.11,
     "news_sentiment": 0.06,
     "naaim_exposure": 84.02
   },
@@ -60,17 +60,17 @@
   },
   "composite": {
     "regime": "Cautiously Neutral",
-    "score": 0.067,
+    "score": 0.065,
     "score_range": [
       -1,
       1
     ],
-    "percentile": 51.5,
+    "percentile": 51.1,
     "tilt_thresholds": [
       -0.115,
       0.209
     ],
-    "baseline_score": 0.078,
+    "baseline_score": 0.076,
     "psychology_gap": -0.011,
     "psychology_weight": 0.151,
     "psychology_weight_range": [
@@ -78,13 +78,13 @@
       0.55
     ],
     "pillar_scores": {
-      "finance": 0.057,
+      "finance": 0.053,
       "economics": 0.106,
       "psychology": 0.003
     },
     "pillar_components": {
       "finance": {
-        "yield_curve": -0.229,
+        "yield_curve": -0.242,
         "valuation": -0.2,
         "breadth": 0.6
       },
@@ -94,18 +94,18 @@
         "unemployment": 0.0
       },
       "psychology": {
-        "vix": 0.229,
+        "vix": 0.226,
         "put_call": 0.089,
         "aaii_spread": -0.111,
         "consumer_sentiment": -0.851,
-        "hy_oas": 0.269,
+        "hy_oas": 0.275,
         "news_sentiment": 0.113,
         "naaim_exposure": 0.282
       }
     },
     "narrative": [
-      "Regime read: Cautiously Neutral (composite score +0.07 on a -1 to +1 scale, 52th percentile of all trading days since 1999). Finance conditions are roughly balanced (+0.06), economic data is roughly balanced (+0.11), and market psychology leans roughly balanced (+0.00), with the economy in an Expansion phase.",
-      "Finance: the yield curve is positively sloped (+0.47pp), the S&P 500 trades at 26.6x earnings against a ~16.5x historical average, and 4 of 5 tracked sectors are positive over the past month \u2014 the classical efficient-market / factor-based baseline this dashboard's behavioral overlay adjusts. Economics: ISM PMI is at 54.5 (expansion), CPI is running 3.4% YoY against a 3.75% Fed funds rate, and unemployment sits at 4.2%. ISM PMI at 54.5 shows expansion, with neither the yield curve nor unemployment flashing late-cycle strain. (standard business-cycle framing \u2014 sentiment reads differently depending on where the cycle stands.)",
+      "Regime read: Cautiously Neutral (composite score +0.07 on a -1 to +1 scale, 51th percentile of all trading days since 1999). Finance conditions are roughly balanced (+0.05), economic data is roughly balanced (+0.11), and market psychology leans roughly balanced (+0.00), with the economy in an Expansion phase.",
+      "Finance: the yield curve is positively sloped (+0.44pp), the S&P 500 trades at 26.6x earnings against a ~16.5x historical average, and 4 of 5 tracked sectors are positive over the past month \u2014 the classical efficient-market / factor-based baseline this dashboard's behavioral overlay adjusts. Economics: ISM PMI is at 54.5 (expansion), CPI is running 3.4% YoY against a 3.75% Fed funds rate, and unemployment sits at 4.2%. ISM PMI at 54.5 shows expansion, with neither the yield curve nor unemployment flashing late-cycle strain. (standard business-cycle framing \u2014 sentiment reads differently depending on where the cycle stands.)",
       "Psychology isn't pulling the read away from fundamentals right now \u2014 the fundamentals-only baseline (+0.08) and the full psychology-adjusted composite (+0.07) are essentially the same. Psychology is calm enough that it's only weighted 15% of the final read (vs. a floor of 15% and a ceiling of 55% when conditions get extreme).",
       "No single extreme-positioning signal (herding, loss-aversion-driven hedging, overconfidence, or a Minsky-style extended-calm streak) is flashing right now \u2014 sentiment, hedging demand, and volatility all look within a normal range."
     ]
@@ -205,7 +205,7 @@
   "historical_analogues": [
     {
       "date": "2019-06-18",
-      "distance": 0.003,
+      "distance": 0.004,
       "finance_score": 0.056,
       "economics_score": 0.104,
       "psychology_score": 0.002,
@@ -214,18 +214,18 @@
       "fwd_6m_return": 10.31
     },
     {
-      "date": "2014-08-15",
-      "distance": 0.024,
-      "finance_score": 0.075,
-      "economics_score": 0.119,
-      "psychology_score": 0.011,
-      "fwd_1m_return": 2.43,
-      "fwd_3m_return": 4.82,
-      "fwd_6m_return": 8.45
+      "date": "2000-04-13",
+      "distance": 0.026,
+      "finance_score": 0.029,
+      "economics_score": 0.1,
+      "psychology_score": -0.002,
+      "fwd_1m_return": 0.71,
+      "fwd_3m_return": 5.1,
+      "fwd_6m_return": -7.26
     },
     {
       "date": "2005-08-24",
-      "distance": 0.028,
+      "distance": 0.027,
       "finance_score": 0.047,
       "economics_score": 0.131,
       "psychology_score": -0.006,
