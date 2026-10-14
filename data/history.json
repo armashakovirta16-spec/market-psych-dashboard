@@ -1331,23 +1331,23 @@
     },
     {
       "date": "2026-10-14",
-      "composite_score": 0.065,
-      "psychology_weight": 0.151,
+      "composite_score": 0.082,
+      "psychology_weight": 0.156,
       "pillar_scores": {
-        "finance": 0.053,
-        "economics": 0.106,
-        "psychology": 0.003
+        "finance": 0.055,
+        "economics": 0.147,
+        "psychology": 0.015
       },
-      "vix": 15.27,
-      "sp500_pe": 26.64,
+      "vix": 16.87,
+      "sp500_pe": 26.34,
       "ism_pmi": 54.5,
-      "put_call_ratio": 0.91,
+      "put_call_ratio": 0.83,
       "consumer_sentiment": 51.7,
-      "hy_oas": 3.11,
+      "hy_oas": 3.16,
       "news_sentiment": 0.06,
       "naaim_exposure": 84.02,
       "aaii_spread": 1.2999999999999972,
-      "cpi_yoy": 3.35,
+      "cpi_yoy": 3.72,
       "unemployment_rate": 4.2,
       "fed_funds_rate": 3.75
     }
