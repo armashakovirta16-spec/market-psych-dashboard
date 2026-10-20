@@ -1397,19 +1397,19 @@
     },
     {
       "date": "2026-10-20",
-      "composite_score": 0.004,
-      "psychology_weight": 0.167,
+      "composite_score": 0.01,
+      "psychology_weight": 0.157,
       "pillar_scores": {
-        "finance": -0.087,
+        "finance": -0.084,
         "economics": 0.147,
-        "psychology": -0.042
+        "psychology": -0.017
       },
-      "vix": 18.44,
-      "sp500_pe": 26.23,
+      "vix": 17.31,
+      "sp500_pe": 26.32,
       "ism_pmi": 54.5,
-      "put_call_ratio": 0.92,
+      "put_call_ratio": 0.87,
       "consumer_sentiment": 51.7,
-      "hy_oas": 3.31,
+      "hy_oas": 3.29,
       "news_sentiment": 0.06,
       "naaim_exposure": 84.02,
       "aaii_spread": -2.8999999999999986,
